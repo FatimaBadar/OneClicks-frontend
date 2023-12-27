@@ -2,8 +2,8 @@ import useFetch from "../_helpers/useFetch";
 import { ResponseVM } from "../_models/response.model";
 import { User, UserPayload } from "../_models/user.model";
 
-// const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
-const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
+const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
+// const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
 // 
 
 async function handleResponse<T>(response: Response): Promise<T> {

@@ -273,7 +273,6 @@ export default function LoginComponent() {
                       },
                     }}
                   >
-                    {' '}
                     Login
                   </Button>
                   <Divider variant="middle" sx={{ mb: 2 }} />

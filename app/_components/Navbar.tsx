@@ -26,21 +26,27 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Cookies from 'universal-cookie';
 import useStore from '@/app/_store/authStore';
+import { useRouter } from 'next/navigation';
 
 export const Navbar: React.FC = () => {
   const [loggingOut, setLoggingOut] = useState(false);
   const store = useStore();
   const cookies = new Cookies();
+  const pathname = usePathname();
+  const router = useRouter();
 
   const logoutFunc = async () => {
     setLoggingOut(true);
     cookies.remove('token');
     cookies.remove('role');
     store.removeAuthUser();
+
+    if (pathname === '/home') {
+      router.push('/');
+    }
     // await userService.logout();
   };
 
-  const pathname = usePathname();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -125,244 +131,274 @@ export const Navbar: React.FC = () => {
   }));
 
   return (
-    <AppBar sx={{boxShadow: 'none'  }}>
-    <NavbarContainer
-      maxWidth="xl"
-      disableGutters
-      sx={{
-        gap: '2.5rem',
-        pl: '20px',
-        pr: '20px',
-      }}
-    >
-      <Box
+    <AppBar sx={{ boxShadow: 'none' }}>
+      <NavbarContainer
+        maxWidth="xl"
+        disableGutters
         sx={{
-          display: 'flex',
-          alignItems: 'center',
           gap: '2.5rem',
-          // pl: "20px",
+          pl: '20px',
+          pr: '20px',
         }}
       >
-        <Box //image for full screen
+        <Box
           sx={{
-            mr: 'auto',
-            display: { xs: 'none', md: 'flex' },
+            display: 'flex',
+            alignItems: 'center',
+            gap: '2.5rem',
+            // pl: "20px",
+          }}
+        >
+          <Box //image for full screen
+            sx={{
+              mr: 'auto',
+              display: { xs: 'none', md: 'flex' },
+              flexGrow: 1,
+              height: 25,
+            }}
+          >
+            <Link href={'/'} style={{ textDecoration: 'none' }}>
+              <Image
+                src="/Images/navbarlogo2.svg"
+                width={134}
+                height={25}
+                priority={true}
+                alt="OneClicks"
+              />
+            </Link>
+          </Box>
+
+          <Box //for menu
+            sx={{
+              display: { xs: 'flex', md: 'none' },
+              // justifyContent: "left"
+            }}
+          >
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              // color="primary"
+              sx={{ color: '#0F1B4C' }}
+            >
+              <MenuIcon />
+            </IconButton>
+
+            <Paper sx={{ backgroundColor: '#E6F0FF' }}>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                  mt: '45px',
+                  alignItems: 'left',
+                  // backgroundColor:"#E6F0FF"
+                  // ml:"-30px"
+                }}
+              >
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link href={'/home'} style={{ textDecoration: 'none' }}>
+                    <Typography
+                      className={pathname === '/' ? 'active' : ''}
+                      textAlign="center"
+                      color="#597FB5"
+                      margin="-4px"
+                      width="140px"
+                      sx={{ '&:hover': { color: '#405D80' } }}
+                    >
+                      Home
+                    </Typography>
+                  </Link>
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link href={'/account/login'} style={{ textDecoration: 'none' }}>
+                    <Typography
+                      className={pathname === '/account/login' ? 'active' : ''}
+                      textAlign="center"
+                      color="#597FB5"
+                      margin="-4px"
+                      width="140px"
+                      sx={{ '&:hover': { color: '#405D80' } }}
+                    >
+                      Login
+                    </Typography>
+                  </Link>
+                </MenuItem>
+              </Menu>
+            </Paper>
+          </Box>
+
+          <NavbarLinksBox>
+            <Link href="/home" style={{ textDecoration: 'none' }}>
+              <NavLink variant="body2">Home</NavLink>
+            </Link>
+            {/* <NavLink variant="body2">Features</NavLink> */}
+            {/* <NavLink variant="body2">Services</NavLink> */}
+            {/* <NavLink variant="body2">Dashboard</NavLink> */}
+            <Link href="/contact" style={{ textDecoration: 'none' }}>
+              <NavLink variant="body2">Contact Us</NavLink>
+            </Link>
+          </NavbarLinksBox>
+        </Box>
+
+        <Box //logo for small screen
+          sx={{
+            // ml: '160px',
+            // ml: '100px',
+            // alignItems: 'center',
+            justifyContent: 'center',
+            display: { xs: 'flex', md: 'none' },
             flexGrow: 1,
             height: 25,
           }}
         >
-          <Image
-            src="/Images/navbarlogo2.svg"
-            width={134}
-            height={25}
-            priority={true}
-            alt="OneClicks"
-          />
+          <Link href={'/'} style={{ textDecoration: 'none' }}>
+            <Image
+              src="/Images/navbarlogo2.svg"
+              width={134}
+              height={25}
+              priority={true}
+              alt="OneClicks"
+            />
+          </Link>
         </Box>
 
-        <Box //for menu
+        <Box
           sx={{
-            display: { xs: 'flex', md: 'none' },
-            // justifyContent: "left"
+            display: 'flex',
           }}
         >
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={handleOpenNavMenu}
-            // color="primary"
-            sx={{ color: '#0F1B4C' }}
+          <Box //login, signup for big screen
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              alignItems: 'center',
+              justifyContent: 'right',
+              mr: '1rem',
+              gap: '1rem',
+            }}
           >
-            <MenuIcon />
-          </IconButton>
+            <Link href="/account/login" style={{ textDecoration: 'none' }}>
+              <NavLink variant="body2">Login</NavLink>
+            </Link>
 
-          <Paper sx={{ backgroundColor: '#E6F0FF' }}>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-                mt: '45px',
-                alignItems: 'left',
-                // backgroundColor:"#E6F0FF"
-                // ml:"-30px"
-              }}
-            >
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Link href={'/home'} style={{ textDecoration: 'none' }}>
-                  <Typography
-                    className={pathname === '/' ? 'active' : ''}
-                    textAlign="center"
-                    color="#597FB5"
-                    margin="-4px"
-                    width="140px"
-                    sx={{'&:hover': {color: '#405D80',},}}
-                  >
-                    Home
-                  </Typography>
-                </Link>
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Link href={'/account/login'} style={{ textDecoration: 'none' }}>
-                  <Typography
-                    className={pathname === '/account/login' ? 'active' : ''}
-                    textAlign="center"
-                    color="#597FB5"
-                    margin="-4px"
-                    width="140px"
-                    sx={{'&:hover': {color: '#405D80',},}}
-                  >
-                    Login
-                  </Typography>
-                </Link>
-              </MenuItem>
-            </Menu>
-          </Paper>
+            <Link href="/account/register" style={{ textDecoration: 'none' }}>
+              <CustomButton backgroundColor="#0F1B4C" color="#fff" buttonText="Register" />
+            </Link>
+          </Box>
+
+          <Tooltip title="Open settings">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <AccountCircleIcon
+                sx={{
+                  fontSize: 40,
+                  color: '#0F1B4C',
+                  '&:hover': {
+                    color: '#405D80',
+                  },
+                }}
+              />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            sx={{
+              mt: '45px',
+
+              [theme.breakpoints.down('md')]: {
+                ml: theme.spacing(60), // Set margin-left to 16px on medium screens
+              },
+              [theme.breakpoints.up('lg')]: {
+                ml: theme.spacing(145), // Set margin-left to 32px on large screens and above
+              },
+            }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Link href={'/profile'} style={{ textDecoration: 'none' }}>
+                <Typography
+                  margin="-4px"
+                  width="140px"
+                  textAlign="center"
+                  color="#597FB5"
+                  sx={{ '&:hover': { color: '#405D80' } }}
+                >
+                  Profile
+                </Typography>
+              </Link>
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Link href={'/account'} style={{ textDecoration: 'none' }}>
+                <Typography
+                  margin="-4px"
+                  width="140px"
+                  textAlign="center"
+                  color="#597FB5"
+                  sx={{ '&:hover': { color: '#405D80' } }}
+                >
+                  Account
+                </Typography>
+              </Link>
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Link href={'/dashboard'} style={{ textDecoration: 'none' }}>
+                <Typography
+                  margin="-4px"
+                  width="140px"
+                  textAlign="center"
+                  color="#597FB5"
+                  sx={{ '&:hover': { color: '#405D80' } }}
+                >
+                  Dashboard
+                </Typography>
+              </Link>
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleCloseUserMenu}>
+              {/* <Button> */}
+              <Link onClick={logoutFunc} style={{ textDecoration: 'none' }}>
+                <Typography
+                  margin="-4px"
+                  width="140px"
+                  textAlign="center"
+                  color="#597FB5"
+                  sx={{ '&:hover': { color: '#405D80' } }}
+                >
+                  Logout
+                </Typography>
+              </Link>
+              {/* </Button> */}
+            </MenuItem>
+          </Menu>
         </Box>
-
-        <NavbarLinksBox>
-        <Link href="/home" style={{ textDecoration: 'none' }}>
-          <NavLink variant="body2">Home</NavLink>
-        </Link>
-          {/* <NavLink variant="body2">Features</NavLink> */}
-          {/* <NavLink variant="body2">Services</NavLink> */}
-          {/* <NavLink variant="body2">Dashboard</NavLink> */}
-          <Link href="/contact" style={{ textDecoration: 'none' }}>
-          <NavLink variant="body2">Contact Us</NavLink>
-          </Link>
-        </NavbarLinksBox>
-      </Box>
-
-      <Box //logo for small screen
-        sx={{
-          // ml: '160px',
-          // ml: '100px',
-          // alignItems: 'center',
-          justifyContent: 'center',
-          display: { xs: 'flex', md: 'none' },
-          flexGrow: 1,
-          height: 25,
-        }}
-      >
-        <Image
-          src="/Images/navbarlogo2.svg"
-          width={134}
-          height={25}
-          priority={true}
-          alt="OneClicks"
-        />
-      </Box>
-
-      <Box
-        sx={{
-          display: 'flex',
-        }}
-      >
-        <Box //login, signup for big screen
-          sx={{
-            display: { xs: 'none', md: 'flex' },
-            alignItems: 'center',
-            justifyContent: 'right',
-            mr: '1rem',
-            gap: '1rem',
-          }}
-        >
-          <Link href="/account/login" style={{ textDecoration: 'none' }}>
-            <NavLink variant="body2">Login</NavLink>
-          </Link>
-
-          <Link href="/account/register" style={{ textDecoration: 'none' }}>
-            <CustomButton backgroundColor="#0F1B4C" color="#fff" buttonText="Register" />
-          </Link>
-        </Box>
-
-        <Tooltip title="Open settings">
-          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <AccountCircleIcon sx={{ fontSize: 40, color: '#0F1B4C',   '&:hover': {
-      color: '#405D80',
-    }, }} />
-          </IconButton>
-        </Tooltip>
-        <Menu
-          sx={{
-            mt: '45px',
-
-            [theme.breakpoints.down('md')]: {
-              ml: theme.spacing(60), // Set margin-left to 16px on medium screens
-            },
-            [theme.breakpoints.up('lg')]: {
-              ml: theme.spacing(145), // Set margin-left to 32px on large screens and above
-            },
-          }}
-          id="menu-appbar"
-          anchorEl={anchorElUser}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          keepMounted
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          open={Boolean(anchorElUser)}
-          onClose={handleCloseUserMenu}
-        >
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href={'/profile'} style={{ textDecoration: 'none' }}>
-              <Typography margin="-4px" width="140px" textAlign="center" 
-              color="#597FB5" sx={{'&:hover': {color: '#405D80',},}}>
-                Profile
-              </Typography>
-            </Link>
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href={'/account'} style={{ textDecoration: 'none' }}>
-              <Typography margin="-4px" width="140px" textAlign="center" color="#597FB5"
-               sx={{'&:hover': {color: '#405D80',},}}>
-                Account
-              </Typography>
-            </Link>
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Link href={'/dashboard'} style={{ textDecoration: 'none' }}>
-              <Typography margin="-4px" width="140px" textAlign="center" color="#597FB5"
-               sx={{'&:hover': {color: '#405D80',},}}>
-                Dashboard
-              </Typography>
-            </Link>
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleCloseUserMenu}>
-            {/* <Button> */}
-            <Link onClick={logoutFunc}
-            style={{ textDecoration: 'none' }}>
-              <Typography margin="-4px" width="140px" textAlign="center" color="#597FB5"
-               sx={{'&:hover': {color: '#405D80',},}}>
-                Logout
-              </Typography>
-            </Link>
-            {/* </Button> */}
-          </MenuItem>
-        </Menu>
-      </Box>
-    </NavbarContainer></AppBar>
+      </NavbarContainer>
+    </AppBar>
   );
 };
 
