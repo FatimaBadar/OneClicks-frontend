@@ -18,7 +18,9 @@ import Navbar from './_components/Navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  
   return (
+
     <div className="main mx-auto">
       <Navbar />
 

@@ -1,17 +1,21 @@
 // check line 164
 'use client'
-import React, { useState,useEffect, ChangeEvent, FormEvent } from 'react';
+import React, { useState,useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
   Avatar, Button, CssBaseline, TextField, Link,
   Paper, Box, Grid, Typography, createTheme, ThemeProvider, Divider
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 // import { useUserService } from '@/app/_services/useUserService';
 import { RegisterService } from '@/app/_services/authService';
 import useStore from '@/app/_store/authStore';
 import { UserPayload } from '@/app/_models/user.model';
-
+// import  {showSuccessToast, showErrorToast, ToastComponent} from '@/app/_components/toaster';
+import { Toast} from 'primereact/toast';
+import 'primereact/resources/themes/lara-light-cyan/theme.css';
+import { PrimeReactProvider } from 'primereact/api';
 // If 'useUserService' is a custom hook, make sure to import its type definition or create one
 // Example: import { useUserService } from '@/Services/useUserService';
 // interface UseUserService {
@@ -25,18 +29,18 @@ const  Signup=()=> {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const store = useStore();
+  const toast = useRef<Toast>(null);
 
   // const userService = useUserService();
-  useEffect(() => {
-    if (!store.authUser) {
-      fetchUser();
-    }
-  }, []);
+  // useEffect(() => {
+  //   // if (!store.authUser) {
+  //   //   fetchUser();
+  //   // }
+  // }, []);
 
-  async function fetchUser() {
-    return store.authUser;
-  }
+  // async function fetchUser() {
+  //   return store.authUser;
+  // }
 
   const submitSignup = async (e: FormEvent) => {
     e.preventDefault();
@@ -44,31 +48,47 @@ const  Signup=()=> {
 
     try {
       const response = await RegisterService(tempUser);
-      
-      // const message = "User registered";
-      // if(response){
-      //   try {
-      //     store.setAuthUser(response);
-      //   } catch (error: any) {
-      //     console.log("errorrr")
-      //   }
-      //   cookies.set("token", response.token);
-      //   cookies.set("role", response.role);
-      //   jwtVerification(response.token);
-      //   // cookies.set('authorization', response.token, { httpOnly: true });
-      // }
+      if(response.statusCode == "200"){
+        showSuccessToast("Regsitered. \nPlease verify your account using the verification Link sent to your email address.");        
+      }
+      else{
+        showErrorToast("Registration failed. Please check your credentials.");
+      }
+
       setFirstname("");
       setLastname("");
       setUsername("");
       setEmail("");
       setPassword("");
 
-      // router.push('/');
+      setTimeout(() => {
+        router.push('/');
+      }, 3000);   
+
     } catch (error) {
       console.error(error);
+      showErrorToast("Please enter correct registered username.");
     }
   }
+   const showSuccessToast = (message: string) => {
+  
+    toast.current?.show({
+      severity: 'success',
+      summary: 'Success',
+      detail: message,
+      life: 3000,
+    });
+  };
 
+   const showErrorToast = (message: string) => {
+    toast.current?.show({
+      severity: 'error',
+      summary: 'Error Message',
+      detail: message,
+      life: 3000,
+    });
+  };
+   
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -117,14 +137,51 @@ const  Signup=()=> {
     },
   });
 
+  //   const showSuccessToast = () => {
+  //   toast.current?.show({
+  //     severity: 'success',
+  //     summary: 'Success',
+  //     detail: 'Verification Link sent to your email: {email}',
+  //     life: 3000,
+  //   });
+  // };
+
+  // const showErrorToast = ()=>{
+  // // message: string) => {
+  //   toast.current?.show({
+  //     severity: 'error',
+  //     summary: 'Error Message',
+  //     detail: "not registered",
+  //     life: 3000,
+  //   });
+  // };
+
   return (
+    <>
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ m: 10 }}>
         <Grid container component={Paper} elevation={24} square={false} sx={{ borderRadius: '20px', boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)' }}>
           <CssBaseline />
-          <Grid item xs={false} md={6} sx={{ m: 'auto' }}>
-            <img src="/Images/signupImage.svg" alt="" />
+          <Grid
+            item
+            sx={{
+              m: "auto",
+              display: { xs: "none", md: "block" }, // hide on extra-small screens, show on medium screens
+            }}
+          >
+             <Image
+              src="/Images/signupImage.svg"
+              width={456 }
+              height={304 }
+              priority={true}
+              alt="signuppageimage"
+            />
+          
+            {/* <img src="/Images/signupImage.svg" alt="" /> */}
           </Grid>
+          {/* <Grid item xs={false} md={6} sx={{ m: 'auto' }}>
+            <img src="/Images/signupImage.svg" alt="" />
+          </Grid> */}
 
           <Grid item xs={12} md={6}>
             <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -189,6 +246,7 @@ const  Signup=()=> {
                   // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters
                   value={password} onChange={onChange}
                 />
+              
                 <Button
                   type="submit"
                   fullWidth
@@ -201,7 +259,9 @@ const  Signup=()=> {
                     '&:hover': {
                       backgroundColor: "#405D80 !important", // Darker color on hover
                     },
-                  }}> Sign Up
+                  }}
+                  // onClick={showSuccessToast} 
+                  > Sign Up
                 </Button>
                 <Divider variant="middle"
                   sx={{ mb: 2 }} />
@@ -237,6 +297,14 @@ const  Signup=()=> {
         </Grid>
       </Box>
     </ThemeProvider>
+
+    {/* <ToastComponent/> */}
+    <PrimeReactProvider>
+    <div className="card flex justify-content-center">  
+    <Toast ref={toast} />
+      </div>    
+    </PrimeReactProvider>
+    </>
   );
 }
 

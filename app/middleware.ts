@@ -1,81 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { verifyJWT } from "./lib/token";
-// import { getErrorResponse } from "./lib/helpers";
-
-interface AuthenticatedRequest extends NextRequest {
-  user: {
-    id: string;
-  };
-}
-
-let redirectToLogin = false;
-export async function middleware(req: NextRequest) {
-
-  console.log("in middleware")
-  let token: string | undefined;
-
-  if (req.cookies.has("token")) {
-    token = req.cookies.get("token")?.value;
-  } else if (req.headers.get("Authorization")?.startsWith("Bearer ")) {
-    token = req.headers.get("Authorization")?.substring(7);
-  }
-
-  if (req.nextUrl.pathname.startsWith("/accounts/login") && (!token || redirectToLogin))
-    return;
-
-  // if (
-  //   !token &&
-  //   (req.nextUrl.pathname.startsWith("/api/users") ||
-  //     req.nextUrl.pathname.startsWith("/api/auth/logout"))
-  // ) {
-  //   console.log("You are not logged in. Please provide a token to gain access.")
-  //   // return getErrorResponse(
-  //   //   401,
-  //   //   "You are not logged in. Please provide a token to gain access."
-  //   // );
-  // }
-
-  const response = NextResponse.next();
-
-  try {
-    if (token) {
-      const { sub } = await verifyJWT<{ sub: string }>(token);
-      response.headers.set("X-USER-ID", sub);
-      (req as AuthenticatedRequest).user = { id: sub };
-    }
-  } catch (error) {
-    redirectToLogin = true;
-    if (req.nextUrl.pathname.startsWith("/api")) {
-      console.log( "Token is invalid or user doesn't exists");
-      // return getErrorResponse(401, "Token is invalid or user doesn't exists");
-    }
-
-    return NextResponse.redirect(
-      new URL(`/login?${new URLSearchParams({ error: "badauth" })}`, req.url)
-    );
-  }
-
-  const authUser = (req as AuthenticatedRequest).user;
-
-  if (!authUser) {
-    return NextResponse.redirect(
-      new URL(
-        `/login?${new URLSearchParams({
-          error: "badauth",
-          forceLogin: "true",
-        })}`,
-        req.url
-      )
-    );
-  }
-
-  if (req.url.includes("/login") && authUser) {
-    return NextResponse.redirect(new URL("/profile", req.url));
-  }
-
-  return response;
-}
+//without a defined matcher, this one line
+//applies next-auth to the entire project
+export {default} from "next-auth/middleware"
 
 export const config = {
-  matcher: ["/profile", "/login", "/api/users/:path*", "/api/auth/logout"],
-};
+  matcher: ["/account/login",
+"/dashboard"]
+}

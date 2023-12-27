@@ -1,13 +1,17 @@
 'use client'
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import React, { useState,useRef, ChangeEvent, FormEvent, useEffect } from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
   Avatar, Button, CssBaseline, TextField, Link,
   Paper, Box, Grid, Typography, createTheme, ThemeProvider, Divider
 } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 // import { useUserService } from '@/app/_services/useUserService';
 import { ResetPasswordService } from '@/app/_services/authService';
+import Cookies from "universal-cookie";
+import { Toast} from 'primereact/toast';
+import 'primereact/resources/themes/lara-light-cyan/theme.css';
+import { PrimeReactProvider } from 'primereact/api';
 
 export default function ResetPassword() {
   const router = useRouter();
@@ -19,27 +23,62 @@ export default function ResetPassword() {
 
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true);
-
+  const [PasswordError, setPasswordError] = useState<string>("");
+  const cookies = new Cookies();
+  const toast = useRef<Toast>(null);
+  const searchParams = useSearchParams();
   // const userService = useUserService();
 
   const submitReset = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (confirmPassword !== password) {
+      setPasswordError("Password and confirm password should be same");
+      return;
+    }
+    setPasswordError("");
+    const token = searchParams.get("token");
     try {
-      const token = "";
-      const response = await ResetPasswordService(token.toString(),confirmPassword,password);
-      // Your login logic here
-      console.log("Password successful changed");
+      // const token = cookies.get("token");
+      const response = await ResetPasswordService(token,password,confirmPassword);
+
+      if(response.statusCode=="200"){
+        showSuccessToast("Password successful changed!");
+
+        setTimeout(() => {
+          router.push('/account/login');
+        }, 3000);   
+      }   
+      else if(response.statusCode=="401"){
+        showErrorToast("Token is Expired!");
+      }   
 
       setPassword("");
       setConfirmPassword("");
 
-      router.push('/');
     } catch (error) {
-      console.error(error);
+      showErrorToast("Please enter correct passwords.");
+      // console.error(error);
     }
   }
+
+  const showSuccessToast = (message: string) => {
+    toast.current?.show({
+      severity: 'success',
+      summary: 'Success',
+      detail: message,
+      life: 3000,
+    });
+  };
+
+   const showErrorToast = (message: string) => {
+    toast.current?.show({
+      severity: 'error',
+      summary: 'Error Message',
+      detail: message,
+      life: 3000,
+    });
+  };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -49,25 +88,29 @@ export default function ResetPassword() {
         setPassword(value);
         break;
       case "confirmPassword":
-        {
+        
             // if(password ===value){
                 setConfirmPassword(value);
-                // setPasswordsMatch(password === value);
-            // }
-            // else{
-            // }
-        }
+                // setPasswordsMatch(false);
+        // }
+      
         break;
       default:
         break;
     }
 
-    if (password !== confirmPassword) {
-        setPasswordsMatch(false);
-    }
-    else{
-    setPasswordsMatch(true);}
+    // if (password !== confirmPassword) {
+    //     setPasswordsMatch(false);
+    // }
+    // else{
+    // setPasswordsMatch(true);}
   }
+
+  // const validateFormInput = (event) => {
+  //   event.preventDefault();
+
+  
+  // };
 
   const defaultTheme = createTheme({
     typography: {
@@ -93,23 +136,25 @@ export default function ResetPassword() {
     },
   });
 
-  return (
-    <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ m: 10 }}>
-        <Grid container component={Paper} elevation={24} square={false} sx={{ borderRadius: '20px', boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)' }}>
-          <CssBaseline />
-          <Grid item xs={false} md={6} sx={{ m: 'auto' }}>
-            <img src="/Images/signupImage.svg" alt="" />
-          </Grid>
 
-          <Grid item xs={12} md={6}>
-            <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Avatar sx={{ m: 1, bgcolor: '#597FB5' }}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5" sx={{ fontWeight: 700 }}>
+
+  return (
+    <>
+    <ThemeProvider theme={defaultTheme}>
+    <Box component={Paper} elevation={24} square={false}
+        sx={{
+            mx: 'auto',
+            maxWidth: '600px',
+            // mr: 10, ml: 10, mt: 10,
+            borderRadius: '20px', boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+        }}>
+        <Box sx={{ my: 8, mx: 4, py:8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+               <Avatar sx={{ m: 1, bgcolor: '#597FB5' }}>
+    <LockOutlinedIcon />
+               </Avatar>
+               <Typography component="h1" variant="h5" sx={{ fontWeight: 700 }}>
                 Reset Password
-              </Typography>
+           </Typography>
               <Box component="form" onSubmit={submitReset}
                 sx={{
                   mt: 3,
@@ -123,8 +168,12 @@ export default function ResetPassword() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  inputProps={{
+                    minLength: 8,
+                  }}
                   value={password} onChange={onChange}
-                />
+                />  
+                {/* <p className="error-message"></p> */}
                   <TextField  margin="normal"
                   required
                   name="confirmPassword"
@@ -133,9 +182,16 @@ export default function ResetPassword() {
                   id="confirmPassword"
                   autoComplete="current-password"
                   value={confirmPassword} onChange={onChange}
-                  error={!passwordsMatch}
-                  helperText={!passwordsMatch ? "Passwords do not match" : ""}
+                  // error={!passwordsMatch}
+                  // helperText={!passwordsMatch ? "Passwords do not match" : ""}
                 />
+                <Typography className="error-message" 
+                sx={{color:"red",
+                fontSize: 15,
+                mb: -1
+              }}
+                 >{PasswordError}</Typography>
+
                 <Button
                   type="submit"
                   fullWidth
@@ -151,11 +207,15 @@ export default function ResetPassword() {
                   }}> Reset Password
                 </Button>
                
-              </Box>
+          </Box>
             </Box>
-          </Grid>
-        </Grid>
-      </Box>
-    </ThemeProvider>
+             </Box>
+</ThemeProvider>
+<PrimeReactProvider>
+    <div className="card flex justify-content-center">  
+    <Toast ref={toast} />
+      </div>    
+    </PrimeReactProvider>  
+    </>
   );
 }
