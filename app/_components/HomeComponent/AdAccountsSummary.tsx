@@ -12,6 +12,7 @@ import {
     Button 
 } from '@mui/material';
 import DashboardCard from './DashboardCard';
+import AccountLogin  from '../AccountLogin';
 
 const typeColor = 
     {
@@ -19,7 +20,6 @@ const typeColor =
         Instagram: "rgb(250, 137, 107)",
         Google: "rgb(73, 190, 255)",
  }
-
 
 const accounts = [
     {
@@ -84,19 +84,9 @@ const AdAccountsSummary = () => {
         <Typography variant="h5" fontWeight={550}>
           Dashboard
         </Typography>
-        <Button
-          href="/connect"
-          variant="contained"
-          sx={{
-            backgroundColor: "#597FB5 !important",
-            color: "#fff !important",
-            '&:hover': {
-              backgroundColor: "#405D80 !important",
-            },
-          }}
-        >
-          Connect Ad Account
-        </Button>
+        
+        <AccountLogin/>
+
       </Box>
 
             <Box sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' } }}>

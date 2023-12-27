@@ -197,7 +197,7 @@ export default function LoginComponent() {
                 display: { xs: 'none', sm: 'none', md: 'block', lg: 'block', xl: 'block' }, // hide on extra-small screens, show on medium screens
               }}
             >
-              <Image src="/Images/signupImage.svg" width={456} height={304} alt="loginpageimage" />
+              <Image src="/Images/signupImage.svg" width={456} height={304} priority={true} alt="loginpageimage" />
               {/* <Image
               src="/Images/signupImage.svg"
               width={200}

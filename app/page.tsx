@@ -20,9 +20,8 @@ const inter = Inter({ subsets: ['latin'] });
 export default function Home() {
   
   return (
-
-    <div className="main mx-auto">
-      <Navbar />
+<>      <Navbar />
+    <div className="main mx-auto" >
 
       <Hero />
       <br />
@@ -39,5 +38,7 @@ export default function Home() {
       <Footer1 />
       <br />
     </div>
+    </>
+
   );
 }

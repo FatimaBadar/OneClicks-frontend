@@ -6,6 +6,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Container } from '@mui/system';
 import CustomButton from './CustomButton';
 import Image from 'next/image';
+import AppBar from '@mui/material/AppBar';
+
 import {
   Link,
   Paper,
@@ -16,62 +18,25 @@ import {
   MenuItem,
   Divider,
   useTheme,
+  Button,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import Cookies from 'universal-cookie';
+import useStore from '@/app/_store/authStore';
 
 export const Navbar: React.FC = () => {
   const [loggingOut, setLoggingOut] = useState(false);
+  const store = useStore();
+  const cookies = new Cookies();
 
-  // const [mobileMenu, setMobileMenu] = useState({
-  //   left: false,
-  // });
-
-  // const toggleDrawer = (anchor: string, open: boolean) => (
-  //   event: React.KeyboardEvent | React.MouseEvent
-  // ) => {
-  //   if (
-  //     event.type === "keydown"
-  //     // (event.type === "Tab" || event.type === "Shift")
-  //   ) {
-  //     return;
-  //   }
-
-  //   setMobileMenu({ ...mobileMenu, [anchor]: open });
-  // };
-
-  // const list = (anchor: string) => (
-  //   <Box
-  //     sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
-  //     role="presentation"
-  //     onClick={toggleDrawer(anchor, false)}
-  //     onKeyDown={toggleDrawer(anchor, false)}
-  //   >
-  //     <List>
-  //       {["Home", "Features", "Services", "Listed", "Contact"].map(
-  //         (text, index) => (
-  //           <ListItem key={text} disablePadding>
-  //             <ListItemButton>
-  //               <ListItemIcon>
-  //                 {index === 0 && <HomeIcon />}
-  //                 {index === 1 && <FeaturedPlayListIcon />}
-  //                 {index === 2 && <MiscellaneousServicesIcon />}
-  //                 {index === 3 && <ListAltIcon />}
-  //                 {index === 4 && <ContactsIcon />}
-  //               </ListItemIcon>
-  //               <ListItemText primary={text} />
-  //             </ListItemButton>
-  //           </ListItem>
-  //         )
-  //       )}
-  //     </List>
-  //   </Box>
-  // );
-
-  const logout = async () => {
+  const logoutFunc = async () => {
     setLoggingOut(true);
+    cookies.remove('token');
+    cookies.remove('role');
+    store.removeAuthUser();
     // await userService.logout();
   };
 
@@ -124,13 +89,22 @@ export const Navbar: React.FC = () => {
   //     display: 'block',
   //   },
   // }));
-
+  // const NavbarContainer = styled(Container)(({ theme }) => ({
+  //   background: '#E6F0FF',
+  //   boxShadow: 'none', // Remove box shadow
+  //   // zIndex: theme.zIndex.drawer + 1,
+  //   paddingLeft: theme.spacing(1),
+  //   paddingRight: theme.spacing(1),
+  //   [theme.breakpoints.down('md')]: {
+  //     paddingLeft: theme.spacing(1),
+  //     paddingRight: theme.spacing(1),
+  //   },
+  // }));
   const NavbarContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     position: 'sticky',
-    top: 0,
     background: '#E6F0FF',
     // opacity: 1, // Set opacity to 1 for full opacity
     borderStyle: 'solid',
@@ -150,19 +124,8 @@ export const Navbar: React.FC = () => {
     },
   }));
 
-  // const UserMenuContainer = styled(Box)(({ theme }) => ({
-  //   display: 'flex',
-  //   justifyContent: 'flex-end',
-  //   alignItems: 'center',
-  //   // marginRight: 'auto',
-  //   // marginRight: "-200px",
-  //   gap: theme.spacing(3),
-  //   // [theme.breakpoints.down('md')]: {
-  //   //   display: 'none',
-  //   // },
-  // }));
-
   return (
+    <AppBar sx={{boxShadow: 'none'  }}>
     <NavbarContainer
       maxWidth="xl"
       disableGutters
@@ -239,13 +202,14 @@ export const Navbar: React.FC = () => {
               }}
             >
               <MenuItem onClick={handleCloseNavMenu}>
-                <Link href={'/'} style={{ textDecoration: 'none' }}>
+                <Link href={'/home'} style={{ textDecoration: 'none' }}>
                   <Typography
                     className={pathname === '/' ? 'active' : ''}
                     textAlign="center"
                     color="#597FB5"
                     margin="-4px"
                     width="140px"
+                    sx={{'&:hover': {color: '#405D80',},}}
                   >
                     Home
                   </Typography>
@@ -260,6 +224,7 @@ export const Navbar: React.FC = () => {
                     color="#597FB5"
                     margin="-4px"
                     width="140px"
+                    sx={{'&:hover': {color: '#405D80',},}}
                   >
                     Login
                   </Typography>
@@ -270,11 +235,15 @@ export const Navbar: React.FC = () => {
         </Box>
 
         <NavbarLinksBox>
+        <Link href="/home" style={{ textDecoration: 'none' }}>
           <NavLink variant="body2">Home</NavLink>
+        </Link>
           {/* <NavLink variant="body2">Features</NavLink> */}
           {/* <NavLink variant="body2">Services</NavLink> */}
           {/* <NavLink variant="body2">Dashboard</NavLink> */}
+          <Link href="/contact" style={{ textDecoration: 'none' }}>
           <NavLink variant="body2">Contact Us</NavLink>
+          </Link>
         </NavbarLinksBox>
       </Box>
 
@@ -316,14 +285,16 @@ export const Navbar: React.FC = () => {
             <NavLink variant="body2">Login</NavLink>
           </Link>
 
-          <Link href="/account/signup" style={{ textDecoration: 'none' }}>
+          <Link href="/account/register" style={{ textDecoration: 'none' }}>
             <CustomButton backgroundColor="#0F1B4C" color="#fff" buttonText="Register" />
           </Link>
         </Box>
 
         <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <AccountCircleIcon sx={{ fontSize: 40, color: '#0F1B4C' }} />
+            <AccountCircleIcon sx={{ fontSize: 40, color: '#0F1B4C',   '&:hover': {
+      color: '#405D80',
+    }, }} />
           </IconButton>
         </Tooltip>
         <Menu
@@ -353,7 +324,8 @@ export const Navbar: React.FC = () => {
         >
           <MenuItem onClick={handleCloseUserMenu}>
             <Link href={'/profile'} style={{ textDecoration: 'none' }}>
-              <Typography margin="-4px" width="140px" textAlign="center" color="#597FB5">
+              <Typography margin="-4px" width="140px" textAlign="center" 
+              color="#597FB5" sx={{'&:hover': {color: '#405D80',},}}>
                 Profile
               </Typography>
             </Link>
@@ -361,7 +333,8 @@ export const Navbar: React.FC = () => {
           <Divider />
           <MenuItem onClick={handleCloseUserMenu}>
             <Link href={'/account'} style={{ textDecoration: 'none' }}>
-              <Typography margin="-4px" width="140px" textAlign="center" color="#597FB5">
+              <Typography margin="-4px" width="140px" textAlign="center" color="#597FB5"
+               sx={{'&:hover': {color: '#405D80',},}}>
                 Account
               </Typography>
             </Link>
@@ -369,22 +342,27 @@ export const Navbar: React.FC = () => {
           <Divider />
           <MenuItem onClick={handleCloseUserMenu}>
             <Link href={'/dashboard'} style={{ textDecoration: 'none' }}>
-              <Typography margin="-4px" width="140px" textAlign="center" color="#597FB5">
+              <Typography margin="-4px" width="140px" textAlign="center" color="#597FB5"
+               sx={{'&:hover': {color: '#405D80',},}}>
                 Dashboard
               </Typography>
             </Link>
           </MenuItem>
           <Divider />
           <MenuItem onClick={handleCloseUserMenu}>
-            <Link href={'/'} style={{ textDecoration: 'none' }}>
-              <Typography margin="-4px" width="140px" textAlign="center" color="#597FB5">
+            {/* <Button> */}
+            <Link onClick={logoutFunc}
+            style={{ textDecoration: 'none' }}>
+              <Typography margin="-4px" width="140px" textAlign="center" color="#597FB5"
+               sx={{'&:hover': {color: '#405D80',},}}>
                 Logout
               </Typography>
             </Link>
+            {/* </Button> */}
           </MenuItem>
         </Menu>
       </Box>
-    </NavbarContainer>
+    </NavbarContainer></AppBar>
   );
 };
 

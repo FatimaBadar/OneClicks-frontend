@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@mui/material';
 import React, { useEffect } from 'react';
 const app_id = process.env.FACEBOOK_ID;
 
@@ -30,22 +31,22 @@ const AccountLogin: React.FC = () => {
         loadFacebookSDK(); 
     }, [ ]);
 
-const login = () => {
+    const fblogin = () => {
     
-    window.FB.login( (response: any) =>{
-
-        if(response.status === 'connected'){
-            console.log(response.authResponse.accessToken);
-
-            fetch(`/api/fblogin?token=${response.authResponse.accessToken}`)
-            .then(response2 => console.log("Debug response: ", response2));
-            console.log("Response by Facebook Login: ",response);
-        }
-        },
-        {scope: 'email, read_insights, pages_show_list, ads_management, ads_read, business_management, pages_read_engagement,pages_manage_posts'}      
-        // :'email,public_profile, ads_management, pages_manage_ads'}
-    )
-  }
+        window.FB.login( (response: any) =>{
+    
+            if(response.status === 'connected'){
+                console.log(response.authResponse.accessToken);
+    
+                fetch(`/api/fblogin?token=${response.authResponse.accessToken}`)
+                .then(response2 => console.log("Debug response: ", response2));
+                console.log("Response by Facebook Login: ",response);
+            }
+            },
+            {scope: 'email, read_insights, pages_show_list, ads_management, ads_read, business_management, pages_read_engagement,pages_manage_posts'}      
+            // :'email,public_profile, ads_management, pages_manage_ads'}
+        )
+      }
 
     // const statusChangeCallback = (response: any) => {
     //     console.log('statusChangeCallback');
@@ -83,7 +84,21 @@ const login = () => {
                 }}
         >
         </div>   */}
-                    <button onClick={login}>login</button>
+         <Button 
+        onClick={fblogin}
+        //   href="/connect"
+          variant="contained"
+          sx={{
+            backgroundColor: "#597FB5 !important",
+            color: "#fff !important",
+            '&:hover': {
+              backgroundColor: "#405D80 !important",
+            },
+          }}
+        >
+          Connect Ad Account
+        </Button>
+                    {/* <button onClick={fblogin}>login</button> */}
                     </>  
     );
 };
