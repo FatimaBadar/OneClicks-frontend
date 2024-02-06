@@ -26,13 +26,9 @@ import { useRouter } from 'next/navigation';
 import { LoginService, ForgetPasswordService } from '@/app/_services/authService';
 import Cookies from 'universal-cookie';
 import useStore from '@/app/_store/authStore';
-import { jwtVerification } from '@/app/_helpers/jwt-verification';
-
 import { Toast } from 'primereact/toast';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
-import { PrimeReactProvider } from 'primereact/api';
 import { Dialog } from 'primereact/dialog';
-// import { ToastComponent } from "@/app/_components/toaster";
 
 export default function LoginComponent() {
   const [username, setUsername] = useState<string>('');
@@ -158,8 +154,8 @@ export default function LoginComponent() {
       MuiInputBase: {
         styleOverrides: {
           root: {
-            width: '360px',
-            // width: "100%",
+            width: "100%",
+            // width: '360px',
             boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16)',
             borderRadius: '8px',
             '& .MuiInputLabel-root': {
@@ -178,7 +174,7 @@ export default function LoginComponent() {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        <Box sx={{ m: 7 }}>
+        <Box sx={{ m: 7}}>
           <Grid
             container
             component={Paper}
@@ -194,10 +190,13 @@ export default function LoginComponent() {
               item
               sx={{
                 m: 'auto',
-                display: { xs: 'none', sm: 'none', md: 'block', lg: 'block', xl: 'block' }, // hide on extra-small screens, show on medium screens
+                display: { xs: 'none', 
+                sm: 'none', md: 'block', 
+                lg: 'block', xl: 'block' }, // hide on extra-small screens, show on medium screens
               }}
             >
-              <Image src="/Images/signupImage.svg" width={456} height={304} priority={true} alt="loginpageimage" />
+              <Image src="/Images/signupImage.svg" 
+              width={456} height={304} priority={true} alt="loginpageimage" />
               {/* <Image
               src="/Images/signupImage.svg"
               width={200}
@@ -230,6 +229,8 @@ export default function LoginComponent() {
                   component="form"
                   onSubmit={submitLogin}
                   sx={{
+                    width: "93%",
+                    // width: '360px',
                     mt: 3,
                     textAlign: 'center',
                   }}
@@ -245,6 +246,7 @@ export default function LoginComponent() {
                     autoComplete="username"
                     value={username}
                     onChange={onChange}
+                    sx={{display:"flex"}}
                   />
                   <TextField
                     margin="normal"
@@ -256,6 +258,7 @@ export default function LoginComponent() {
                     autoComplete="current-password"
                     value={password}
                     onChange={onChange}
+                    sx={{display:"flex"}}
                   />
                   <Button
                     type="submit"
@@ -264,7 +267,9 @@ export default function LoginComponent() {
                     sx={{
                       mt: 3,
                       mb: 2,
-                      width: '360px',
+                      width: "100%",
+                      display:"flex",
+                      // width: '360px',
                       // width: "66%",
                       backgroundColor: '#597FB5 !important',
                       color: '#fff !important',

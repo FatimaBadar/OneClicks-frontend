@@ -121,7 +121,7 @@ const  Signup=()=> {
       MuiInputBase: {
         styleOverrides: {
           root: {
-            width: '360px',
+            width: '100%',
             boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16)',
             borderRadius: '8px',
             '& .MuiInputLabel-root': {
@@ -159,14 +159,17 @@ const  Signup=()=> {
   return (
     <>
     <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ m: 10 }}>
+      <Box sx={{ m: 7 }}>
         <Grid container component={Paper} elevation={24} square={false} sx={{ borderRadius: '20px', boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)' }}>
           <CssBaseline />
           <Grid
             item
             sx={{
               m: "auto",
-              display: { xs: "none", md: "block" }, // hide on extra-small screens, show on medium screens
+              display: { xs: 'none', 
+                sm: 'none', md: 'block', 
+                lg: 'block', xl: 'block' }, // hide on extra-small screens, show on medium screens
+              // display: { xs: "none", md: "block" }, // hide on extra-small screens, show on medium screens
             }}
           >
              <Image
@@ -193,6 +196,7 @@ const  Signup=()=> {
               </Typography>
               <Box component="form" onSubmit={submitSignup}
                 sx={{
+                  width: "93%",
                   mt: 3,
                   // ml:10,
                   // justifyContent: 'center', 
@@ -206,6 +210,7 @@ const  Signup=()=> {
                   autoFocus
                   autoComplete ="username"
                   value={firstname} onChange={onChange}
+                  sx={{display:"flex"}}
                 // focused         
                 />
                 <TextField margin="normal" required
@@ -214,6 +219,7 @@ const  Signup=()=> {
                   autoFocus
                   autoComplete ="username"
                   value={lastname} onChange={onChange}
+                  sx={{display:"flex"}}
                 // focused
                 />
                 <TextField margin="normal" required
@@ -222,6 +228,7 @@ const  Signup=()=> {
                   autoFocus
                   autoComplete ="username"
                   value={username} onChange={onChange}
+                  sx={{display:"flex"}}
                 // focused
                 />
                 <TextField margin="normal" required
@@ -230,6 +237,7 @@ const  Signup=()=> {
                   type='email'
                   autoFocus
                   value={email} onChange={onChange}
+                  sx={{display:"flex"}}
                 />
                 <TextField
                   margin="normal"
@@ -245,6 +253,7 @@ const  Signup=()=> {
                   }}
                   // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters
                   value={password} onChange={onChange}
+                  sx={{display:"flex"}}
                 />
               
                 <Button
@@ -253,7 +262,8 @@ const  Signup=()=> {
                   variant="contained"
                   sx={{
                     mt: 3, mb: 2,
-                    width: '360px',
+                    width: "100%",
+                    display:"flex",
                     backgroundColor: "#597FB5 !important",
                     color: "#fff !important",
                     '&:hover': {

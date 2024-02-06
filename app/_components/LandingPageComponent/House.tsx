@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import { Box, styled, Typography } from "@mui/material";
 import React from "react";
 import bedroomsIcon from "../media/bedroomsIcon.png";

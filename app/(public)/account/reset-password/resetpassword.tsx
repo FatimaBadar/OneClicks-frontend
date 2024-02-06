@@ -120,7 +120,7 @@ export default function ResetPassword() {
       MuiInputBase: {
         styleOverrides: {
           root: {
-            width: '360px',
+            width: '100%',
             boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16)',
             borderRadius: '8px',
             '& .MuiInputLabel-root': {
@@ -157,6 +157,7 @@ export default function ResetPassword() {
            </Typography>
               <Box component="form" onSubmit={submitReset}
                 sx={{
+                  width: "93%",
                   mt: 3,
                   textAlign: 'center'
                 }}>
@@ -172,6 +173,7 @@ export default function ResetPassword() {
                     minLength: 8,
                   }}
                   value={password} onChange={onChange}
+                  sx={{display:"flex"}}
                 />  
                 {/* <p className="error-message"></p> */}
                   <TextField  margin="normal"
@@ -182,6 +184,7 @@ export default function ResetPassword() {
                   id="confirmPassword"
                   autoComplete="current-password"
                   value={confirmPassword} onChange={onChange}
+                  sx={{display:"flex"}}
                   // error={!passwordsMatch}
                   // helperText={!passwordsMatch ? "Passwords do not match" : ""}
                 />
@@ -198,7 +201,8 @@ export default function ResetPassword() {
                   variant="contained"
                   sx={{
                     mt: 3, mb: 2,
-                    width: '360px',
+                    width: "100%",
+                    display:"flex",
                     backgroundColor: "#597FB5 !important",
                     color: "#fff !important",
                     '&:hover': {

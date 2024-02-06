@@ -2,6 +2,7 @@
 
 import { Button } from '@mui/material';
 import React, { useEffect } from 'react';
+import Cookies from 'universal-cookie';
 const app_id = process.env.FACEBOOK_ID;
 
 const AccountLogin: React.FC = () => {
@@ -31,19 +32,22 @@ const AccountLogin: React.FC = () => {
         loadFacebookSDK(); 
     }, [ ]);
 
+    const cookies = new Cookies();
     const fblogin = () => {
     
         window.FB.login( (response: any) =>{
     
             if(response.status === 'connected'){
-                console.log(response.authResponse.accessToken);
+              cookies.set('accessToken', response.authResponse.accessToken);
+
+                console.log("access token: ",response.authResponse.accessToken);
     
                 fetch(`/api/fblogin?token=${response.authResponse.accessToken}`)
                 .then(response2 => console.log("Debug response: ", response2));
                 console.log("Response by Facebook Login: ",response);
             }
             },
-            {scope: 'email, read_insights, pages_show_list, ads_management, ads_read, business_management, pages_read_engagement,pages_manage_posts'}      
+            {scope: 'email, read_insights, pages_show_list, ads_management, ads_read, business_management, pages_read_engagement,pages_manage_posts, pages_manage_metadata, pages_read_user_content'}      
             // :'email,public_profile, ads_management, pages_manage_ads'}
         )
       }

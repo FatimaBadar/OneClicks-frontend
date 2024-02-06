@@ -116,7 +116,9 @@ export default function EmailVerification() {
                         variant="contained"
                         sx={{
                             mt: 3, mb: 8,
-                            width: '300px',
+                            // width: '300px',
+                            display:"flex",
+                            width:"100%",
                             backgroundColor: "#597FB5 !important",
                             color: "#fff !important",
                             '&:hover': {

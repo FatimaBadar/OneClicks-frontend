@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Container } from '@mui/system';
-import CustomButton from './CustomButton';
+import CustomButton from './LandingPageComponent/CustomButton';
 import Image from 'next/image';
 import AppBar from '@mui/material/AppBar';
 

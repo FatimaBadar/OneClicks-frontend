@@ -34,7 +34,8 @@ const RecentActivity = () => {
               flex: 0.5,
               paddingLeft: 0,
             },
-          }} placeholder={undefined}        >
+          }}
+          >
           <TimelineItem>
             <TimelineOppositeContent>09:30 am</TimelineOppositeContent>
             <TimelineSeparator>
