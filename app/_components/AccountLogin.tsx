@@ -1,8 +1,12 @@
 'use client'
 
-import { Button } from '@mui/material';
-import React, { useEffect } from 'react';
+import { Box, Button, Card, CardContent, Modal, Stack, Typography } from '@mui/material';
+import { title } from 'process';
+import React, { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
+import router from 'next/router';
+// import { useRouter } from 'next/router';
+import CreateCampaign from './CreateCampaign';
 const app_id = process.env.FACEBOOK_ID;
 
 const AccountLogin: React.FC = () => {
@@ -72,7 +76,17 @@ const AccountLogin: React.FC = () => {
     //         statusChangeCallback(response);
     //     });
     // };
+    // const router = useRouter(); // Declare useRouter her
+    const [isModalOpen, setModalOpen] = useState(false);
 
+    const handleCreateCampaignClick = () => {
+      setModalOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setModalOpen(false);
+      // const router = useRouter();
+    };
     return (
         <>
         {/* <div    
@@ -102,6 +116,49 @@ const AccountLogin: React.FC = () => {
         >
           Connect Ad Account
         </Button>
+        
+        <Button
+         onClick={handleCreateCampaignClick}
+        variant="contained"
+        sx={{
+          backgroundColor: "#your-color !important", // Add your color for the second button
+          color: "#your-text-color !important", // Add your text color for the second button
+          '&:hover': {
+            backgroundColor: "#your-hover-color !important", // Add your hover color for the second button
+          },
+        }}
+      >
+        Create a Campaign
+      </Button>
+      <Modal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 600, bgcolor: 'background.paper', border: '2px solid #000', p: 4 }}>
+  <div>
+    {/* Modal Title */}
+    <h3 id="modal-modal-title">Create a Campaign</h3>
+
+    {/* Modal Content */}
+    <p id="modal-modal-description">Dashboard</p>
+    
+
+    {/* Button to Navigate to Another Page */}
+    <Button
+      variant="contained"
+      onClick={() => {
+        // Replace '/your-page' with the actual path to the page you want to navigate to
+        // window.location.href = '/CreateCampaign';
+        router.push('/CreateCampaign');
+      }}
+    >
+      Create a Campaign Form
+    </Button>
+  </div>
+</Box>
+      </Modal>
                     {/* <button onClick={fblogin}>login</button> */}
                     </>  
     );

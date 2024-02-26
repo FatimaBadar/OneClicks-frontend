@@ -11,6 +11,7 @@ import RecentActivity from '@/app/_components/HomeComponent/RecentActivity';
 import MonthlyEarnings from '@/app/_components/HomeComponent/MonthlyEarnings';
 import AdAccountsSummary from '@/app/_components/HomeComponent/AdAccountsSummary';
 import ContactsCreated from '@/app/_components/HomeComponent/ContactsCreated';
+import CreateCampaign from '@/app/_components/CreateCampaign';
 import Navbar from '@/app/_components/Navbar';
 import { useRouter } from 'next/navigation';
 

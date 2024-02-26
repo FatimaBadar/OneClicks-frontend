@@ -6,6 +6,7 @@ import './globals.css';
 // import Script from 'next/script';
 // import Head from 'next/head';
 // import { Toast } from 'primereact/toast';
+import CreateCampaign from './_components/CreateCampaign';
 const inter = Inter({ subsets: ['latin'] });
 import Chatbot from './_components/Chatbot';
 
