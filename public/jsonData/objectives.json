@@ -1,0 +1,262 @@
+[
+    {
+      "codeWord": "OUTCOME_AWARENESS",
+      "name": "Awareness",
+      "description": "Show your ads to people who are most likely to remember them.",
+      "goodFor": {
+        "name": ["Reach", "Brand awareness", "Video views", "Store location awareness"],
+        "description": [
+          "Reach the maximum number of people who may be interested in your brand.",
+          "Reach people who are more likely to remember your brand.",
+          "Reach people who are more likely to watch your video.",
+          "Reach people using the physical location for your business, organization or set of stores."
+        ]
+      },
+      "optimizationGoal": [
+        {
+          "conversionLocation": "On your ad",
+          "performanceGoal": [
+            "Maximise reach of ads",
+            "Maximise number of impressions",
+            "Maximise ad recall lift (tooltip: We'll try to show your ads to people who are likely to remember seeing them.)",
+            "Maximise ThruPlay views",
+            "Maximise 2-second continuous video views"]
+        }
+      ]
+    },
+    {
+      "codeWord": "OUTCOME_TRAFFIC",
+      "name": "Traffic",
+      "description": "Send people to a destination, such as your website, app or Facebook event.",
+      "goodFor": {
+        "name": ["Link clicks","Landing page views","Messenger, Instagram and WhatsApp","Calls"],
+        "description": ["Get people to click on a link to your website, app or Facebook event.",
+                       "Get people to view content on your landing page.",
+                      "Send people to Messenger, Instagram or WhatsApp to start a conversation with you.", 
+                      "Get people who may be interested in your business to call you."]
+      },
+      "optimizationGoal": [
+        {
+          "conversionLocation": "Website",
+          "performanceGoal": [
+            "Maximise number of landing page views",
+            "Maximise number of link clicks",
+            "Maximise daily unique reach (tooltip: We'll try to show your ads to people up to once a day. )",
+            "Maximise number of impressions"
+          ]
+        },
+        {
+          "conversionLocation": "App",
+          "performanceGoal": [
+            "Maximise number of link clicks",
+            "Maximise daily unique reach (tooltip: We'll try to show your ads to people up to once a day. )"
+          ]
+        },
+        {
+          "conversionLocation": "Messenger",
+          "performanceGoal": [
+            "Maximise number of link clicks",
+            "Maximise daily unique reach (tooltip: We'll try to show your ads to people up to once a day. )",
+            "Maximise number of impressions"
+          ]
+        },
+        {
+          "conversionLocation": "WhatsApp",
+          "performanceGoal": [
+            "Maximise number of link clicks",
+            "Maximise daily unique reach (tooltip: We'll try to show your ads to people up to once a day. )",
+            "Maximise number of impressions"
+          ]
+        },  
+        {
+          "conversionLocation": "Calls",
+          "performanceGoal": [
+            "Maximise number of link clicks",
+            "Maximise number of calls (tooltip: We'll try to show your ads to the people most likely to call your business.)"
+          ]
+        }
+      ]
+        
+      },
+      
+    {
+      "codeWord": "OUTCOME_ENGAGEMENT",
+      "name": "Engagement",
+      "description": "Get more messages, purchases through messaging, video views, post engagement, Page likes, event responses or community engagement.",
+      "goodFor": {
+        "name": ["Messenger, Instagram and WhatsApp", "Video views", "Post engagement" ,"Conversions","Calls"],
+        "description": ["Encourage people to start a conversation with you or initiate a purchase through messaging apps.",
+        "Reach people who are more likely to watch your video.",
+        "Get people to interact with your posts.",
+       "Get people to view content, contact your business, add to a wishlist or take another action on your website or app.", 
+       "Get people who may be interested in your business to call you"]
+      },
+
+      "optimizationGoal": [
+        {
+          "conversionLocation": "On your ad",
+          "performanceGoal": [
+            "Maximise number of ThruPlay views",
+            "Maximise 2-second continuous video views"
+          ]
+        },
+        {
+          "conversionLocation": "Messaging apps",
+          "performanceGoal": [
+            "Maximise number of link clicks",
+            "Maximise number of conversations (tooltip: We'll try to show your ads to the people most likely to have a conversation with you through messaging. )"
+          ]
+        },
+        {
+          "conversionLocation": "Website",
+          "performanceGoal": [
+            "Maximise number of link clicks",
+            "Maximise number of landing page views",
+            "Maximise number of impressions",
+            "Maximise daily unique reach (tooltip: We'll try to show your ads to people up to once a day.)"
+          ]
+        },
+        {
+          "conversionLocation": "App",
+          "performanceGoal": [
+            "Maximise number of link clicks",
+            "Maximise daily unique reach (tooltip: We'll try to show your ads to people up to once a day. )",
+            "Maximise number of app events (tooltip: We'll try to show your ads to the people most likely to take a specific action in your app at least once.)"
+          ]
+        },  
+        {
+          "conversionLocation": "Facebook Page",
+          "performanceGoal": [
+            "Maximise number of Page likes"
+          ]
+        }
+      ]
+    },
+    {
+      "codeWord": "OUTCOME_LEADS",
+      "name": "Leads",
+      "description": "Collect leads for your business or brand.",
+      "goodFor": {
+        "name": ["Instant Forms", "Messenger and Instagram","Conversions","Calls"],
+        "description": ["Find people who are willing to share their contact information and other details by filling in a form.",
+         "Find people who are willing to share their contact information and other details through chat.",
+        "Get people to share their contact information, complete a registration form, submit an application or take another action on your website or app.",
+      "Get people who may be interested in your business to call you.."]
+      },
+      "optimizationGoal": [
+        {
+          "conversionLocation": "Website",
+          "performanceGoal": [
+            "Maximise number of conversions (tooltip: We'll try to show your ads to the people most likely to take a specific action on your website.)",
+            "Maximise landing page views",
+            "Maximise link clicks",
+            "Maximise daily unique reach (tooltip: We'll try to show your ads to people up to once a day.)",
+            "Maximise number of impressions"
+          ]
+        },
+        {
+          "conversionLocation": "Messenger",
+          "performanceGoal": [
+            "Maximise number of leads"
+          ]
+        },
+        {
+          "conversionLocation": "Instant forms",
+          "performanceGoal": [
+            "Maximise number of leads",
+            "Maximise number of conversion leads (tooltip: We'll try to show your ads to the people most likely to convert after sharing their contact information with you.)"
+          ]
+        },
+        {
+          "conversionLocation": "App",
+          "performanceGoal": [
+            "Maximise number of link clicks",
+            "Maximise daily unique reach (tooltip: We'll try to show your ads to people up to once a day. )",
+            "Maximise number of app events (tooltip: We'll try to show your ads to the people most likely to take a specific action in your app at least once.)"
+          ]
+        },  
+        {
+          "conversionLocation": "Calls",
+          "performanceGoal": [
+            "Maximise number of calls (tooltip: We'll try to show your ads to the people most likely to call your business.)"
+          ]
+        }
+      ]
+    },
+    {
+      "codeWord": "OUTCOME_APP_PROMOTION",
+      "name": "App promotion",
+      "description": "Find new people to install your app and continue using it.",
+      "goodFor": {
+        "name": ["App Installs", "App events"],
+        "description": ["Get people to install your app.",
+         "Get people to make an in-app purchase or take another action in your app."]
+      },
+      "optimizationGoal": [
+        {
+          "conversionLocation": "App",
+          "performanceGoal": [
+            "Maximise number of link clicks",
+            "Maximise number of app installs",
+            "Maximise number of app events (tooltip: We'll try to show your ads to the people most likely to take a specific action in your app at least once.)",
+            "Maximise ROAS (return on ad spend) (tooltip: We'll try to show your ads to the people most likely to make higher-value purchases, helping you get the highest return on ad spend (ROAS) possible.)"
+          ]
+        }
+      ]
+    },
+    {
+      "codeWord": "OUTCOME_SALES",
+      "name": "Sales",
+      "description": "Find people who are likely to purchase your product or service.",
+      "goodFor": {
+        "name": ["Conversions", "Catalogue sales", "Messenger, Instagram and WhatsApp", "Calls"],
+        "description": ["Get people to add an item to their basket, make a purchase, start a subscription or take another action on your website or app.",
+        "Get people to buy products or services from your catalogue.",
+        "Get people to buy products or services from your catalogue.",
+       "Get people who may be interested in your business to call you"]
+      },
+      "optimizationGoal": [
+        {
+          "conversionLocation": "Website",
+          "performanceGoal": [
+            "Maximise number of conversions (tooltip: We'll try to show your ads to the people most likely to take a specific action on your website.)",
+            "Maximise landing page views",
+            "Maximise link clicks",
+            "Maximise daily unique reach (tooltip: We'll try to show your ads to people up to once a day.)",
+            "Maximise number of impressions"
+          ]
+        },
+        {
+          "conversionLocation": "Website and app",
+          "performanceGoal": [
+            "Maximise number of conversions (tooltip: We'll try to show your ads to the people most likely to take a specific action on your website.)"
+          ]
+        },
+        {
+          "conversionLocation": "App",
+          "performanceGoal": [
+            "Maximise number of link clicks",
+            "Maximise daily unique reach (tooltip: We'll try to show your ads to people up to once a day. )",
+            "Maximise number of app events (tooltip: We'll try to show your ads to the people most likely to take a specific action in your app at least once.)"
+          ]
+        },  
+        {
+          "conversionLocation": "Messenger",
+          "performanceGoal": [
+            "Maximise number of conversations (tooltip: We'll try to show your ads to the people most likely to have a conversation with you through messaging.)",
+            "Maximise number of conversions (tooltip: We'll try to show your ads to the people most likely to take a specific action on your website.)",
+            "Maximise number of link clicks",
+            "Maximise number of impressions",
+            "Maximise reach of ads"
+          ]
+        },
+        {
+          "conversionLocation": "WhatsApp",
+          "performanceGoal": [
+            "Maximise number of calls (tooltip: We'll try to show your ads to the people most likely to call your business.)"
+          ]
+        }
+      ]
+    }
+]
+  

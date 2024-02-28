@@ -1,0 +1,38 @@
+[        
+    {
+        "codeWord": "APP_INSTALLS",
+        "description": "Pay when people install your app."
+    },
+    {
+        "codeWord": "CLICKS",
+        "description": "Pay when people click anywhere in the ad."
+    },
+    {
+        "codeWord": "IMPRESSIONS",
+        "description": "Pay when the ads are shown to people."
+    },
+    {
+        "codeWord": "LINK_CLICKS",
+        "description": "Pay when people click on the link of the ad."
+    },
+    {
+        "codeWord": "OFFER_CLAIMS",
+        "description": "Pay when people claim the offer."
+    },
+    {
+        "codeWord": "PAGE_LIKES",
+        "description": "Pay when people like your page."
+    },
+    {
+        "codeWord": "POST_ENGAGEMENT",
+        "description": "Pay when people engage with your post."
+    },
+    {
+        "codeWord": "VIDEO_VIEWS",
+        "description": "Pay when people watch your video ads for at least 10 seconds."
+    },
+    {
+        "codeWord": "THRUPLAY",
+        "description": "Pay for ads that are played to completion, or played for at least 15 seconds."
+    }
+]

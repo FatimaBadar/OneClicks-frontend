@@ -22,7 +22,6 @@ import {
 
 import { useRouter } from 'next/navigation';
 // import { Toast } from 'primereact/toast';
-// import Cookies from "universal-cookie";
 import { LoginService, ForgetPasswordService } from '@/app/_services/authService';
 import Cookies from 'universal-cookie';
 import useStore from '@/app/_store/authStore';
@@ -57,11 +56,7 @@ export default function LoginComponent() {
       const response = await ForgetPasswordService(ForgotPassUsername);
       if (response.statusCode == "200") {
         showSuccessToast(response.message);
-        // cookies.set('token', response.responseData.token);
-        // showSuccessToast('Reset password Link sent to your email!');
-        setTimeout(() => {
           router.push('/home');
-        }, 3000);     
        } 
       else{
         showErrorToast(response.message);
@@ -77,9 +72,6 @@ export default function LoginComponent() {
     e.preventDefault();
     try {
       const response = await LoginService(username, password);
-      // if (response.token) {
-      //   headers["Authorization"] = `Bearer ${token}`;
-      // }
       console.log("res", response);
       if (response.statusCode == "200") {
         try {
@@ -98,6 +90,9 @@ export default function LoginComponent() {
         }, 3000);
         // jwtVerification(response.token);
         // cookies.set('authorization', response.token, { httpOnly: true });
+      }
+      else{
+        showErrorToast('Wrong password!');
       }
      // <ToastComponent func="SuccessToast" message="Logged in successfully!"/>
       setUsername('');

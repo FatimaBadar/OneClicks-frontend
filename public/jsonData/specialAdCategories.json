@@ -1,0 +1,23 @@
+[
+    {
+      "codeWord": "HOUSING",
+      "name": "Housing",
+      "description": "Ads for property listings, home insurance, mortgages or other related opportunities."
+    },
+    {
+      "codeWord": "CREDIT",
+      "name": "Credit",
+      "description": "Ads for credit card offers, vehicle loans, long-term financing or other related opportunities."
+    },
+    {
+      "codeWord": "EMPLOYMENT",
+      "name": "Employment",
+      "description": "Ads for job offers, internships, professional certification programmes or other related opportunities."
+    },
+    {
+      "codeWord": "ISSUES_ELECTIONS_POLITICS",
+      "name": "Social issues, Elections, or Politics",
+      "description": "Ads about social issues (such as the economy, or civil and social rights), elections, or political figures or campaigns."
+    }
+]
+  

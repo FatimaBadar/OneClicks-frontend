@@ -1,0 +1,193 @@
+[
+    {
+      "codeWord": "OUTCOME_AWARENESS",
+      "name": "Awareness",
+      "optimizationGoal": [
+        {
+            "codeWord": "AD_RECALL_LIFT",
+            "description": "Optimize for people more likely to remember seeing your ads."
+        },
+        {
+            "codeWord": "REACH",
+            "description": "Optimize to reach the most unique users for each day."
+        },
+        {
+            "codeWord": "IMPRESSIONS",
+            "description": "Show the ads as many times as possible."
+        },
+        {
+            "codeWord": "THRUPLAY",
+            "description": "Optimize delivery of your ads to people who are more likely to play your ad to completion, or play it for at least 15 seconds."
+        },
+        {
+            "codeWord": "TWO_SECOND_CONTINUOUS_VIDEO_VIEWS",
+            "description": "Pay when people watch your video ads for at least 2 seconds."
+        }
+      ]
+    },
+    {
+      "codeWord": "OUTCOME_TRAFFIC",
+      "name": "Traffic",
+      "optimizationGoal": [
+        {
+            "codeWord": "LINK_CLICKS",
+            "description": "Optimize for people more likely to click in the link of the ad."
+        },
+        {
+            "codeWord": "REACH",
+            "description": "Optimize to reach the most unique users for each day."
+        },
+        {
+            "codeWord": "LANDING_PAGE_VIEWS",
+            "description": "Optimize for people who are most likely to click on and load your chosen landing page."
+        },
+        {
+            "codeWord": "IMPRESSIONS",
+            "description": "Show the ads as many times as possible."
+        },
+        {
+            "codeWord": "QUALITY_CALL",
+            "description": "Optimize for people who are likely to call the advertiser."
+        }
+      ]
+        
+      },
+      
+    {
+      "codeWord": "OUTCOME_ENGAGEMENT",
+      "name": "Engagement",
+      "optimizationGoal": [
+        {
+            "codeWord": "POST_ENGAGEMENT",
+            "description": "Optimize for people more likely to engage with your post."
+        },
+        {
+            "codeWord": "REACH",
+            "description": "Optimize to reach the most unique users for each day."
+        },
+        {
+            "codeWord": "PAGE_LIKES",
+            "description": "Optimize for people more likely to like your page."
+        },
+        {
+            "codeWord": "IMPRESSIONS",
+            "description": "Show the ads as many times as possible."
+        },
+        {
+            "codeWord": "EVENT_RESPONSES",
+            "description": "Optimize for people more likely to attend your event."
+        },
+        {
+            "codeWord": "POST_ENGAGEMENT",
+            "description": "Optimize for people more likely to engage with your post."
+        },
+        {
+            "codeWord": "THRUPLAY",
+            "description": "Optimize delivery of your ads to people who are more likely to play your ad to completion, or play it for at least 15 seconds."
+        },
+        {
+            "codeWord": "TWO_SECOND_CONTINUOUS_VIDEO_VIEWS",
+            "description": "Pay when people watch your video ads for at least 2 seconds."
+        },
+        {
+            "codeWord": "CONVERSATIONS",
+            "description": "Directs ads to people more likely to have a conversation with the business."
+        },
+        {
+            "codeWord": "LINK_CLICKS",
+            "description": "Optimize for people more likely to click in the link of the ad."
+        },
+        {
+            "codeWord": "LEAD_GENERATION",
+            "description": "Optimize for people more likely to fill out a lead generation form."
+        },
+        {
+            "codeWord": "OFFSITE_CONVERSIONS",
+            "description": "Optimize for people more likely to make a conversion on the site."
+        },
+        {
+            "codeWord": "LANDING_PAGE_VIEWS",
+            "description": "Optimize for people who are most likely to click on and load your chosen landing page."
+        }
+      ]
+    },
+    {
+      "codeWord": "OUTCOME_LEADS",
+      "name": "Leads",
+      "optimizationGoal": [
+        {
+            "codeWord": "LEAD_FROM_MESSENGER",
+            "description": "Optimize for people more likely to fill out a lead generation form."
+        },
+        {
+            "codeWord": "LEAD_FROM_IG_DIRECT",
+            "description": "Optimize for people more likely to fill out a lead generation form."
+        },
+        {
+            "codeWord": "PHONE_CALL",
+            "description": "Optimize for people who are likely to call the advertiser."
+        },
+        {
+            "codeWord": "OFFSITE_CONVERSIONS",
+            "description": "Optimize for people more likely to make a conversion on the site."
+        },
+        {
+            "codeWord": "REACH",
+            "description": "Optimize to reach the most unique users for each day."
+        },
+        {
+            "codeWord": "LANDING_PAGE_VIEWS",
+            "description": "Optimize for people who are most likely to click on and load your chosen landing page."
+        },
+        {
+            "codeWord": "IMPRESSIONS",
+            "description": "Show the ads as many times as possible."
+        },
+        {
+            "codeWord": "LINK_CLICKS",
+            "description": "Optimize for people more likely to click in the link of the ad."
+        }
+      ]
+    },
+    {
+      "codeWord": "OUTCOME_APP_PROMOTION",
+      "name": "App promotion",
+      "optimizationGoal": [
+        {
+            "codeWord": "LINK_CLICKS",
+            "description": "Optimize for people more likely to click in the link of the ad."
+        },
+        {
+            "codeWord": "OFFSITE_CONVERSIONS",
+            "description": "Optimize for people more likely to make a conversion on the site."
+        },
+        {
+            "codeWord": "APP_INSTALLS",
+            "description": "Optimize for people more likely to install your app."
+        }
+      ]
+    },
+    {
+      "codeWord": "OUTCOME_SALES",
+      "name": "Sales",
+      "optimizationGoal": [
+        {
+            "codeWord": "OFFSITE_CONVERSIONS",
+            "description": "Optimize for people more likely to make a conversion on the site."
+        },
+        {
+            "codeWord": "CONVERSATIONS",
+            "description": "Directs ads to people more likely to have a conversation with the business."
+        },
+        {
+            "codeWord": "QUALITY_CALL",
+            "description": "Optimize for people who are likely to call the advertiser."
+        },
+        {
+            "codeWord": "LINK_CLICKS",
+            "description": "Optimize for people more likely to click in the link of the ad."
+        }
+      ]
+    }
+]
+  

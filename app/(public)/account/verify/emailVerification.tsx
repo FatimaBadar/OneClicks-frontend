@@ -47,9 +47,9 @@ export default function EmailVerification() {
             if(response.statusCode=="200"){
                 showSuccessToast("Account Verified Successfully!");
                 
-                setTimeout(() => {
+             //   setTimeout(() => {
                     router.push('/account/login');
-                  }, 3000);   
+             //     }, 3000);   
                 // showSuccessToast("Please login again");
             }
             //check status code, if 200 then route to login page.        

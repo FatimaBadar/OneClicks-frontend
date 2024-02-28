@@ -2,12 +2,11 @@ import useFetch from "../_helpers/useFetch";
 import { ResponseVM } from "../_models/response.model";
 import { User, UserPayload } from "../_models/user.model";
 
-const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
-// const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
+// const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
+const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
 // 
 
 async function handleResponse<T>(response: Response): Promise<T> {
-    // const fetch = useFetch();
     const contentType = response.headers.get("Content-Type") || "";
     const isJson = contentType.includes("application/json");
     const data = isJson ? await response.json() : await response.text();
@@ -19,8 +18,6 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
         throw new Error(data.message || response.statusText);
     }
-    // middleware();
-    // useAuth();
     return data as T;
 }
 

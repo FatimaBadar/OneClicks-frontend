@@ -45,9 +45,9 @@ export default function ResetPassword() {
       if(response.statusCode=="200"){
         showSuccessToast("Password successful changed!");
 
-        setTimeout(() => {
+       // setTimeout(() => {
           router.push('/account/login');
-        }, 3000);   
+       // }, 3000);   
       }   
       else if(response.statusCode=="401"){
         showErrorToast("Token is Expired!");
