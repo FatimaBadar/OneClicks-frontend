@@ -53,12 +53,12 @@ const AdCampaignForm = ({ onReturnObjective }: any) => {
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
     const tempCampaignData: Campaign = {
-      campaignName,
-      objective,
-      status,
-      specialAdCategory,
+      campaignName: campaignName,
+      objective: objective,
+      status: status,
+      specialAdCategories: specialAdCategory,
       accessToken: cookies.get('accesstoken'),
-      adAccountId: cookies.get('adAccountId')
+      ad_accountId: cookies.get('adAccountId')
     };
     console.log(tempCampaignData);
 

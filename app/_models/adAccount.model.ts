@@ -1,18 +1,27 @@
+// export interface AdAccount{
+//     accessToken: string,
+//     data_access_expiration_time: number,
+//     expiresIn: number
+//     graphDomain: string,
+//     signedRequest: string,
+//     userID: string
+// }
 export interface AdAccount{
-    accessToken: string,
-    data_access_expiration_time: number,
-    expiresIn: number
-    graphDomain: string,
-    signedRequest: string,
-    userID: string
+    userId: string, 
+    accountId: string,
+    adAccountId: string,
+    pages: string[],
+    platform: string,
+    longLiveToken: string
 }
+
 export interface Campaign {
     campaignId?:string,
     campaignName: string,
     objective: string,
     status: string,
-    specialAdCategory: string[],
-    adAccountId: string,
+    specialAdCategories: string[],
+    ad_accountId: string,
     accessToken: string
 }
 

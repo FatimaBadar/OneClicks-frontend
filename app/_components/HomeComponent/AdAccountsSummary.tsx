@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import DashboardCard from "./DashboardCard";
 import FbLogin from "../FbLogin";
-import DashboardPage from "../AdCampaignModal";
 
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",

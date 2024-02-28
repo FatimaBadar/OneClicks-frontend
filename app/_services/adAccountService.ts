@@ -21,28 +21,17 @@ async function handleResponse<T>(response: Response): Promise<T> {
     return data as T;
 }
 
-export async function ConnectAdAccount(accessToken: string): Promise<ResponseVM<any>> {
+export async function ConnectAdAccount(accessToken: string): Promise<ResponseVM<AdAccount>>{
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Accounts/GetAdAccountData`, accessToken);
-    return handleResponse<ResponseVM<any>>(response).then((data) => data);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Accounts/getAdAccountData?accessToken=${accessToken}`);
+   
+    return handleResponse<ResponseVM<AdAccount>>(response).then((data) => data);
 }
-// export async function ConnectAdAccount(accessToken: string): Promise<ResponseVM<any>> {    
-//      const fetch = useFetch();     
-//      const headers = new Headers();     
-//      headers.append('accessToken', accessToken);     
-//      const response = await fetch.get(`${SERVER_ENDPOINT}/api/Accounts/GetAdAccountData`, 
-//      {         headers: headers     });     
-// return handleResponse<ResponseVM<any>>(response).then((data) => data); }
 
 export async function CreateCampaignService(payload: Campaign): Promise<ResponseVM<Campaign>> {
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/ads/createcampaign`,payload);
-    //  {payload,
-    //     headers: {
-    //         'accesstoken': payload.accessToken
-    //     }
-    // });
-
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/Create`,payload);
+    
     return handleResponse<ResponseVM<Campaign>>(response).then((data) => data);
 }
 

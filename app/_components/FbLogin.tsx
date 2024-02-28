@@ -54,8 +54,15 @@ const toast = useRef<Toast>(null);
   const adAccount = async (accessToken: string) => {
     try {
       const backendResponse = await ConnectAdAccount(accessToken);
+      console.log("check2",backendResponse);
       if (backendResponse.statusCode == "200") {
-        cookies.set('accesstoken', backendResponse.responseData.accesstoken);
+        console.log("check",backendResponse.responseData.longLiveToken);
+        // if (typeof window !== 'undefined') {
+          // Set a value in localStorage
+          localStorage.setItem('accesstoken2', backendResponse.responseData.longLiveToken);
+        // }
+
+        cookies.set('accesstoken', backendResponse.responseData.longLiveToken);
         cookies.set('adAccountId', backendResponse.responseData.adAccountId);
         showSuccessToast(backendResponse.message);
         showSuccessToast('Ad Account Connected successfully')
