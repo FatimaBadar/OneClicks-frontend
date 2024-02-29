@@ -18,6 +18,7 @@ import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 import AdCampaignModal from "@/app/_components/AdModal";
 import Navbar from "@/app/_components/Navbar";
 import { useRouter } from "next/navigation";
+import { getAllCampaignsService } from "@/app/_services/adAccountService";
 
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",
@@ -41,8 +42,44 @@ const Campaigns = [
 
 const Ads = () => {
   const [checkLogin, setcheckLogin] = useState<boolean>(false);
+  const [name, setName] = useState("");
+  //const [type, setType] = useState("");
+  const type = "Facebook";
+  const  pbg= typeColor.Facebook;
+
+  const  impressions= 0;
+  const clicks = 0;
+
+  const [objective, setObjective] = useState("");
+  const [status, setStatus] = useState("");
   const store = useStore();
   const router = useRouter();
+
+
+  const getCampaigns = async (e: any) => {
+    e.preventDefault();
+    try {
+            const response = await getAllCampaignsService();
+            
+            if(response.statusCode=="200"){
+              setObjective(response.responseData.ad_accountId)
+              setName(response.responseData.campaignName)
+              setStatus(response.responseData.status)
+
+                // showSuccessToast("Account Verified Successfully!");
+                
+             //   setTimeout(() => {
+             //     }, 3000);   
+                // showSuccessToast("Please login again");
+            }
+            //check sttus code, if 200 then route to login page.        
+        }
+      
+    catch (error) {
+        //showErrorToast("Verification failed.");
+         console.error(error);
+    }
+    }
 
   // useEffect(() => {
   //   if (!store.authUser) {
@@ -92,7 +129,7 @@ const Ads = () => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="subtitle2" fontWeight={600}>
-                      Account Name
+                      Objective
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -110,16 +147,17 @@ const Ads = () => {
                       Clicks
                     </Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  {/* <TableCell align="right">
                     <Typography variant="subtitle2" fontWeight={600}>
                       Budget Spent
                     </Typography>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Campaigns.map((account) => (
-                  <TableRow key={account.id}>
+                {/* {Campaigns.map((account) => ( */}
+                  <TableRow >
+                    {/* //key={account.id}> */}
                     <TableCell>
                       <Typography
                         sx={{
@@ -127,7 +165,8 @@ const Ads = () => {
                           fontWeight: "500",
                         }}
                       >
-                        {account.name}
+                        {/* {account.name} */}
+                        {name}
                       </Typography>
                     </TableCell>
 
@@ -140,7 +179,9 @@ const Ads = () => {
                       >
                         <Box>
                           <Typography variant="subtitle2" fontWeight={600}>
-                            {account.accountName}
+                            {/* {account.accountName} */}
+                            {objective}
+
                           </Typography>
                           <Typography
                             color="textSecondary"
@@ -148,7 +189,8 @@ const Ads = () => {
                               fontSize: "13px",
                             }}
                           >
-                            {account.status}
+                            {status}
+                            {/* {account.status} */}
                           </Typography>
                         </Box>
                       </Box>
@@ -158,11 +200,11 @@ const Ads = () => {
                       <Chip
                         sx={{
                           px: "4px",
-                          backgroundColor: account.pbg,
+                          backgroundColor: pbg,
                           color: "#fff",
                         }}
                         size="small"
-                        label={account.type}
+                        label={type}
                       ></Chip>
                     </TableCell>
 
@@ -172,7 +214,7 @@ const Ads = () => {
                         variant="subtitle2"
                         fontWeight={400}
                       >
-                        {account.impressions}
+                        {impressions}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
@@ -181,17 +223,17 @@ const Ads = () => {
                         variant="subtitle2"
                         fontWeight={400}
                       >
-                        {account.clicks}
+                        {clicks}
                       </Typography>
                     </TableCell>
 
-                    <TableCell align="right">
+                    {/* <TableCell align="right">
                       <Typography color="textSecondary" variant="subtitle2">
                         ${account.budget}k
                       </Typography>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
-                ))}
+                {/* ))} */}
               </TableBody>
             </Table>
           </Box>

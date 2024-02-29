@@ -37,7 +37,15 @@ export async function CreateCampaignService(payload: Campaign): Promise<Response
 
 export async function CreateAdsetService(payload: Adset): Promise<ResponseVM<Adset>> {
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/ads/createadset`, payload);
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/createAdSet`, payload);
 
     return handleResponse<ResponseVM<Adset>>(response).then((data) => data);
+}
+
+export async function getAllCampaignsService():  Promise<ResponseVM<Campaign>>{
+    const fetch = useFetch();
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllCampaigns`);
+    
+    return handleResponse<ResponseVM<Campaign>>(response).then((data) => data);
+    // return handleResponse<ResponseVM<User>>(verifyToken).then((data) => data.responseData);
 }
