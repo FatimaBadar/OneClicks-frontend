@@ -58,7 +58,7 @@ const AdCampaignForm = ({ onReturnObjective }: any) => {
       status: status,
       specialAdCategories: specialAdCategory,
       accessToken: cookies.get('accesstoken'),
-      ad_accountId: cookies.get('adAccountId')
+      ad_accountId: cookies.get('adAccountId').toString()
     };
     console.log(tempCampaignData);
 

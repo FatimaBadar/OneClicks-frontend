@@ -30,8 +30,8 @@ export async function ConnectAdAccount(accessToken: string): Promise<ResponseVM<
 
 export async function CreateCampaignService(payload: Campaign): Promise<ResponseVM<Campaign>> {
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/Create`,payload);
-    
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateCampaign`,payload);
+
     return handleResponse<ResponseVM<Campaign>>(response).then((data) => data);
 }
 
