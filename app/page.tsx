@@ -20,6 +20,36 @@ export default function Home() {
   const store = useStore();
   console.log('user in landing: ', store.authUser);
 
+  useEffect(() => {
+    const getAccessTokenFromURL = () => {
+      const params = new URLSearchParams(window.location.hash.slice(1));
+      const access_token = params.get('access_token'); 
+
+      if (access_token) {
+        console.log('Access token:', access_token);
+        localStorage.setItem('access_tokenGoogle', access_token as string);
+        trySampleRequest();
+      } else {
+        console.log('Access token not found in the URL');
+      }
+    };
+    getAccessTokenFromURL();
+    }, []);
+
+    const trySampleRequest = () => {
+      const accessToken = localStorage.getItem('access_tokenGoogle');
+      if (accessToken) {
+        fetch('https://www.googleapis.com/drive/v3/about?fields=user', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => console.log("sample google request: ",data))
+        .catch(error => console.error('Error:', error));
+      }
+    };
+  
   return (
 <>      <Navbar />
     <div className="main mx-auto" >

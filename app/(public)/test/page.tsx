@@ -7,7 +7,6 @@ const Oauth = () => {
   const searchParams = useSearchParams()
 
   useEffect(() => {
-  
     const access_token = searchParams.get('access_token');
     console.log(access_token)
     if (access_token) {
@@ -18,6 +17,7 @@ const Oauth = () => {
     }
   }, []);
 
+  //end
   const trySampleRequest = () => {
     const accessToken = localStorage.getItem('access_token');
     if (accessToken) {
@@ -32,6 +32,7 @@ const Oauth = () => {
     }
   };
 
+  //1st: connect google
   const oauthSignIn = () => {
     const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
 
