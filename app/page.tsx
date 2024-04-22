@@ -8,8 +8,12 @@ import Details from './_components/LandingPageComponent/Details';
 import GetStarted from './_components/LandingPageComponent/GetStarted';
 import Companies from './_components/LandingPageComponent/Companies';
 import Cards from './_components/LandingPageComponent/Cards';
-import Navbar from './_components/Navbar';
 import useStore from './_store/authStore';
+// import  Details from './_components/Details'
+// import Properties from './_components/Properties'
+import Navbar from './_components/Navbar';
+import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
