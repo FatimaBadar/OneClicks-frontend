@@ -2,7 +2,7 @@
 
 import { Button } from "@mui/material";
 import React, { useEffect, useRef } from "react";
-import { ConnectAdAccount } from "../_services/adAccountService";
+import { ConnectAdAccount } from "../../_services/adAccountService";
 import { Toast } from 'primereact/toast';
 import Cookies from 'universal-cookie';
 
@@ -62,8 +62,8 @@ const toast = useRef<Toast>(null);
           localStorage.setItem('accesstoken2', backendResponse.responseData.longLiveToken);
         // }
 
-        cookies.set('accesstoken', backendResponse.responseData.longLiveToken);
-        cookies.set('adAccountId', backendResponse.responseData.adAccountId);
+        cookies.set('accesstoken', backendResponse.responseData.longLiveToken, { path: '/' });
+        cookies.set('adAccountId', backendResponse.responseData.adAccountId, { path: '/' });
         showSuccessToast(backendResponse.message);
         showSuccessToast('Ad Account Connected successfully')
        } 

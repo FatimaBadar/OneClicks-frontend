@@ -17,20 +17,21 @@ import { useRouter } from 'next/navigation';
 export default function Home() {
   const store = useStore();
   const router = useRouter();
-  const [checkLogin, setcheckLogin] = useState<boolean>(false);
+  const [checkLogin, setcheckLogin] = useState<boolean>(true);
+  console.log('user store in home: ', store.authUser);
 
-  useEffect(() => {
-    if (!store.authUser) {
-      setcheckLogin(false);
-      router.push('/account/login');
-    } else {
-      setcheckLogin(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (store.authUser) {
+  //     setcheckLogin(true);
+  //   } else {      
+  //     setcheckLogin(false);
+  //     router.push('/account/login');
+  //   }
+  // }, []);
 
   return (
     <>
-      {checkLogin && (
+      {/* {checkLogin && ( */}
         <div>
           <Navbar />
           <PageContainer title="Dashboard" description="this is Dashboard">
@@ -67,7 +68,7 @@ export default function Home() {
             </Box>
           </PageContainer>
         </div>
-      )}
+      {/* )}  */}
     </>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useState, useRef, ChangeEvent } from "react";
+import React, { FormEvent, useState, useRef } from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import {
@@ -28,12 +28,18 @@ import optimization from "@/public/jsonData/optimization_goals.json";
 import billingEvents from "@/public/jsonData/billing_event.json";
 import countries from "@/public/jsonData/countries.json";
 
-import { Adset } from "../_models/adAccount.model";
-import { CreateAdsetService } from "../_services/adAccountService";
+import { AdsetPayload } from "../../_models/adAccount.model";
+import { CreateAdsetService } from "../../_services/adAccountService";
 
 import { Toast } from "primereact/toast";
+import campaignStore from "@/app/_store/adStore";
 
-const AdsetForm = ({ selectedObjective }: { selectedObjective: string }) => {
+interface AdSetProps {
+  campaign: string;
+  objective: string;
+}
+const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
+// const AdsetForm= () => {
   const [adsetName, setAdsetName] = useState("");
   // const [conversionLocation, setConversionLocation] = useState("");
   // const [performanceGoal, setPerformanceGoal] = useState("");
@@ -72,11 +78,10 @@ const AdsetForm = ({ selectedObjective }: { selectedObjective: string }) => {
     });
   };
 
-  // console.log("check", selectedObjective);
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
-    const tempAdSetData: Adset = {
-      campaignId: cookies.get('campaignId'),
+    const tempAdSetData: AdsetPayload = {
+      campaignId: campaign,
       adsetName,
       optimizationGoal,
       billingEvent,
@@ -86,7 +91,7 @@ const AdsetForm = ({ selectedObjective }: { selectedObjective: string }) => {
       interests,
       startTime,
       status,
-      accessToken: cookies.get('accesstoken')
+      accessToken: cookies.get('accesstoken'),
     };
     console.log(tempAdSetData);
 
@@ -106,7 +111,7 @@ const AdsetForm = ({ selectedObjective }: { selectedObjective: string }) => {
       setStartTime(""),
       setStatus("");
     } catch (error) {
-      showErrorToast("Could not create campaign");
+      showErrorToast("Could not create adset");
       console.error(error);
     }
   };
@@ -179,7 +184,7 @@ const AdsetForm = ({ selectedObjective }: { selectedObjective: string }) => {
               label="Optimization Goal"
             >
               {optimization
-                .find((obj) => obj.codeWord === selectedObjective)
+                .find((obj) => obj.codeWord === objective)
                 ?.["optimizationGoal"].map((goal, index) => (
                   <MenuItem key={index} value={goal.codeWord}>
                     {goal.codeWord} - {goal.description}

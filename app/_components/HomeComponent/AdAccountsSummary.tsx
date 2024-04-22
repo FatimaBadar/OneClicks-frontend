@@ -13,7 +13,7 @@ import {
   Button,
 } from "@mui/material";
 import DashboardCard from "./DashboardCard";
-import FbLogin from "../FbLogin";
+import FbLogin from "../Ads/FbLogin";
 
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",

@@ -12,49 +12,45 @@ import {
   Chip,
 } from "@mui/material";
 import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
-import AdCampaignModal from "@/app/_components/Ads/AdCampaignModal";
-import AdSetModal from "@/app/_components/Ads/AdSetModal"
+// import AdSetModal from "@/app/_components/Ads/AdSetModal"
 import Navbar from "@/app/_components/Navbar";
-import { getAllCampaignsService } from "@/app/_services/adAccountService";
-import { Campaign } from "@/app/_models/adAccount.model";
+// import { getAllCampaignsService } from "@/app/_services/adAccountService";
+// import { Campaign } from "@/app/_models/adAccount.model";
 import useAdStore from "@/app/_store/adStore";
+import AdSetModal from "@/app/_components/Ads/AdSetModal";
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",
   Instagram: "rgb(250, 137, 107)",
   Google: "rgb(73, 190, 255)",
 };
 
-const Ads = () => {
-  //const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const type = "Facebook";
-  const pbg = typeColor.Facebook;
-  const impressions = 0;
-  const clicks = 0;
-// const store = useCampaignStore();
-const { campaigns, setCampaigns, removeCampaigns } =
+const Adsets = () => {
+//   const [adsets, setAdsets] = useState<Campaign[]>([]);
+const type = "Facebook";
+const pbg = typeColor.Facebook;
+
+const { adsets, setAdsets, removeAdsets } =
 useAdStore((state) => ({
-  campaigns: state.campaigns,
-  setCampaigns: state.setCampaigns,
-  removeCampaigns: state.removeCampaigns,
+  adsets: state.adsets,
+  setAdsets: state.setAdsets,
+  removeAdsets: state.removeAdsets,
 }));
 
-  useEffect(() => {
-    getCampaigns();
-  }, []);
+//   useEffect(() => {
+//     getAdsets();
+//   }, []);
 
-  const getCampaigns = async () => {
-    try {
-      const response = await getAllCampaignsService();
-      if (response.statusCode == "200") {
-        // setCampaign//s(re)
-        // store.setCampaigns(response.responseData);
-        setCampaigns(response.responseData);
-        console.log("campaigns: ", campaigns)
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+//   const getAdsets = async () => {
+//     try {
+//       const response = await getAllCampaignsService();
+//       if (response.statusCode == "200") {
+//         setAdsets(response.responseData);
+//         console.log("adsets: ", adsets)
+//       }
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
 
   return (
     <>
@@ -70,10 +66,13 @@ useAdStore((state) => ({
             }}
           >
             <Typography variant="h5" fontWeight={550}>
-              Ad Campaigns
+              Ad adsets
             </Typography>
             <div>
-              <AdCampaignModal />
+                adsetmodal 
+                {/* //TODO */}
+
+              {/* <AdSetModal /> */}
             </div>
           </Box>
 
@@ -122,7 +121,7 @@ useAdStore((state) => ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {campaigns?.map((data, key) => (
+                {adsets?.map((data, key) => (
                   <TableRow key={data.campaignId}>
                     <TableCell>
                       <Typography
@@ -131,7 +130,7 @@ useAdStore((state) => ({
                           fontWeight: "500",
                         }}
                       >
-                        {data.campaignName}
+                        {data.adsetName}
                       </Typography>
                     </TableCell>
 
@@ -142,7 +141,7 @@ useAdStore((state) => ({
                           fontWeight: "500",
                         }}
                       >
-                        {data.objective}
+                        {data.interests}
                       </Typography>
                     </TableCell>
 
@@ -175,7 +174,7 @@ useAdStore((state) => ({
                         variant="subtitle2"
                         fontWeight={400}
                       >
-                        {impressions}
+                        {data.bidAmount}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
@@ -184,11 +183,11 @@ useAdStore((state) => ({
                         variant="subtitle2"
                         fontWeight={400}
                       >
-                        {clicks}
+                        {data.interests}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
-                    <AdSetModal selectedCampaign={data.campaignId} selectedObjective={data.objective}/>
+                    {/* <AdSetModal selectedCampaign={data.campaignId} selectedObjective={data.objective}/> */}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -201,4 +200,4 @@ useAdStore((state) => ({
   );
 };
 
-export default Ads;
+export default Adsets;

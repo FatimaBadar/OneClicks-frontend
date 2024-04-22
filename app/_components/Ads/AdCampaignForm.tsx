@@ -19,55 +19,42 @@ import {
 
 import objectives from "@/public/jsonData/objectives.json";
 import specialAdCategories from "@/public/jsonData/specialAdCategories.json";
-import { Campaign } from "../_models/adAccount.model";
-import { CreateCampaignService } from "../_services/adAccountService";
+import { CampaignPayload } from "../../_models/adAccount.model";
+import { CreateCampaignService } from "../../_services/adAccountService";
 import { Toast } from "primereact/toast";
 import Cookies from 'universal-cookie';
+import campaignStore from "@/app/_store/adStore";
 
-const AdCampaignForm = ({ onReturnObjective }: any) => {
+const AdCampaignForm = ({ onReturn }: any) => {
+// const AdCampaignForm = () => {
+
   const [campaignName, setCampaignName] = useState("");
   const [objective, setObjective] = useState("");
   const [status, setStatus] = useState("");
   const [specialAdCategory, setSpecialAdCategory] = useState<string[]>([]);
-  const toast = useRef<Toast>(null);
   const cookies = new Cookies();
-
-  const showSuccessToast = (message: string) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: message,
-      life: 3000,
-    });
-  };
-
-  const showErrorToast = (message: string) => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error Message",
-      detail: message,
-      life: 3000,
-    });
-  };
+  const store = campaignStore();
 
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
-    const tempCampaignData: Campaign = {
+    console.log("token: ", cookies.get('token'));
+
+    console.log("checking cookies", cookies.get('accesstoken'))
+    const tempCampaignData: CampaignPayload = {
       campaignName: campaignName,
       objective: objective,
       status: status,
       specialAdCategories: specialAdCategory,
       accessToken: cookies.get('accesstoken'),
-      ad_accountId: cookies.get('adAccountId').toString()
+      adAccountId: cookies.get('adAccountId').toString()
     };
     console.log(tempCampaignData);
 
     try {
       const response = await CreateCampaignService(tempCampaignData);
       if (response.statusCode == "200") {
-        cookies.set('campaignId', response.responseData.campaignId);
-        onReturnObjective(objective);
-        showSuccessToast(response.message);
+        // cookies.set('campaignId', response.responseData.campaignId, { path: '/' });
+        onReturn(true);
       }
 
       setCampaignName("");
@@ -75,7 +62,7 @@ const AdCampaignForm = ({ onReturnObjective }: any) => {
       setStatus("");
       setSpecialAdCategory([]);
     } catch (error) {
-      showErrorToast("Could not create campaign");
+      onReturn(false);
       console.error(error);
     }
   };

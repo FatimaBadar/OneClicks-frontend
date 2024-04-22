@@ -11,14 +11,20 @@ import {
 
 } from "@mui/material";
 import AdsetForm from "./AdSetForm";
-import AdCampaignForm from "./AdCampaignForm";
 import React, { useState } from "react";
+import AdImageForm from "./AdImage";
 
-const AdCampaignModal: React.FC = () => {
+interface AdSetModalProps {
+    selectedCampaign: string;
+    selectedObjective: string;
+}
+  
+const AdSetModal: React.FC<AdSetModalProps> = ({ selectedCampaign, selectedObjective }) => {
+// const AdSetModal = () => {
+
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
-  const [showAdSetForm, setShowAdSetForm] = useState(false);
-  const [objective, setObjective] = useState("");
+  const [showAdImageForm, setShowAdImageForm] = useState(false);
 
   const handleClickOpen = (scrollType: DialogProps["scroll"]) => () => {
     setOpen(true);
@@ -30,8 +36,7 @@ const AdCampaignModal: React.FC = () => {
   };
 
   const handleReturnValue = async (e: string) => {
-    setObjective(e);
-    setShowAdSetForm(true);
+    setShowAdImageForm(true);
   };
 
   const descriptionElementRef = React.useRef<HTMLElement>(null);
@@ -46,7 +51,6 @@ const AdCampaignModal: React.FC = () => {
 
   return (
     <React.Fragment>
-      {/* <Button onClick={handleClickOpen("paper")}>scroll=paper</Button> */}
       <Button
         onClick={handleClickOpen("paper")}
         variant="contained"
@@ -59,7 +63,7 @@ const AdCampaignModal: React.FC = () => {
           },
         }}
       >
-        Create New Campaign
+        Create ad
       </Button>
 
       <Dialog
@@ -71,27 +75,30 @@ const AdCampaignModal: React.FC = () => {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">
-        {!showAdSetForm ? (
-          <Typography component="h1" variant="h5" sx={{ fontWeight: 700 }}>
-            Create a Campaign
-          </Typography>            ) : (
-            <Typography component="h1" variant="h5" sx={{ fontWeight: 700 }}>
-            Create an Ad
-          </Typography>            )}
-          
+          {!showAdImageForm ? ( 
+          // <Typography component="h1" variant="h5" sx={{ fontWeight: 700 }}>
+            "Create an Ad"
+          // </Typography>   
+          ) : (
+            // <Typography component="h1" variant="h5" sx={{ fontWeight: 700 }}>
+            "Add an Image"
+          // </Typography>  
+          )}        
         </DialogTitle>
+
         <DialogContent dividers={scroll === "paper"}>
-          <DialogContentText
+          {/* <DialogContentText
             id="scroll-dialog-description"
             ref={descriptionElementRef}
             tabIndex={-1}
-          >
-            {!showAdSetForm ? (
-              <AdCampaignForm onReturnObjective={handleReturnValue} />
-            ) : (
-              <AdsetForm selectedObjective={objective} />
-            )}
-          </DialogContentText>
+          > */}
+          {!showAdImageForm ? ( 
+            // <AdsetForm/>
+            <AdsetForm campaign={selectedCampaign} objective={selectedObjective}/>
+          ) : ( 
+            <AdImageForm/>
+          )}
+          {/* </DialogContentText> */}
         </DialogContent>
 
         <DialogActions>
@@ -102,4 +109,4 @@ const AdCampaignModal: React.FC = () => {
     </React.Fragment>
   );
 };
-export default AdCampaignModal;
+export default AdSetModal;

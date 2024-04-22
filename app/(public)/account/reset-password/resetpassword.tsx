@@ -39,7 +39,6 @@ export default function ResetPassword() {
     setPasswordError("");
     const token = searchParams.get("token");
     try {
-      // const token = cookies.get("token");
       const response = await ResetPasswordService(token,password,confirmPassword);
 
       if(response.statusCode=="200"){

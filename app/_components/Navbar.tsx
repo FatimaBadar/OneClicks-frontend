@@ -29,14 +29,13 @@ import useStore from '@/app/_store/authStore';
 import { useRouter } from 'next/navigation';
 
 export const Navbar: React.FC = () => {
-  const [loggingOut, setLoggingOut] = useState(false);
   const store = useStore();
   const cookies = new Cookies();
   const pathname = usePathname();
   const router = useRouter();
 
   const logoutFunc = async () => {
-    setLoggingOut(true);
+    store.setLoggedOut();
     cookies.remove('token');
     cookies.remove('role');
     store.removeAuthUser();
@@ -224,6 +223,7 @@ export const Navbar: React.FC = () => {
                   </Link>
                 </MenuItem>
                 <Divider />
+                {!store.loggedIn ? (
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Link href={'/account/login'} style={{ textDecoration: 'none' }}>
                     <Typography
@@ -238,6 +238,9 @@ export const Navbar: React.FC = () => {
                     </Typography>
                   </Link>
                 </MenuItem>
+                ): (
+                  ""
+                  )}
               </Menu>
             </Paper>
           </Box>
@@ -251,6 +254,15 @@ export const Navbar: React.FC = () => {
             {/* <NavLink variant="body2">Dashboard</NavLink> */}
             <Link href="/contact" style={{ textDecoration: 'none' }}>
               <NavLink variant="body2">Contact Us</NavLink>
+            </Link>
+            <Link href="/ads" style={{ textDecoration: 'none' }}>
+              <NavLink variant="body2">Ad Campaigns</NavLink>
+            </Link>
+            <Link href="/adsets" style={{ textDecoration: 'none' }}>
+              <NavLink variant="body2">Adsets</NavLink>
+            </Link>
+            <Link href="/adcreatives" style={{ textDecoration: 'none' }}>
+              <NavLink variant="body2">Ad Creatives</NavLink>
             </Link>
           </NavbarLinksBox>
         </Box>
@@ -282,6 +294,7 @@ export const Navbar: React.FC = () => {
             display: 'flex',
           }}
         >
+        {!store.loggedIn ? (
           <Box //login, signup for big screen
             sx={{
               display: { xs: 'none', md: 'flex' },
@@ -299,6 +312,7 @@ export const Navbar: React.FC = () => {
               <CustomButton backgroundColor="#0F1B4C" color="#fff" buttonText="Register" />
             </Link>
           </Box>
+          ):("")}
 
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

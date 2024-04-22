@@ -1,7 +1,7 @@
 // components/LoginComponent.tsx
 
 'use client';
-import React, { useState, useEffect, ChangeEvent, FormEvent, useRef } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useRef } from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Image from 'next/image';
 
@@ -18,6 +18,7 @@ import {
   createTheme,
   ThemeProvider,
   Divider,
+  stepperClasses,
 } from '@mui/material';
 
 import { useRouter } from 'next/navigation';
@@ -39,16 +40,6 @@ export default function LoginComponent() {
   const router = useRouter();
   const cookies = new Cookies();
   const toast = useRef<Toast>(null);
-
-  // useEffect(() => {
-  //   if (!store.authUser) {
-  //     fetchUser();
-  //   }
-  // }, []);
-
-  // async function fetchUser() {
-  //   return store.authUser;
-  // }
 
   const submitForgotPassword = async (e: FormEvent) => {
     e.preventDefault();
@@ -75,14 +66,15 @@ export default function LoginComponent() {
       console.log("res", response);
       if (response.statusCode == "200") {
         try {
+          store.setLoggedIn();
           store.setAuthUser(response.responseData);
+
           console.log('user store2: ', store.authUser);
         } catch (error: any) {
           console.log('errorrr');
         }
-        cookies.set('token', response.responseData.token);
-        cookies.set('role', response.responseData.role);
-
+        cookies.set('token', response.responseData.token, { path: '/' });
+        cookies.set('role', response.responseData.role, { path: '/' });
         showSuccessToast('Logged in successfully!');
 
         setTimeout(() => {
