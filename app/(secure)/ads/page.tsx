@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -10,14 +10,21 @@ import {
   TableHead,
   TableRow,
   Chip,
+  Button
 } from "@mui/material";
+import querystring from 'querystring'; // Import querystring module
+
 import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 import AdCampaignModal from "@/app/_components/Ads/AdCampaignModal";
-import AdSetModal from "@/app/_components/Ads/AdSetModal"
+// import AdSetModal from "@/app/_components/Ads/AdSetModal"
 import Navbar from "@/app/_components/Navbar";
 import { getAllCampaignsService } from "@/app/_services/adAccountService";
 import { Campaign } from "@/app/_models/adAccount.model";
 import useAdStore from "@/app/_store/adStore";
+import Adsets from "../adsets/page";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import AdsetForm from "@/app/_components/Ads/AdSetForm";
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",
   Instagram: "rgb(250, 137, 107)",
@@ -30,13 +37,15 @@ const Ads = () => {
   const pbg = typeColor.Facebook;
   const impressions = 0;
   const clicks = 0;
-// const store = useCampaignStore();
-const { campaigns, setCampaigns, removeCampaigns } =
-useAdStore((state) => ({
-  campaigns: state.campaigns,
-  setCampaigns: state.setCampaigns,
-  removeCampaigns: state.removeCampaigns,
-}));
+
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const { campaigns, setCampaigns, removeCampaigns } = useAdStore((state) => ({
+    campaigns: state.campaigns,
+    setCampaigns: state.setCampaigns,
+    removeCampaigns: state.removeCampaigns,
+  }));
 
   useEffect(() => {
     getCampaigns();
@@ -46,15 +55,23 @@ useAdStore((state) => ({
     try {
       const response = await getAllCampaignsService();
       if (response.statusCode == "200") {
-        // setCampaign//s(re)
-        // store.setCampaigns(response.responseData);
         setCampaigns(response.responseData);
-        console.log("campaigns: ", campaigns)
       }
     } catch (error) {
       console.error(error);
     }
   };
+
+  const CreateAdsets = useCallback(
+    (name1: string, value: string, name2:string, value2: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name1, value);
+      params.set(name2, value2);
+  
+      return params.toString()
+    },
+    [searchParams]
+  )
 
   return (
     <>
@@ -117,8 +134,7 @@ useAdStore((state) => ({
                       Clicks
                     </Typography>
                   </TableCell>
-                  <TableCell align="right">
-                  </TableCell>
+                  <TableCell align="right"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -188,7 +204,22 @@ useAdStore((state) => ({
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
-                    <AdSetModal selectedCampaign={data.campaignId} selectedObjective={data.objective}/>
+                      <Button 
+                       onClick={() => {
+                        router.push('/adsets' + '?' + CreateAdsets('selectedCampaignId' ,data.campaignId, 'selectedObjective', data.objective))
+                      }}
+                      variant="contained"
+                      sx={{
+                        marginRight: "10px",
+                        backgroundColor: "#597FB5 !important",
+                        color: "#fff !important",
+                        "&:hover": {
+                          backgroundColor: "#405D80 !important",
+                        },
+                      }}>
+                        Create ad
+                      </Button>
+                    {/* <AdSetModal selectedCampaign={data.campaignId} selectedObjective={data.objective}/> */}
                     </TableCell>
                   </TableRow>
                 ))}

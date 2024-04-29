@@ -1,6 +1,6 @@
 import useFetch from "../_helpers/useFetch";
 import { ResponseVM } from "../_models/response.model";
-import { AdAccount, Campaign, Adset, AdImage, CampaignPayload, AdsetPayload } from "../_models/adAccount.model";
+import { AdAccount, Campaign, Adset, AdImage, CampaignPayload, AdsetPayload, Interest, LocationData, AdTargetingCategory } from "../_models/adAccount.model";
 
 // const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
 const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
@@ -53,4 +53,25 @@ export async function CreateAdImageHashService(payload: AdImage): Promise<Respon
     const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdset`, payload);
 
     return handleResponse<ResponseVM<AdImage>>(response).then((data) => data);
+}
+
+export async function GetInterestsSearchData(interests: string, accessToken: string):  Promise<ResponseVM<Interest[]>>{
+    const fetch = useFetch();
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetInterests?accessToken=${accessToken}&interests=${interests}`);
+    
+    return handleResponse<ResponseVM<Interest[]>>(response).then((data) => data);
+}
+
+export async function GetIndustrySearchData(accessToken: string): Promise<ResponseVM<AdTargetingCategory[]>>{
+    const fetch = useFetch();
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetTargetingCategory?accessToken=${accessToken}&targetType=industries`);
+    
+    return handleResponse<ResponseVM<AdTargetingCategory[]>>(response).then((data) => data);
+}
+
+export async function GetCitySearchData(city: string, accessToken: string):  Promise<ResponseVM<LocationData[]>>{
+    const fetch = useFetch();
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetCities?accessToken=${accessToken}&city=${city}`);
+    
+    return handleResponse<ResponseVM<LocationData[]>>(response).then((data) => data);
 }

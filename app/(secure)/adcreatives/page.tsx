@@ -43,6 +43,8 @@ const AdCreatives = () => {
     <>
       <Navbar />
       <Box sx={{ mt: 15 }}>
+      <AdCreativeForm/>
+
         <DashboardCard>
           <Box
             sx={{
@@ -130,7 +132,6 @@ const AdCreatives = () => {
           </Box>
         </DashboardCard>
       </Box>
-      <AdCreativeForm/>
     </>
   );
 };

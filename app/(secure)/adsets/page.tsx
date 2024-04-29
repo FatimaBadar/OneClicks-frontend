@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Chip,
+  Button,
 } from "@mui/material";
 import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 // import AdSetModal from "@/app/_components/Ads/AdSetModal"
@@ -18,44 +19,71 @@ import Navbar from "@/app/_components/Navbar";
 // import { Campaign } from "@/app/_models/adAccount.model";
 import useAdStore from "@/app/_store/adStore";
 import AdSetModal from "@/app/_components/Ads/AdSetModal";
+import AdsetForm from "@/app/_components/Ads/AdSetForm";
+import { useRouter, useSearchParams } from "next/navigation";
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",
   Instagram: "rgb(250, 137, 107)",
   Google: "rgb(73, 190, 255)",
 };
 
+// interface AdSetProps {
+//   selectedCampaign: string;
+//   selectedObjective: string;
+// }
+
+// const Adsets: React.FC<AdSetProps> = ({ selectedCampaign, selectedObjective }) => {
 const Adsets = () => {
-//   const [adsets, setAdsets] = useState<Campaign[]>([]);
-const type = "Facebook";
-const pbg = typeColor.Facebook;
+  //   const [adsets, setAdsets] = useState<Campaign[]>([]);
+  const type = "Facebook";
+  const pbg = typeColor.Facebook;
 
-const { adsets, setAdsets, removeAdsets } =
-useAdStore((state) => ({
-  adsets: state.adsets,
-  setAdsets: state.setAdsets,
-  removeAdsets: state.removeAdsets,
-}));
+  const { adsets, setAdsets, removeAdsets } = useAdStore((state) => ({
+    adsets: state.adsets,
+    setAdsets: state.setAdsets,
+    removeAdsets: state.removeAdsets,
+  }));
+  const router = useRouter()
+  const searchParams = useSearchParams();
+  var selectedCampaignId: string | null =
+    searchParams.get("selectedCampaignId");
+  if (selectedCampaignId == null) selectedCampaignId = "";
 
-//   useEffect(() => {
-//     getAdsets();
-//   }, []);
+  var selectedObjective: string | null = searchParams.get("selectedObjective");
+  if (selectedObjective == null) selectedObjective = "";
 
-//   const getAdsets = async () => {
-//     try {
-//       const response = await getAllCampaignsService();
-//       if (response.statusCode == "200") {
-//         setAdsets(response.responseData);
-//         console.log("adsets: ", adsets)
-//       }
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
+  
+  const CreateAdcreative = (name1: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name1, value);
+      // params.set(name2, value2);
+  
+      return params.toString()
+    }
+  // const selectedObjective = searchParams.get('selectedObjective');
+
+  //   const getAdsets = async () => {
+  //     try {
+  //       const response = await getAllCampaignsService();
+  //       if (response.statusCode == "200") {
+  //         setAdsets(response.responseData);
+  //         console.log("adsets: ", adsets)
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
   return (
     <>
       <Navbar />
-      <Box sx={{ mt: 15 }}>
+      <Box sx={{ mt: 13, ml:15, mr: 15}}>
+        <AdsetForm
+          campaign={selectedCampaignId}
+          objective={selectedObjective}
+        />
+      </Box>
+      <Box sx={{ mt: 5 }}>
         <DashboardCard>
           <Box
             sx={{
@@ -65,15 +93,9 @@ useAdStore((state) => ({
               flexDirection: "row",
             }}
           >
-            <Typography variant="h5" fontWeight={550}>
+            <Typography variant="h6" fontWeight={550}>
               Ad adsets
             </Typography>
-            <div>
-                adsetmodal 
-                {/* //TODO */}
-
-              {/* <AdSetModal /> */}
-            </div>
           </Box>
 
           <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
@@ -88,12 +110,12 @@ useAdStore((state) => ({
                 <TableRow>
                   <TableCell>
                     <Typography variant="subtitle2" fontWeight={600}>
-                      Campaign Name
+                      Adset Name
                     </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography variant="subtitle2" fontWeight={600}>
-                      Objective
+                      Optimization Goal
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -108,16 +130,10 @@ useAdStore((state) => ({
                   </TableCell>
                   <TableCell>
                     <Typography variant="subtitle2" fontWeight={600}>
-                      Impressions
+                      Start time
                     </Typography>
                   </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Clicks
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                  </TableCell>
+                  <TableCell align="right"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -141,7 +157,7 @@ useAdStore((state) => ({
                           fontWeight: "500",
                         }}
                       >
-                        {data.interests}
+                        {data.optimizationGoal}
                       </Typography>
                     </TableCell>
 
@@ -174,21 +190,26 @@ useAdStore((state) => ({
                         variant="subtitle2"
                         fontWeight={400}
                       >
-                        {data.bidAmount}
+                        {data.startTime}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
-                      <Typography
-                        color="textSecondary"
-                        variant="subtitle2"
-                        fontWeight={400}
-                      >
-                        {data.interests}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                    {/* <AdSetModal selectedCampaign={data.campaignId} selectedObjective={data.objective}/> */}
-                    </TableCell>
+                    <Button 
+                       onClick={() => {
+                        router.push('/adsets' + '?' + CreateAdcreative('selectedCampaignId' ,data.adsetName))
+                      }}
+                      variant="contained"
+                      sx={{
+                        marginRight: "10px",
+                        backgroundColor: "#597FB5 !important",
+                        color: "#fff !important",
+                        "&:hover": {
+                          backgroundColor: "#405D80 !important",
+                        },
+                      }}>
+                        Create ad
+                      </Button>                    
+                      </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

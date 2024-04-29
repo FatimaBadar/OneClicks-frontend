@@ -40,8 +40,9 @@ export interface AdsetPayload{
     bidAmount: number,
     dailyBudget: number,
     campaignId: string,
-    geolocations: string[],
-    interests: string,
+    geolocations: GeoLocation,
+    interests: Interest[],
+    industries: AdTargetingCategory[], 
     startTime: string,
     status: string,
     accessToken: string
@@ -55,11 +56,39 @@ export interface Adset{
     bidAmount: number,
     dailyBudget: number,
     campaignId: string,
-    geolocations: string[],
-    interests: string,
+    geolocations: GeoLocation,
+    interests: Interest[],
+    industries: AdTargetingCategory[],
     startTime: string,
     status: string,
     accessToken: string
+}
+
+export interface Interest{
+    id: number,
+    name: string
+}
+
+export interface Targeting{
+    geo_locations: GeoLocation,
+    interests: Interest[]
+}
+
+export interface GeoLocation{
+    cities: string[]
+}
+
+export interface LocationData{
+    key: string,
+    cityName: string,
+    countryName: string
+}
+
+export interface AdTargetingCategory{
+    id: string,
+    name: string,
+    description: string,
+    type: string
 }
 
 export interface AdImage{

@@ -59,10 +59,10 @@ const toast = useRef<Toast>(null);
         console.log("check",backendResponse.responseData.longLiveToken);
         // if (typeof window !== 'undefined') {
           // Set a value in localStorage
-          localStorage.setItem('accesstoken2', backendResponse.responseData.longLiveToken);
+          localStorage.setItem('accesstoken_fb', backendResponse.responseData.longLiveToken);
         // }
 
-        cookies.set('accesstoken', backendResponse.responseData.longLiveToken, { path: '/' });
+        cookies.set('accesstoken_fb', backendResponse.responseData.longLiveToken, { path: '/' });
         cookies.set('adAccountId', backendResponse.responseData.adAccountId, { path: '/' });
         showSuccessToast(backendResponse.message);
         showSuccessToast('Ad Account Connected successfully')
