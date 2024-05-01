@@ -17,7 +17,7 @@ import { AdCreative } from "@/app/_models/adAccount.model";
 import AdCreativeForm from "@/app/_components/Ads/AdCreativeForm";
 
 const AdCreatives = () => {
-    const [creatives, setCreatives] = useState<AdCreative[]>([]);
+  const [creatives, setCreatives] = useState<AdCreative[]>([]);
 
   useEffect(() => {
     getAdCreatives();
@@ -41,10 +41,10 @@ const AdCreatives = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar/>
       <Box sx={{ mt: 15 }}>
       <AdCreativeForm/>
-
+      </Box>
         <DashboardCard>
           <Box
             sx={{
@@ -79,6 +79,7 @@ const AdCreatives = () => {
                   </TableCell>
                   <TableCell>
                     <Typography variant="subtitle2" fontWeight={600}>
+  
                       Image
                     </Typography>
                   </TableCell>
@@ -131,7 +132,7 @@ const AdCreatives = () => {
             </Table>
           </Box>
         </DashboardCard>
-      </Box>
+      {/* </Box> */}
     </>
   );
 };

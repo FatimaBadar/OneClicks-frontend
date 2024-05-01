@@ -48,6 +48,14 @@ export async function CreateAdsetService(payload: AdsetPayload): Promise<Respons
 
     return handleResponse<ResponseVM<Adset>>(response).then((data) => data);
 }
+
+export async function CreateAdcampaignService(){
+    const fetch = useFetch();
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdset`);
+
+    return handleResponse(response).then((data) => data);
+}
+
 export async function CreateAdImageHashService(payload: AdImage): Promise<ResponseVM<AdImage>> {
     const fetch = useFetch();
     const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdset`, payload);
