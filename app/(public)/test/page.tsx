@@ -39,10 +39,11 @@ const Oauth = () => {
     const params = {
       client_id: '195870252277-kgqnfto3d27fhvvhivk7m3ikfkc4qhvl.apps.googleusercontent.com',
       redirect_uri: 'https://localhost:3000',
-      response_type: 'token',
-      scope: 'https://www.googleapis.com/auth/drive.metadata.readonly',
+      response_type: 'code',
+      scope: 'https://www.googleapis.com/auth/adwords',
       include_granted_scopes: 'true',
-      state: 'try_sample_request'
+      state: 'try_sample_request',
+      access_type : 'offline'
     };
 
     const queryString = new URLSearchParams(params).toString();

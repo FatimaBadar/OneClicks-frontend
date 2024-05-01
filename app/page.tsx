@@ -9,8 +9,6 @@ import GetStarted from './_components/LandingPageComponent/GetStarted';
 import Companies from './_components/LandingPageComponent/Companies';
 import Cards from './_components/LandingPageComponent/Cards';
 import useStore from './_store/authStore';
-// import  Details from './_components/Details'
-// import Properties from './_components/Properties'
 import Navbar from './_components/Navbar';
 import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -23,7 +21,8 @@ export default function Home() {
   useEffect(() => {
     const getAccessTokenFromURL = () => {
       const params = new URLSearchParams(window.location.hash.slice(1));
-      const access_token = params.get('access_token'); 
+      console.log(params)
+      const access_token = params.get('code'); 
 
       if (access_token) {
         console.log('Access token:', access_token);
