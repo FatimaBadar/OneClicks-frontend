@@ -22,7 +22,6 @@ import specialAdCategories from "@/public/jsonData/specialAdCategories.json";
 import { CampaignPayload } from "../../_models/adAccount.model";
 import { CreateCampaignService } from "../../_services/adAccountService";
 import { Toast } from "primereact/toast";
-import Cookies from 'universal-cookie';
 import campaignStore from "@/app/_store/adStore";
 
 const AdCampaignForm = ({ onReturn }: any) => {
@@ -32,28 +31,28 @@ const AdCampaignForm = ({ onReturn }: any) => {
   const [objective, setObjective] = useState("");
   const [status, setStatus] = useState("");
   const [specialAdCategory, setSpecialAdCategory] = useState<string[]>([]);
-  const cookies = new Cookies();
   const store = campaignStore();
 
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("token: ", cookies.get('token'));
 
-    console.log("checking cookies", cookies.get('accesstoken'))
+    const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+    const adaccountId = localStorage?.getItem('adAccountId') ??  "";
+
     const tempCampaignData: CampaignPayload = {
       campaignName: campaignName,
       objective: objective,
       status: status,
       specialAdCategories: specialAdCategory,
-      accessToken: cookies.get('accesstoken'),
-      adAccountId: cookies.get('adAccountId').toString()
+      accessToken: accessTokenfb,
+      adAccountId: adaccountId.toString()
     };
     console.log(tempCampaignData);
 
     try {
       const response = await CreateCampaignService(tempCampaignData);
       if (response.statusCode == "200") {
-        // cookies.set('campaignId', response.responseData.campaignId, { path: '/' });
+        localStorage.setItem('campaignId', response.responseData.campaignId);
         onReturn(true);
       }
 

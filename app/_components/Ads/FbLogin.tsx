@@ -4,12 +4,10 @@ import { Button } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { ConnectAdAccount } from "../../_services/adAccountService";
 import { Toast } from 'primereact/toast';
-import Cookies from 'universal-cookie';
 
 const app_id = process.env.FACEBOOK_ID;
 
 const AccountLogin: React.FC = () => {
-  const cookies = new Cookies();
 
   useEffect(() => {
     const loadFacebookSDK = () => {
@@ -54,17 +52,9 @@ const toast = useRef<Toast>(null);
   const adAccount = async (accessToken: string) => {
     try {
       const backendResponse = await ConnectAdAccount(accessToken);
-      console.log("check2",backendResponse);
       if (backendResponse.statusCode == "200") {
-        console.log("check",backendResponse.responseData.longLiveToken);
-        // if (typeof window !== 'undefined') {
-          // Set a value in localStorage
-          localStorage.setItem('accesstoken_fb', backendResponse.responseData.longLiveToken);
-        // }
-
-        cookies.set('accesstoken_fb', backendResponse.responseData.longLiveToken, { path: '/' });
-        cookies.set('adAccountId', backendResponse.responseData.adAccountId, { path: '/' });
-        showSuccessToast(backendResponse.message);
+        localStorage.setItem('accesstoken_fb', backendResponse.responseData.longLiveToken);
+        localStorage.setItem('adAccountId', backendResponse.responseData.adAccountId)
         showSuccessToast('Ad Account Connected successfully')
        } 
       else{
@@ -85,7 +75,6 @@ const toast = useRef<Toast>(null);
           fetch(`/api/fblogin?token=${response.authResponse.accessToken}`).then(
             (response2) => console.log("Debug response: ", response2)
           );
-          console.log("Response by Facebook Login: ", response);
         }
       },
       {

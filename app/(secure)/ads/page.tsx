@@ -12,19 +12,14 @@ import {
   Chip,
   Button
 } from "@mui/material";
-import querystring from 'querystring'; // Import querystring module
 
 import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 import AdCampaignModal from "@/app/_components/Ads/AdCampaignModal";
-// import AdSetModal from "@/app/_components/Ads/AdSetModal"
 import Navbar from "@/app/_components/Navbar";
 import { getAllCampaignsService } from "@/app/_services/adAccountService";
-import { Campaign } from "@/app/_models/adAccount.model";
 import useAdStore from "@/app/_store/adStore";
-import Adsets from "../adsets/page";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import AdsetForm from "@/app/_components/Ads/AdSetForm";
+import { useRouter, useSearchParams } from "next/navigation";
+
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",
   Instagram: "rgb(250, 137, 107)",
@@ -32,7 +27,6 @@ const typeColor = {
 };
 
 const Ads = () => {
-  //const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const type = "Facebook";
   const pbg = typeColor.Facebook;
   const impressions = 0;

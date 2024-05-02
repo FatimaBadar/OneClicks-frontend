@@ -36,9 +36,10 @@ const AdCreativeForm = () => {
           const response = await CreateAdcampaignService();
           // if (response= "200") {
             console.log("res", response);
-       
-    //         // cookies.set('campaignId', response.responseData.campaignId, { path: '/' });
-    //         onReturn(true);
+            const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+            const adaccountId = localStorage?.getItem('adAccountId') ??  "";
+            // const adcreative = localStorage?.setItem('creativeId', response.responseData.campaignId);
+            //onReturn(true);
           // }
     //       setCampaignName("");
     //       setObjective("");

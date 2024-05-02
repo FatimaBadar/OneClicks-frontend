@@ -34,6 +34,7 @@ export interface Campaign {
     accessToken: string
 }
 export interface AdsetPayload{
+    adAccountId: string,
     adsetName: string,
     optimizationGoal: string,
     billingEvent: string,
@@ -42,7 +43,7 @@ export interface AdsetPayload{
     campaignId: string,
     geolocations: GeoLocation,
     interests: Interest[],
-    industries: AdTargetingCategory[], 
+    // industries: AdTargetingCategory[], 
     startTime: string,
     status: string,
     accessToken: string
@@ -58,10 +59,11 @@ export interface Adset{
     campaignId: string,
     geolocations: GeoLocation,
     interests: Interest[],
-    industries: AdTargetingCategory[],
+    // industries: AdTargetingCategory[],
     startTime: string,
     status: string,
     accessToken: string
+    adAccountId: string
 }
 
 export interface Interest{
@@ -75,7 +77,11 @@ export interface Targeting{
 }
 
 export interface GeoLocation{
-    cities: string[]
+    cities: Cities[];
+}
+
+export interface Cities{
+    key: string
 }
 
 export interface LocationData{
@@ -94,6 +100,16 @@ export interface AdTargetingCategory{
 export interface AdImage{
     imageId?: string,
     filename: string,
+    accessToken: string
+}
+
+export interface AdCreativePayload{
+    creativeId: string,
+    creativeName: string,
+    pageId: string,
+    imageHash: AdImage,
+    message: string,
+    AdAccountId: string,
     accessToken: string
 }
 

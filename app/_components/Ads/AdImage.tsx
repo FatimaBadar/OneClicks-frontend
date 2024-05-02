@@ -9,9 +9,6 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
-
-import Cookies from 'universal-cookie';
-
 import { AdImage } from "../../_models/adAccount.model";
 import { CreateAdImageHashService } from "../../_services/adAccountService";
 
@@ -19,9 +16,7 @@ import { Toast } from "primereact/toast";
 
 const AdImageForm =() => {
   const [filename, setFilename] = useState("");
-
   const toast = useRef<Toast>(null);
-  const cookies = new Cookies();
 
   const showSuccessToast = (message: string) => {
     toast.current?.show({
@@ -43,9 +38,11 @@ const AdImageForm =() => {
 
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
+    const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+
     const tempAdImageData: AdImage = {
         filename,
-        accessToken: cookies.get('accesstoken')
+        accessToken: accessTokenfb
     };
     console.log(tempAdImageData);
 

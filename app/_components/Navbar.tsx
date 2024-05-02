@@ -21,23 +21,22 @@ import {
   Button,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
-import { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import Cookies from 'universal-cookie';
 import useStore from '@/app/_store/authStore';
 import { useRouter } from 'next/navigation';
 
 export const Navbar: React.FC = () => {
   const store = useStore();
-  const cookies = new Cookies();
   const pathname = usePathname();
   const router = useRouter();
 
   const logoutFunc = async () => {
     store.setLoggedOut();
-    cookies.remove('token');
-    cookies.remove('role');
+
+    if(localStorage.getItem('role')){
+      localStorage?.removeItem('role');
+    }
+    localStorage.removeItem('token');
     store.removeAuthUser();
 
     if (pathname === '/home') {

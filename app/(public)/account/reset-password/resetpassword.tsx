@@ -8,7 +8,6 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 // import { useUserService } from '@/app/_services/useUserService';
 import { ResetPasswordService } from '@/app/_services/authService';
-import Cookies from "universal-cookie";
 import { Toast} from 'primereact/toast';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
 import { PrimeReactProvider } from 'primereact/api';
@@ -24,7 +23,6 @@ export default function ResetPassword() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [PasswordError, setPasswordError] = useState<string>("");
-  const cookies = new Cookies();
   const toast = useRef<Toast>(null);
   const searchParams = useSearchParams();
   // const userService = useUserService();

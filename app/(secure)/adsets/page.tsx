@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Typography,
   Box,
@@ -13,28 +13,19 @@ import {
   Button,
 } from "@mui/material";
 import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
-// import AdSetModal from "@/app/_components/Ads/AdSetModal"
 import Navbar from "@/app/_components/Navbar";
-// import { getAllCampaignsService } from "@/app/_services/adAccountService";
-// import { Campaign } from "@/app/_models/adAccount.model";
+import { getAllAdsetsService } from "@/app/_services/adAccountService";
 import useAdStore from "@/app/_store/adStore";
-import AdSetModal from "@/app/_components/Ads/AdSetModal";
 import AdsetForm from "@/app/_components/Ads/AdSetForm";
 import { useRouter, useSearchParams } from "next/navigation";
+
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",
   Instagram: "rgb(250, 137, 107)",
   Google: "rgb(73, 190, 255)",
 };
 
-// interface AdSetProps {
-//   selectedCampaign: string;
-//   selectedObjective: string;
-// }
-
-// const Adsets: React.FC<AdSetProps> = ({ selectedCampaign, selectedObjective }) => {
 const Adsets = () => {
-  //   const [adsets, setAdsets] = useState<Campaign[]>([]);
   const type = "Facebook";
   const pbg = typeColor.Facebook;
 
@@ -43,36 +34,35 @@ const Adsets = () => {
     setAdsets: state.setAdsets,
     removeAdsets: state.removeAdsets,
   }));
+  
   const router = useRouter()
   const searchParams = useSearchParams();
-  var selectedCampaignId: string | null =
-    searchParams.get("selectedCampaignId");
+  var selectedCampaignId: string | null = searchParams.get("selectedCampaignId");
   if (selectedCampaignId == null) selectedCampaignId = "";
-
   var selectedObjective: string | null = searchParams.get("selectedObjective");
   if (selectedObjective == null) selectedObjective = "";
-
   
   const CreateAdcreative = (name1: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set(name1, value);
-      // params.set(name2, value2);
-  
-      return params.toString()
-    }
-  // const selectedObjective = searchParams.get('selectedObjective');
+    const params = new URLSearchParams(searchParams.toString())
+    params.set(name1, value);
+    return params.toString()
+  }
 
-  //   const getAdsets = async () => {
-  //     try {
-  //       const response = await getAllCampaignsService();
-  //       if (response.statusCode == "200") {
-  //         setAdsets(response.responseData);
-  //         console.log("adsets: ", adsets)
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+  useEffect(() => {
+    getAdsets();
+  }, []);
+
+  const getAdsets = async () => {
+    try {
+      const response = await getAllAdsetsService();
+      if (response.statusCode == "200") {
+        setAdsets(response.responseData);
+        console.log("adsets: ", adsets)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -138,7 +128,7 @@ const Adsets = () => {
               </TableHead>
               <TableBody>
                 {adsets?.map((data, key) => (
-                  <TableRow key={data.campaignId}>
+                  <TableRow key={data.adsetId}>
                     <TableCell>
                       <Typography
                         sx={{
@@ -196,7 +186,7 @@ const Adsets = () => {
                     <TableCell align="right">
                     <Button 
                        onClick={() => {
-                        router.push('/adsets' + '?' + CreateAdcreative('selectedCampaignId' ,data.adsetName))
+                        router.push('/adsets' + '?' + CreateAdcreative('selectedAdsetId' ,data.adsetId))
                       }}
                       variant="contained"
                       sx={{

@@ -24,7 +24,6 @@ import {
 import { useRouter } from 'next/navigation';
 // import { Toast } from 'primereact/toast';
 import { LoginService, ForgetPasswordService } from '@/app/_services/authService';
-import Cookies from 'universal-cookie';
 import useStore from '@/app/_store/authStore';
 import { Toast } from 'primereact/toast';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
@@ -38,7 +37,6 @@ export default function LoginComponent() {
 
   const store = useStore();
   const router = useRouter();
-  const cookies = new Cookies();
   const toast = useRef<Toast>(null);
 
   const submitForgotPassword = async (e: FormEvent) => {
@@ -73,15 +71,15 @@ export default function LoginComponent() {
         } catch (error: any) {
           console.log('errorrr');
         }
-        cookies.set('token', response.responseData.token, { path: '/' });
-        cookies.set('role', response.responseData.role, { path: '/' });
+        localStorage.setItem('token', response.responseData.token);
+        if(response.responseData.role){
+          localStorage?.setItem('role', response.responseData.role);
+        }
         showSuccessToast('Logged in successfully!');
 
         setTimeout(() => {
           router.push('/home');
         }, 3000);
-        // jwtVerification(response.token);
-        // cookies.set('authorization', response.token, { httpOnly: true });
       }
       else{
         showErrorToast('Wrong password!');

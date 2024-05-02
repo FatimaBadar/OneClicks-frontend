@@ -15,28 +15,37 @@ import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 import Navbar from "@/app/_components/Navbar";
 import { AdCreative } from "@/app/_models/adAccount.model";
 import AdCreativeForm from "@/app/_components/Ads/AdCreativeForm";
+import useAdStore from "@/app/_store/adStore";
+import { useRouter, useSearchParams } from "next/navigation";
+import { getAllAdcreativesService } from "@/app/_services/adAccountService";
 
 const AdCreatives = () => {
-  const [creatives, setCreatives] = useState<AdCreative[]>([]);
+  // const [creatives, setCreatives] = useState<AdCreative[]>([]);
+  const { creatives, setCreatives, removeCreatives } = useAdStore((state) => ({
+    creatives: state.creatives,
+    setCreatives: state.setCreatives,
+    removeCreatives: state.removeCreatives,
+  }));
 
+  const router = useRouter()
+  const searchParams = useSearchParams();
+  var selectedAdsetId: string | null = searchParams.get("selectedAdsetId");
+  if (selectedAdsetId == null) selectedAdsetId = "";
+  
   useEffect(() => {
     getAdCreatives();
   }, []);
 
   const getAdCreatives = async () => {
-//     try {
-//       const response = await getAllCampaignsService();
-//       if (response.statusCode == "200") {
-//         console.log("campaigns in page: ",response.responseData)
-//         store.setCampaigns(response.responseData);
-//         console.log("check campaigns: ",store.campaigns);
-
-//         setCampaigns(response.responseData);
-//         // setCampaigns([...campaigns, response.responseData[0]]);
-//       }
-//     } catch (error) {
-//       console.error(error);
-//     }
+    try {
+      const response = await getAllAdcreativesService();
+      if (response.statusCode == "200") {
+        setCreatives(response.responseData);
+        console.log("creatives: ", creatives)
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

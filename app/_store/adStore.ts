@@ -1,4 +1,4 @@
-import { Adset, Campaign } from "../_models/adAccount.model";
+import { AdCreative, Adset, Campaign } from "../_models/adAccount.model";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -10,6 +10,10 @@ interface AdStore {
     adsets: Adset[];
     setAdsets: (adset: Adset[]) => void;
     removeAdsets: () => void
+
+    creatives: AdCreative[];
+    setCreatives: (creative: AdCreative[]) => void;
+    removeCreatives: () => void
 }
   
 const useAdStore = create<AdStore>()(
@@ -30,7 +34,16 @@ const useAdStore = create<AdStore>()(
       removeAdsets: ()=>{
         set({ adsets: [] });
       },
-    }),
+
+      creatives: [],
+      setCreatives: (c) => {
+        set({creatives: c})
+      },
+      removeCreatives: ()=>{
+        set({ creatives: [] });
+      },
+  }),
+
     {
       name: "adStore",
       skipHydration: true,
