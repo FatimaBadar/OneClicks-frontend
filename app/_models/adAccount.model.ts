@@ -34,7 +34,7 @@ export interface Campaign {
     accessToken: string
 }
 export interface AdsetPayload{
-    adAccountId: string,
+    adAccountId : string
     adsetName: string,
     optimizationGoal: string,
     billingEvent: string,
@@ -43,7 +43,7 @@ export interface AdsetPayload{
     campaignId: string,
     geolocations: GeoLocation,
     interests: Interest[],
-    // industries: AdTargetingCategory[], 
+    industries: Interest[], 
     startTime: string,
     status: string,
     accessToken: string
@@ -77,13 +77,11 @@ export interface Targeting{
 }
 
 export interface GeoLocation{
-    cities: Cities[];
+    cities: Cities[]
 }
-
 export interface Cities{
-    key: string
+    key : string
 }
-
 export interface LocationData{
     key: string,
     cityName: string,

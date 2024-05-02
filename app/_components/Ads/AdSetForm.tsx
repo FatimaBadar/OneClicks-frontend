@@ -14,14 +14,26 @@ import {
   ThemeProvider,
   Typography,
   Grid,
-  IconButton
+  IconButton,
 } from "@mui/material";
 import Cookies from "universal-cookie";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 import optimization from "@/public/jsonData/optimization_goals.json";
 import billingEvents from "@/public/jsonData/billing_event.json";
-import { AdTargetingCategory, AdsetPayload, GeoLocation, Interest, LocationData } from "../../_models/adAccount.model";
-import { CreateAdsetService, GetCitySearchData, GetIndustrySearchData, GetInterestsSearchData } from "../../_services/adAccountService";
+import {
+  AdTargetingCategory,
+  AdsetPayload,
+  Cities,
+  GeoLocation,
+  Interest,
+  LocationData,
+} from "../../_models/adAccount.model";
+import {
+  CreateAdsetService,
+  GetCitySearchData,
+  GetIndustrySearchData,
+  GetInterestsSearchData,
+} from "../../_services/adAccountService";
 import { Toast } from "primereact/toast";
 
 interface AdSetProps {
@@ -29,7 +41,6 @@ interface AdSetProps {
   objective: string;
 }
 const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
-
   const [adsetName, setAdsetName] = useState("");
   const [optimizationGoal, setOptimizationGoal] = useState("");
   const [billingEvent, setBillingEvent] = useState("");
@@ -43,13 +54,17 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const [interests, setInterests] = useState("");
   const [startTime, setStartTime] = useState("");
 
-  const [interestsSearchData, setInterestsSearchData] = useState<Interest[]>([]);
+  const [interestsSearchData, setInterestsSearchData] = useState<Interest[]>(
+    []
+  );
   const [citySearchData, setCitySearchData] = useState<LocationData[]>([]);
-  const [industrySearchData, setIndustrySearchData] = useState<AdTargetingCategory[]>([]);
+  const [industrySearchData, setIndustrySearchData] = useState<
+    AdTargetingCategory[]
+  >([]);
 
-  const [returnInterestsData, setReturnInterestsData] = useState<Interest[]>([]);
-  const [returnCityData, setReturnCityData] = useState<LocationData[]>([]);
-  const [returnIndustryData, setReturnIndustryData] = useState<AdTargetingCategory[]>([]);
+  const [returnInterestsData, setReturnInterestsData] = useState<string[]>([]);
+  const [returnCityData, setReturnCityData] = useState<string[]>([]);
+  const [returnIndustryData, setReturnIndustryData] = useState<string[]>([]);
 
   const toast = useRef<Toast>(null);
   const cookies = new Cookies();
@@ -74,17 +89,41 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
 
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
+    //city
+    var tempCity = citySearchData.filter((x) => returnCityData.includes(x.key));
+    var geoCity: Cities[] = [];
+    tempCity.forEach((x) => {
+      var city: Cities = {
+        key: x.key,
+      };
+      geoCity.push(city);
+    });
+    const geo: GeoLocation = {
+      cities: geoCity,
+    };
+    //interest
+    var tempInterest = interestsSearchData.filter((x) =>
+      returnInterestsData.map((x) => parseInt(x)).includes(x.id)
+    );
+    //industry
+    var tempIndustry = industrySearchData.filter((x) =>
+      returnIndustryData.includes(x.id)
+    );
+    var industry: Interest[] = [];
+    tempIndustry.forEach((x) => {
+      var temp: Interest = {
+        id: parseInt(x.id),
+        name: x.name,
+      };
+      industry.push(temp);
+    });
 
-    const geo : GeoLocation = {
-      cities: returnCityData.map(city => city.key)
-    }
-
-    const ind: AdTargetingCategory[] = returnIndustryData;
-    const inte: Interest[] = returnInterestsData;
-    
-    const accessTokenfb = cookies.get('accesstoken_fb');
-
+    const accessTokenfb = cookies.get("accesstoken_fb");
+//"message": "(#100) billing_event must be one of the following values: APP_INSTALLS, CLICKS, IMPRESSIONS, LINK_CLICKS, NONE, OFFER_CLAIMS, PAGE_LIKES, POST_ENGAGEMENT, THRUPLAY, PURCHASE, LISTING_INTERACTION",
+   //Billing event invalid for optimisation goal",
+    //"error_user_msg": "The specified billing event is not a valid option for the optimisation goal provided. If you are modifying the optimisation goal, please make sure that your billing event will still be consistent with your new optimisation goal.",
     const tempAdSetData: AdsetPayload = {
+      adAccountId: cookies.get("adAccountId").toString(),
       campaignId: campaign,
       adsetName,
       optimizationGoal,
@@ -92,8 +131,8 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
       bidAmount,
       dailyBudget,
       geolocations: geo,
-      industries: ind,
-      interests: inte,    
+      industries: industry,
+      interests: tempInterest,
       startTime,
       status,
       accessToken: accessTokenfb,
@@ -115,11 +154,10 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
       setInterests(""),
       setStartTime(""),
       setStatus("");
-      setReturnIndustryData([]); 
-      setReturnInterestsData([]); 
-      setReturnCityData([]); 
-    } 
-    catch (error) {
+      setReturnIndustryData([]);
+      setReturnInterestsData([]);
+      setReturnCityData([]);
+    } catch (error) {
       showErrorToast("Could not create adset");
       console.error(error);
     }
@@ -128,14 +166,13 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableInterestsData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const accessToken = cookies.get('accesstoken_fb');
+      const accessToken = cookies.get("accesstoken_fb");
       const response = await GetInterestsSearchData(interests, accessToken);
-      if(response.statusCode == '200'){
+      if (response.statusCode == "200") {
         setInterestsSearchData(response.responseData);
         showSuccessToast(response.message);
       }
-    } 
-    catch (error) {
+    } catch (error) {
       showErrorToast("Error searching interests");
     }
   };
@@ -143,14 +180,13 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableCityData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const accessToken = cookies.get('accesstoken_fb');
+      const accessToken = cookies.get("accesstoken_fb");
       const response = await GetCitySearchData(cities, accessToken);
-      if(response.statusCode === '200'){
+      if (response.statusCode === "200") {
         setCitySearchData(response.responseData);
         showSuccessToast(response.message);
-      }    
-    } 
-    catch (error) {
+      }
+    } catch (error) {
       showErrorToast("Error searching cities");
     }
   };
@@ -158,7 +194,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableIndustryData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const accessToken = cookies.get('accesstoken_fb');
+      const accessToken = cookies.get("accesstoken_fb");
       const response = await GetIndustrySearchData(accessToken);
       if (response.statusCode == "200") {
         showSuccessToast(response.message);
@@ -170,49 +206,33 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
     }
   };
 
-
-  const handleIndustrySearchData = (event: SelectChangeEvent<AdTargetingCategory[]>) => {
-    const {target: { value },} = event;
+  const handleIndustrySearchData = (event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value },
+    } = event;
     if (Array.isArray(value)) {
+      // console.log(value)
       setReturnIndustryData(value);
-    } 
-    else if (typeof value === 'string') {
-      const parsedValue = value.split(',').map((item) => ({
-        id: item.trim(),
-        name: item.trim(),
-        description: item.trim(),
-        type: item.trim(), 
-      }));
-      setReturnIndustryData(parsedValue);
-    } 
-  };
-
-  const handleCitySearchData = (event: SelectChangeEvent<LocationData[]>) => {
-    const {target: { value },} = event;
-    if (Array.isArray(value)) {
-      setReturnCityData(value);
-    } 
-    else if (typeof value === 'string') {
-      const parsedValue = value.split(',').map((item) => ({
-        key: item.trim(),
-        cityName: item.trim(),
-        countryName: item.trim(),
-      }));
-      setReturnCityData(parsedValue);
     }
   };
 
-  const handleInterestsSearchData = (event: SelectChangeEvent<Interest[]>) => {
-    const {target: { value },} = event;
+  const handleCitySearchData = (event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value },
+    } = event;
     if (Array.isArray(value)) {
+      // console.log(value)
+      setReturnCityData(value);
+    }
+  };
+
+  const handleInterestsSearchData = (event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value },
+    } = event;
+    if (Array.isArray(value)) {
+      // console.log(value)
       setReturnInterestsData(value);
-    } 
-    else if (typeof value === 'string') {
-      const parsedValue = value.split(',').map((item) => ({
-        id: parseInt(item), 
-        name: item.trim(), 
-      }));
-      setReturnInterestsData(parsedValue);
     }
   };
 
@@ -258,10 +278,15 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
           Create a new Adset
         </Typography>
 
-        <Box sx={{width: "100%", mt: 3, display: "flex"}}>
-          <Box component="form" onSubmit={getAvailableInterestsData}
-            sx={{width: "100%", mt: 3, display: "flex"}}>
-            <Typography sx={{ fontWeight: 600 }}>Search available interests</Typography>
+        <Box sx={{ width: "100%", mt: 3, display: "flex" }}>
+          <Box
+            component="form"
+            onSubmit={getAvailableInterestsData}
+            sx={{ width: "100%", mt: 3, display: "flex" }}
+          >
+            <Typography sx={{ fontWeight: 600 }}>
+              Search available interests
+            </Typography>
             <TextField
               size="small"
               margin="dense"
@@ -279,9 +304,14 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
             </IconButton>
           </Box>
 
-          <Box component="form" onSubmit={getAvailableCityData}
-            sx={{width: "100%", mt: 3, display: "flex"}}>
-            <Typography sx={{ fontWeight: 600 }}>Search available cities</Typography>
+          <Box
+            component="form"
+            onSubmit={getAvailableCityData}
+            sx={{ width: "100%", mt: 3, display: "flex" }}
+          >
+            <Typography sx={{ fontWeight: 600 }}>
+              Search available cities
+            </Typography>
             <TextField
               size="small"
               margin="dense"
@@ -298,10 +328,15 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
               <SearchIcon style={{ fill: "blue" }} />
             </IconButton>
           </Box>
-          
-          <Box component="form" onSubmit={getAvailableIndustryData}
-            sx={{width: "100%", mt: 3, display: "flex"}}>
-            <Typography sx={{ fontWeight: 600 }}>Search available industries</Typography>
+
+          <Box
+            component="form"
+            onSubmit={getAvailableIndustryData}
+            sx={{ width: "100%", mt: 3, display: "flex" }}
+          >
+            <Typography sx={{ fontWeight: 600 }}>
+              Search available industries
+            </Typography>
             <TextField
               size="small"
               margin="dense"
@@ -315,7 +350,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
               onChange={(e) => setIndustries(e.target.value)}
             />
             <IconButton type="submit" aria-label="search">
-              <SearchIcon style={{ fill: "blue"}} />
+              <SearchIcon style={{ fill: "blue" }} />
             </IconButton>
           </Box>
         </Box>
@@ -330,17 +365,31 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
         >
           <Grid container>
             <Grid item xs={12} md={6}>
-              <Grid container sx={{ display: "flex"}} >
-                <Grid item xs={12} md={6} sx={{ display: "grid", alignItems: "center"}}>
+              <Grid container sx={{ display: "flex" }}>
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
+                  sx={{ display: "grid", alignItems: "center" }}
+                >
                   <Typography sx={{ fontWeight: 600 }}>Adset Name</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>Optimization Goal</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>Billing Event</Typography>
+                  <Typography sx={{ fontWeight: 600 }}>
+                    Optimization Goal
+                  </Typography>
+                  <Typography sx={{ fontWeight: 600 }}>
+                    Billing Event
+                  </Typography>
                   <Typography sx={{ fontWeight: 600 }}>Bid Amount</Typography>
                   <Typography sx={{ fontWeight: 600 }}>Daily Budget</Typography>
                   <Typography sx={{ fontWeight: 600 }}>Cities</Typography>
                 </Grid>
 
-                <Grid item xs={12} md={6} sx={{ display: "grid", justifyContent: "center" }}>
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
+                  sx={{ display: "grid", justifyContent: "center" }}
+                >
                   <TextField
                     size="small"
                     margin="dense"
@@ -410,62 +459,72 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                   />
 
                   <FormControl variant="outlined" margin="dense">
-                  <Select
-                    value={returnCityData}
-                    onChange={handleCitySearchData}
-                    multiple
-                    sx={{ height: "32px" }}
-                  >
-                    {citySearchData.map((obj, id) => (
-                      <MenuItem key={id} value={obj.key}>
-                        {obj.cityName}, {obj.countryName}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                    <Select
+                      value={returnCityData}
+                      onChange={handleCitySearchData}
+                      multiple
+                      sx={{ height: "32px" }}
+                    >
+                      {citySearchData.map((obj, id) => (
+                        <MenuItem key={id} value={obj.key}>
+                          {obj.cityName}, {obj.countryName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
             </Grid>
 
             <Grid item xs={12} md={6}>
               <Grid container>
-                <Grid item xs={12} md={6} sx={{ display: "grid", alignItems: "center" }}>
-                <Typography sx={{ fontWeight: 600 }}>Industries</Typography>
-                <Typography sx={{ fontWeight: 600 }}>Interests</Typography>
-                <Typography sx={{ fontWeight: 600 }}>Start Time</Typography>
-                <Typography sx={{ fontWeight: 600 }}>Status</Typography>
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
+                  sx={{ display: "grid", alignItems: "center" }}
+                >
+                  <Typography sx={{ fontWeight: 600 }}>Industries</Typography>
+                  <Typography sx={{ fontWeight: 600 }}>Interests</Typography>
+                  <Typography sx={{ fontWeight: 600 }}>Start Time</Typography>
+                  <Typography sx={{ fontWeight: 600 }}>Status</Typography>
                 </Grid>
 
-                <Grid item xs={12} md={6} sx={{ display: "grid", justifyContent: "center" }}> 
-                <FormControl variant="outlined" margin="dense">
-                  <Select
-                    value={returnIndustryData}
-                    onChange={handleIndustrySearchData}
-                    multiple
-                    sx={{ height: "32px" }}
-                  >
-                    {industrySearchData.map((obj, id) => (
-                    <MenuItem key={id} value={obj.id}>
-                      {obj.name}
-                    </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
+                  sx={{ display: "grid", justifyContent: "center" }}
+                >
+                  <FormControl variant="outlined" margin="dense">
+                    <Select
+                      value={returnIndustryData}
+                      onChange={handleIndustrySearchData}
+                      multiple
+                      sx={{ height: "32px" }}
+                    >
+                      {industrySearchData.map((obj, id) => (
+                        <MenuItem key={id} value={obj.id}>
+                          {obj.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
 
-                <FormControl variant="outlined" margin="dense">
-                  <Select
-                    value={returnInterestsData}
-                    onChange={handleInterestsSearchData}
-                    multiple
-                    sx={{ height: "32px" }}
-                  >
-                    {interestsSearchData.map((obj, id) => (
-                      <MenuItem key={id} value={obj.id}>
-                        {obj.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                  <FormControl variant="outlined" margin="dense">
+                    <Select
+                      value={returnInterestsData}
+                      onChange={handleInterestsSearchData}
+                      multiple
+                      sx={{ height: "32px" }}
+                    >
+                      {interestsSearchData.map((obj, id) => (
+                        <MenuItem key={id} value={obj.id}>
+                          {obj.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
 
                   <TextField
                     size="small"
@@ -477,7 +536,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                     autoComplete="startTime"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                  />   
+                  />
 
                   <FormControl
                     component="fieldset"
@@ -505,7 +564,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                       />
                     </RadioGroup>
                   </FormControl>
-                </Grid>                  
+                </Grid>
                 <Button
                   type="submit"
                   variant="contained"
@@ -520,11 +579,12 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                       backgroundColor: "#405D80 !important",
                     },
                   }}
-                >Create
+                >
+                  Create
                 </Button>
               </Grid>
             </Grid>
-          </Grid>         
+          </Grid>
         </Box>
       </ThemeProvider>
     </>
