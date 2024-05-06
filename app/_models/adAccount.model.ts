@@ -105,7 +105,6 @@ export interface AdCreativePayload{
     creativeName: string,
     pageId: string,
     adsetId: string,
-    imageFile: string
     imageHash: string,
     message: string,
     AdAccountId: string,
@@ -122,4 +121,21 @@ export interface AdCreative{
     pageId: string,
     image: AdImagePayload,
     message: string
+}
+
+export interface Ads{
+    adsetId: string
+    adsetName: string,
+    optimizationGoal: string,
+    billingEvent: string,
+    bidAmount: number,
+    dailyBudget: number,
+    campaignId: string,
+    geolocations: GeoLocation,
+    interests: Interest[],
+    // industries: AdTargetingCategory[],
+    startTime: string,
+    status: string,
+    accessToken: string
+    adAccountId: string
 }

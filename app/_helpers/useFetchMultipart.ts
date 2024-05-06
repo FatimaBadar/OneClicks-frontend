@@ -17,7 +17,7 @@ const useFetchMultipart = () => {
           // credentials: "include", // Include credentials (e.g., cookies) in the request
         };
         if (body) {
-          requestOptions.headers = { "Content-Type": "multipart/form-data" };
+          requestOptions.body = { "Content-Type": "multipart/form-data" };
           // requestOptions.body = JSON.stringify(body);
         }
         return fetch(url, requestOptions);

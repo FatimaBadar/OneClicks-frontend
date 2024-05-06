@@ -55,6 +55,7 @@ const toast = useRef<Toast>(null);
       if (backendResponse.statusCode == "200") {
         localStorage.setItem('accesstoken_fb', backendResponse.responseData.longLiveToken);
         localStorage.setItem('adAccountId', backendResponse.responseData.adAccountId)
+        localStorage.setItem('pageId', backendResponse.responseData.pages[0])
         showSuccessToast('Ad Account Connected successfully')
        } 
       else{

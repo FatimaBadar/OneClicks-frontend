@@ -254,7 +254,7 @@ export const Navbar: React.FC = () => {
             <Link href="/contact" style={{ textDecoration: 'none' }}>
               <NavLink variant="body2">Contact Us</NavLink>
             </Link>
-            <Link href="/ads" style={{ textDecoration: 'none' }}>
+            <Link href="/campaigns" style={{ textDecoration: 'none' }}>
               <NavLink variant="body2">Ad Campaigns</NavLink>
             </Link>
             <Link href="/adsets" style={{ textDecoration: 'none' }}>
@@ -262,6 +262,9 @@ export const Navbar: React.FC = () => {
             </Link>
             <Link href="/adcreatives" style={{ textDecoration: 'none' }}>
               <NavLink variant="body2">Ad Creatives</NavLink>
+            </Link>
+            <Link href="/ads" style={{ textDecoration: 'none' }}>
+              <NavLink variant="body2">Ads</NavLink>
             </Link>
           </NavbarLinksBox>
         </Box>

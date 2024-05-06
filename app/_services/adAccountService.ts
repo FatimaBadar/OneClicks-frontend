@@ -86,15 +86,14 @@ export async function GetCitySearchData(city: string, accessToken: string):  Pro
     return handleResponse<ResponseVM<LocationData[]>>(response).then((data) => data);
 }
 
-export async function CreateAdImageHashService(payload: FormData): Promise<ResponseVM<ImageHash>> {
-    const fetch = useFetchMultipart();
-    console.log("payload: ", payload)
-    console.log("formdata acc: ",payload.get("accessToken"))
-    console.log("formdata imagefile: ",payload.get("imageFile"))
+export async function CreateAdImageHashService(adAccountId: string, payload: FormData, accessToken: string): Promise<ResponseVM<string>> {
 
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdImageHash`, {payload});
-
-    return handleResponse<ResponseVM<ImageHash>>(response).then((data) => data);
+    const response = await fetch(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdImageHash/${adAccountId}?accessToken=${accessToken}`,{
+        method : 'PUT', 
+        body : payload
+    });  
+    return handleResponse<ResponseVM<string>>(response).then((data) => data);
+    // const response = await fetch.put(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdImageHash/${adAccountId}?accessToken=${accessToken}`, {payload});
 }
 
 export async function CreateAdcreativeService(payload: AdCreativePayload): Promise<ResponseVM<AdCreative>> {
