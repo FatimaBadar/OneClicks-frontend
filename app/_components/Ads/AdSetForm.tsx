@@ -16,7 +16,6 @@ import {
   Grid,
   IconButton,
 } from "@mui/material";
-import Cookies from "universal-cookie";
 import SearchIcon from "@mui/icons-material/Search";
 import optimization from "@/public/jsonData/optimization_goals.json";
 import billingEvents from "@/public/jsonData/billing_event.json";
@@ -67,7 +66,6 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const [returnIndustryData, setReturnIndustryData] = useState<string[]>([]);
 
   const toast = useRef<Toast>(null);
-  const cookies = new Cookies();
 
   const showSuccessToast = (message: string) => {
     toast.current?.show({
@@ -118,12 +116,13 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
       industry.push(temp);
     });
 
-    const accessTokenfb = cookies.get("accesstoken_fb");
-//"message": "(#100) billing_event must be one of the following values: APP_INSTALLS, CLICKS, IMPRESSIONS, LINK_CLICKS, NONE, OFFER_CLAIMS, PAGE_LIKES, POST_ENGAGEMENT, THRUPLAY, PURCHASE, LISTING_INTERACTION",
+    const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+    const adaccountId = localStorage?.getItem('adAccountId') ??  "";
+    //"message": "(#100) billing_event must be one of the following values: APP_INSTALLS, CLICKS, IMPRESSIONS, LINK_CLICKS, NONE, OFFER_CLAIMS, PAGE_LIKES, POST_ENGAGEMENT, THRUPLAY, PURCHASE, LISTING_INTERACTION",
    //Billing event invalid for optimisation goal",
     //"error_user_msg": "The specified billing event is not a valid option for the optimisation goal provided. If you are modifying the optimisation goal, please make sure that your billing event will still be consistent with your new optimisation goal.",
     const tempAdSetData: AdsetPayload = {
-      adAccountId: cookies.get("adAccountId").toString(),
+      adAccountId: adaccountId.toString(),
       campaignId: campaign,
       adsetName,
       optimizationGoal,
@@ -166,8 +165,8 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableInterestsData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const accessToken = cookies.get("accesstoken_fb");
-      const response = await GetInterestsSearchData(interests, accessToken);
+      const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+      const response = await GetInterestsSearchData(interests, accessTokenfb);
       if (response.statusCode == "200") {
         setInterestsSearchData(response.responseData);
         showSuccessToast(response.message);
@@ -180,8 +179,8 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableCityData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const accessToken = cookies.get("accesstoken_fb");
-      const response = await GetCitySearchData(cities, accessToken);
+      const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+      const response = await GetCitySearchData(cities, accessTokenfb);
       if (response.statusCode === "200") {
         setCitySearchData(response.responseData);
         showSuccessToast(response.message);
@@ -194,8 +193,8 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableIndustryData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const accessToken = cookies.get("accesstoken_fb");
-      const response = await GetIndustrySearchData(accessToken);
+      const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+      const response = await GetIndustrySearchData(accessTokenfb);
       if (response.statusCode == "200") {
         showSuccessToast(response.message);
         setIndustrySearchData(response.responseData);

@@ -95,26 +95,31 @@ export interface AdTargetingCategory{
     type: string
 }
 
-export interface AdImage{
-    imageId?: string,
-    filename: string,
+export interface AdImagePayload{
+    adAccountId: string,
+    imageFile: FormData,
     accessToken: string
 }
 
 export interface AdCreativePayload{
-    creativeId: string,
     creativeName: string,
     pageId: string,
-    imageHash: AdImage,
+    adsetId: string,
+    imageFile: string
+    imageHash: string,
     message: string,
     AdAccountId: string,
     accessToken: string
+}
+
+export interface ImageHash{
+    hash: string
 }
 
 export interface AdCreative{
     creativeId: string,
     name: string,
     pageId: string,
-    image: AdImage,
+    image: AdImagePayload,
     message: string
 }

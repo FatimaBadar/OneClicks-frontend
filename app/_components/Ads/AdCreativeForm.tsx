@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import {
   Button,
   TextField,
@@ -12,7 +12,9 @@ import {
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Image from "next/image";
-import { CreateAdcampaignService } from "@/app/_services/adAccountService";
+import { CreateAdImageHashService, CreateAdcreativeService } from "@/app/_services/adAccountService";
+import { AdCreativePayload, AdImagePayload } from "@/app/_models/adAccount.model";
+import { Toast } from "primereact/toast";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -25,31 +27,105 @@ const VisuallyHiddenInput = styled("input")({
   whiteSpace: "nowrap",
   width: 1,
 });
-const AdCreativeForm = () => {
+
+interface AdCreativeProps {
+  adset: string;
+}
+
+const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
+
   const [creativeName, setcreativeName] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  const emptyFile = new File([], '', { type: '' });
+  const [image, setImage] = useState<File>(emptyFile);
+  const [imagePath, setImagePath] = useState("");
   const [message, setMessage] = useState("");
+
+  const [imageHash, setImageHash] = useState("");
+  const toast = useRef<Toast>(null);
+
+  const showSuccessToast = (message: string) => {
+    toast.current?.show({
+      severity: "success",
+      summary: "Success",
+      detail: message,
+      life: 3000,
+    });
+  };
+
+  const showErrorToast = (message: string) => {
+    toast.current?.show({
+      severity: "error",
+      summary: "Error Message",
+      detail: message,
+      life: 3000,
+    });
+  };
 
   const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+        const adAccountId = localStorage?.getItem('adAccountId') ??  "";
+        const pgId = localStorage?.getItem('pageId') ??  "";
+
+        const tempAdCreativeData: AdCreativePayload = {
+          creativeName,
+          pageId: pgId,
+          imageHash: imageHash,
+          imageFile: imagePath,
+          adsetId: adset,
+          message,
+          AdAccountId: adAccountId,
+          accessToken: accessTokenfb,
+        };
         try {
-          const response = await CreateAdcampaignService();
-          // if (response= "200") {
-            console.log("res", response);
-            const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
-            const adaccountId = localStorage?.getItem('adAccountId') ??  "";
-            // const adcreative = localStorage?.setItem('creativeId', response.responseData.campaignId);
-            //onReturn(true);
-          // }
-    //       setCampaignName("");
-    //       setObjective("");
-    //       setStatus("");
-    //       setSpecialAdCategory([]);
+          const response = await CreateAdcreativeService(tempAdCreativeData);
+          if (response.statusCode == "200") {
+            console.log("res", response.responseData);
+            showSuccessToast(response.message);
+          }
         } catch (error) {
-          // onReturn(false);
           console.error(error);
         }
       }
+
+  const handleUploadClick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(file);
+        setImagePath(file.name);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    //get image hash
+    e.preventDefault();
+    const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+    const adaccountId = localStorage?.getItem('adAccountId') ??  "";
+
+    const formData: FormData = new FormData();
+    formData.append("adAccountId", adaccountId);
+    formData.append("accessToken", accessTokenfb)
+    // formData.append("imageFile", image);  
+    formData.append("imageFile", JSON.stringify(image))
+    const tempImagePayload: AdImagePayload= {
+      adAccountId: adaccountId,
+      imageFile: formData,
+      accessToken: accessTokenfb    
+    }
+
+    try {
+      const response = await CreateAdImageHashService(formData);
+      if (response.statusCode == "200") {
+        console.log("res", response.responseData);
+        setImageHash(response.responseData.hash);
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const defaultTheme = createTheme({
     typography: {
@@ -75,17 +151,6 @@ const AdCreativeForm = () => {
       },
     },
   });
-
-  const handleUploadClick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(file);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   return (
     <>

@@ -186,7 +186,7 @@ const Adsets = () => {
                     <TableCell align="right">
                     <Button 
                        onClick={() => {
-                        router.push('/adsets' + '?' + CreateAdcreative('selectedAdsetId' ,data.adsetId))
+                        router.push('/adcreatives' + '?' + CreateAdcreative('selectedAdsetId' ,data.adsetId))
                       }}
                       variant="contained"
                       sx={{

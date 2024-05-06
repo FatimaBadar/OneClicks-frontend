@@ -52,7 +52,9 @@ const AdCreatives = () => {
     <>
       <Navbar/>
       <Box sx={{ mt: 15 }}>
-      <AdCreativeForm/>
+      <AdCreativeForm
+          adset={selectedAdsetId}
+        />
       </Box>
         <DashboardCard>
           <Box

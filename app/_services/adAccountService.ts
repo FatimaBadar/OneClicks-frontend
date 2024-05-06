@@ -1,6 +1,7 @@
 import useFetch from "../_helpers/useFetch";
 import { ResponseVM } from "../_models/response.model";
-import { AdAccount, Campaign, Adset, AdImage, CampaignPayload, AdsetPayload, Interest, LocationData, AdTargetingCategory, AdCreative, AdCreativePayload } from "../_models/adAccount.model";
+import { AdAccount, Campaign, Adset, AdImagePayload, CampaignPayload, AdsetPayload, Interest, LocationData, AdTargetingCategory, AdCreative, AdCreativePayload, ImageHash } from "../_models/adAccount.model";
+import useFetchMultipart from "../_helpers/useFetchMultipart";
 
 // const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
 const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
@@ -85,16 +86,20 @@ export async function GetCitySearchData(city: string, accessToken: string):  Pro
     return handleResponse<ResponseVM<LocationData[]>>(response).then((data) => data);
 }
 
-export async function CreateAdImageHashService(payload: AdImage): Promise<ResponseVM<AdImage>> {
-    const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdset`, payload);
+export async function CreateAdImageHashService(payload: FormData): Promise<ResponseVM<ImageHash>> {
+    const fetch = useFetchMultipart();
+    console.log("payload: ", payload)
+    console.log("formdata acc: ",payload.get("accessToken"))
+    console.log("formdata imagefile: ",payload.get("imageFile"))
 
-    return handleResponse<ResponseVM<AdImage>>(response).then((data) => data);
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdImageHash`, {payload});
+
+    return handleResponse<ResponseVM<ImageHash>>(response).then((data) => data);
 }
 
 export async function CreateAdcreativeService(payload: AdCreativePayload): Promise<ResponseVM<AdCreative>> {
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdcreative`, payload);
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdCreative`, payload);
 
     return handleResponse<ResponseVM<AdCreative>>(response).then((data) => data);
 }
