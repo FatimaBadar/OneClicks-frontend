@@ -17,8 +17,8 @@ import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 import AdCampaignModal from "@/app/_components/Ads/AdCampaignModal";
 import Navbar from "@/app/_components/Navbar";
 import { getAllCampaignsService } from "@/app/_services/adAccountService";
-import useAdStore from "@/app/_store/adStore";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Campaign } from "@/app/_models/adAccount.model";
 
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",
@@ -32,14 +32,10 @@ const Adcampaigns = () => {
   const impressions = 0;
   const clicks = 0;
 
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);  
+
   const router = useRouter()
   const searchParams = useSearchParams()
-
-  const { campaigns, setCampaigns, removeCampaigns } = useAdStore((state) => ({
-    campaigns: state.campaigns,
-    setCampaigns: state.setCampaigns,
-    removeCampaigns: state.removeCampaigns,
-  }));
 
   useEffect(() => {
     getCampaigns();
@@ -47,7 +43,11 @@ const Adcampaigns = () => {
 
   const getCampaigns = async () => {
     try {
-      const response = await getAllCampaignsService();
+      
+      const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+      const adaccountId = localStorage?.getItem('adAccountId') ??  "";
+
+      const response = await getAllCampaignsService(adaccountId.toString(), accessTokenfb);
       if (response.statusCode == "200") {
         setCampaigns(response.responseData);
       }

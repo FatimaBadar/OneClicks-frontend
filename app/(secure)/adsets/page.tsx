@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -15,9 +15,9 @@ import {
 import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 import Navbar from "@/app/_components/Navbar";
 import { getAllAdsetsService } from "@/app/_services/adAccountService";
-import useAdStore from "@/app/_store/adStore";
 import AdsetForm from "@/app/_components/Ads/AdSetForm";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Adset } from "@/app/_models/adAccount.model";
 
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",
@@ -29,14 +29,10 @@ const Adsets = () => {
   const type = "Facebook";
   const pbg = typeColor.Facebook;
 
-  const { adsets, setAdsets, removeAdsets } = useAdStore((state) => ({
-    adsets: state.adsets,
-    setAdsets: state.setAdsets,
-    removeAdsets: state.removeAdsets,
-  }));
-  
+  const [adsets, setAdsets] = useState<Adset[]>([]);  
   const router = useRouter()
   const searchParams = useSearchParams();
+  
   var selectedCampaignId: string | null = searchParams.get("selectedCampaignId");
   if (selectedCampaignId == null) selectedCampaignId = "";
   var selectedObjective: string | null = searchParams.get("selectedObjective");
@@ -54,7 +50,10 @@ const Adsets = () => {
 
   const getAdsets = async () => {
     try {
-      const response = await getAllAdsetsService();
+      const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+      const adaccountId = localStorage?.getItem('adAccountId') ??  "";
+
+      const response = await getAllAdsetsService(adaccountId.toString(), accessTokenfb);
       if (response.statusCode == "200") {
         setAdsets(response.responseData);
         console.log("adsets: ", adsets)
@@ -67,23 +66,30 @@ const Adsets = () => {
   return (
     <>
       <Navbar />
-      <Box sx={{ mt: 13, ml:15, mr: 15}}>
+      
+      <Box sx={{ mt: 10, 
+        ml:10, mr: 10}}>
+          { selectedCampaignId ? 
         <AdsetForm
           campaign={selectedCampaignId}
           objective={selectedObjective}
         />
+        : ""}
       </Box>
+
       <Box sx={{ mt: 5 }}>
-        <DashboardCard>
+        {/* <DashboardCard> */}
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               flexDirection: "row",
+              backgroundColor: '#D6E0FE',
+              height: '50px'
             }}
           >
-            <Typography variant="h6" fontWeight={550}>
+            <Typography variant="h6" fontWeight={550} sx={{ml: "15px"}}>
               Ad adsets
             </Typography>
           </Box>
@@ -91,12 +97,8 @@ const Adsets = () => {
           <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
             <Table
               aria-label="simple table"
-              sx={{
-                whiteSpace: "nowrap",
-                mt: 2,
-              }}
             >
-              <TableHead>
+              <TableHead sx={{backgroundColor: '#EEF8FD'}}>
                 <TableRow>
                   <TableCell>
                     <Typography variant="subtitle2" fontWeight={600}>
@@ -175,22 +177,25 @@ const Adsets = () => {
                       </Box>
                     </TableCell>
                     <TableCell align="right">
-                      <Typography
-                        color="textSecondary"
-                        variant="subtitle2"
-                        fontWeight={400}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
                       >
-                        {data.startTime}
-                      </Typography>
+                        <Typography color="textSecondary"
+                          variant="subtitle2" fontWeight={600}>
+                          {data.startTime}
+                        </Typography>
+                      </Box>
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell>
                     <Button 
                        onClick={() => {
                         router.push('/adcreatives' + '?' + CreateAdcreative('selectedAdsetId' ,data.adsetId))
                       }}
                       variant="contained"
                       sx={{
-                        marginRight: "10px",
                         backgroundColor: "#597FB5 !important",
                         color: "#fff !important",
                         "&:hover": {
@@ -205,7 +210,7 @@ const Adsets = () => {
               </TableBody>
             </Table>
           </Box>
-        </DashboardCard>
+        {/* </DashboardCard> */}
       </Box>
     </>
   );

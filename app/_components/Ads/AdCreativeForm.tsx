@@ -16,6 +16,8 @@ import { CreateAdImageHashService, CreateAdcreativeService } from "@/app/_servic
 import { AdCreativePayload, AdImagePayload, ImageHash } from "@/app/_models/adAccount.model";
 import { Toast } from "primereact/toast";
 import { ResponseVM } from "@/app/_models/response.model";
+import ClearIcon from '@mui/icons-material/Clear';
+
 const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
 
 const VisuallyHiddenInput = styled("input")({
@@ -38,9 +40,11 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
 
   const [creativeName, setcreativeName] = useState("");
   const emptyFile = new File([], '', { type: '' });
-  const [image, setImage] = useState<File>(emptyFile);
+  // const emptyFile2 = new File([])
+  const [image, setImage] = useState<File | null>(null);
   const [imagePath, setImagePath] = useState("");
   const [message, setMessage] = useState("");
+  const [displaySelectButton, setDisplaySelectButton] = useState(true);
 
   const [imageHash, setImageHash] = useState("");
   const toast = useRef<Toast>(null);
@@ -73,7 +77,7 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
       creativeName,
       pageId: pgId,
       imageHash: imageHash,
-      // imageFile: imagePath,
+      fileName: image? image.name : "",
       adsetId: adset,
       message,
       AdAccountId: adAccountId,
@@ -82,6 +86,8 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
     try {
       const response = await CreateAdcreativeService(tempAdCreativeData);
       if (response.statusCode == "200") {
+        setMessage(response.responseData.message);
+        setcreativeName(response.responseData.creativeName);
         console.log("creative res", response.responseData);
         showSuccessToast(response.message);
       }
@@ -90,8 +96,17 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
     }
   }
 
-  const handleUploadClick = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const clearImage = async () => {
+    setImage(emptyFile);
+    setDisplaySelectButton(true);
+  }
+
+  const handleSelectFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    let file = e.target.files?.[0];
+    if(file){
+      setImage(file)
+      setImagePath(file.name)
+    }
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -100,24 +115,24 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
       };
       reader.readAsDataURL(file);
     }
+    setDisplaySelectButton(false)
+  }
 
+  const handleUploadClick = async (e: FormEvent) => {
     e.preventDefault();
-    const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
-    const adaccountId = localStorage?.getItem('adAccountId') ??  "";
 
     const formData: FormData = new FormData();
-    formData.append("imageFile", image);  
-
+    if(image){
+      formData.append("imageFile", image);  
+    }
+    
+    const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+    const adaccountId = localStorage?.getItem('adAccountId') ??  "";
     try {
       const response = await CreateAdImageHashService(adaccountId.toString(), formData, accessTokenfb);
-      if (response.statusCode == "200") {
-        console.log("res: ", response.responseData);
-        console.log("hash1: ", imageHash);
-
-        setImageHash("");
-        setImageHash(response.responseData);
-        console.log("hash2: ", imageHash);
-
+      if (response.statusCode === "200") {
+        const hash = response.responseData;
+        setImageHash(hash);
       }
     } catch (error) {
       console.error(error);
@@ -191,47 +206,51 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
           >
             <Box
               component="form"
+              onSubmit={handleUploadClick}
               sx={{
                 width: "100%",
-                // mt: 5,
                 textAlign: "center",
                 p: 2,
                 border: "2px solid grey",
                 height: "100%",
               }}
             >
-                {/* // src={image}
-                // {...image}
-                // alt="Snowy mountain peaks"
-                // title="Photo from Unsplash"
-                // blurDataURL={BASE64}
-                // placeholder="blur" */}
               <Image
-                src={image ? URL.createObjectURL(image) : ""}
-
-                // src={image ? URL.createObjectURL(image) : ""}
+                src={image? URL.createObjectURL(image) : ""}
                 width={200} //397 //134
                 height={200} //245 //25
                 priority={true}
-                alt="Upload File"
-              />
+                alt=""
+              />                
+              <ClearIcon sx={{position: "top"}} onClick={clearImage}/>
               <Box>
-                <Button
+              { displaySelectButton ? 
+              <Button
                   component="label"
                   role={undefined}
                   variant="contained"
                   tabIndex={-1}
                   startIcon={<CloudUploadIcon />}
                 >
-                  Upload file
+                  Select file
                   <VisuallyHiddenInput
                     type="file"
                     // value={image}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      handleUploadClick(e)
+                      handleSelectFile(e)
                     }
                   />
                 </Button>
+                : 
+                <Button
+                  type="submit"
+                  variant="contained"
+                  tabIndex={-1}
+                  startIcon={<CloudUploadIcon />}
+                >
+                  Upload file
+                </Button>
+                }
               </Box>
             </Box>
           </Grid>
@@ -295,7 +314,6 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
             </Box>
           </Grid>
         </Grid>
-        {/* </Box> */}
       </ThemeProvider>
     </>
   );

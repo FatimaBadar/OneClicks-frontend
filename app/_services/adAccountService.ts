@@ -1,6 +1,6 @@
 import useFetch from "../_helpers/useFetch";
 import { ResponseVM } from "../_models/response.model";
-import { AdAccount, Campaign, Adset, AdImagePayload, CampaignPayload, AdsetPayload, Interest, LocationData, AdTargetingCategory, AdCreative, AdCreativePayload, ImageHash } from "../_models/adAccount.model";
+import { AdAccount, Campaign, Adset, AdImagePayload, CampaignPayload, AdsetPayload, Interest, LocationData, AdTargetingCategory, AdCreative, AdCreativePayload, ImageHash, Ads, AdPayloadData } from "../_models/adAccount.model";
 import useFetchMultipart from "../_helpers/useFetchMultipart";
 
 // const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
@@ -44,9 +44,9 @@ export async function CreateAdcampaignService(){
 }
 
 
-export async function getAllCampaignsService():  Promise<ResponseVM<Campaign[]>>{
+export async function getAllCampaignsService(adAccountId: string, accessToken: string):  Promise<ResponseVM<Campaign[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllCampaigns`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllCampaigns?accessToken=${accessToken}&adAccountId=${adAccountId}`);
     
     return handleResponse<ResponseVM<Campaign[]>>(response).then((data) => data);
 }
@@ -58,9 +58,9 @@ export async function CreateAdsetService(payload: AdsetPayload): Promise<Respons
     return handleResponse<ResponseVM<Adset>>(response).then((data) => data);
 }
 
-export async function getAllAdsetsService():  Promise<ResponseVM<Adset[]>>{
+export async function getAllAdsetsService(adAccountId: string, accessToken: string):  Promise<ResponseVM<Adset[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAdsets`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAdsets?accessToken=${accessToken}&adAccountId=${adAccountId}`);
     
     return handleResponse<ResponseVM<Adset[]>>(response).then((data) => data);
 }
@@ -108,4 +108,25 @@ export async function getAllAdcreativesService():  Promise<ResponseVM<AdCreative
     const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAdcreatives`);
     
     return handleResponse<ResponseVM<AdCreative[]>>(response).then((data) => data);
+}
+
+export async function ScheduleAdService(payload: Ads): Promise<ResponseVM<string>> {
+    const fetch = useFetch();
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/ScheduleAd`, payload);
+
+    return handleResponse<ResponseVM<string>>(response).then((data) => data);
+}
+
+export async function getAllAdsService():  Promise<ResponseVM<Ads[]>>{
+    const fetch = useFetch();
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAds`);
+    
+    return handleResponse<ResponseVM<Ads[]>>(response).then((data) => data);
+}
+
+export async function getAllAdsPayloadService(adAccountId: string, accessToken: string):  Promise<ResponseVM<AdPayloadData>>{
+    const fetch = useFetch();
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAdsPayload?accessToken=${accessToken}&adAccountId=${adAccountId}`);
+    
+    return handleResponse<ResponseVM<AdPayloadData>>(response).then((data) => data);
 }

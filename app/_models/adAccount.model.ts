@@ -105,6 +105,7 @@ export interface AdCreativePayload{
     creativeName: string,
     pageId: string,
     adsetId: string,
+    fileName: string,
     imageHash: string,
     message: string,
     AdAccountId: string,
@@ -117,25 +118,40 @@ export interface ImageHash{
 
 export interface AdCreative{
     creativeId: string,
-    name: string,
-    pageId: string,
-    image: AdImagePayload,
+    creativeName: string,
+    adsetId: string,
+    imageHash: string,
+    fileName: string
     message: string
 }
 
 export interface Ads{
+    id?: string
+    adName: string
     adsetId: string
     adsetName: string,
-    optimizationGoal: string,
-    billingEvent: string,
-    bidAmount: number,
-    dailyBudget: number,
-    campaignId: string,
-    geolocations: GeoLocation,
-    interests: Interest[],
-    // industries: AdTargetingCategory[],
-    startTime: string,
+    creativeId: string,
     status: string,
     accessToken: string
     adAccountId: string
+}
+
+export interface AdPayloadData{
+    campaignData: CampaignData[],
+    adSetData: AdsetData[],
+    adCreativeData: CreativeData[] 
+}
+
+export interface CampaignData{
+    id: string,
+    name: string
+}
+export interface AdsetData{
+    id: string,
+    name: string
+    campaignId: string
+}
+export interface CreativeData{
+    id: string,
+    name: string
 }

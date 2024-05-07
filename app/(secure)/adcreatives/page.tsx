@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -9,23 +9,17 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Chip,
+  Button,
 } from "@mui/material";
 import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 import Navbar from "@/app/_components/Navbar";
 import { AdCreative } from "@/app/_models/adAccount.model";
 import AdCreativeForm from "@/app/_components/Ads/AdCreativeForm";
-import useAdStore from "@/app/_store/adStore";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getAllAdcreativesService } from "@/app/_services/adAccountService";
 
 const AdCreatives = () => {
-  // const [creatives, setCreatives] = useState<AdCreative[]>([]);
-  const { creatives, setCreatives, removeCreatives } = useAdStore((state) => ({
-    creatives: state.creatives,
-    setCreatives: state.setCreatives,
-    removeCreatives: state.removeCreatives,
-  }));
+  const [creatives, setCreatives] = useState<AdCreative[]>([]);
 
   const router = useRouter()
   const searchParams = useSearchParams();
@@ -47,6 +41,17 @@ const AdCreatives = () => {
       console.error(error);
     }
   };
+
+  const ScheduleAd = useCallback(
+    (name1: string, value: string, name2:string, value2: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name1, value);
+      params.set(name2, value2);
+  
+      return params.toString()
+    },
+    [searchParams]
+  )
 
   return (
     <>
@@ -111,7 +116,7 @@ const AdCreatives = () => {
                           fontWeight: "500",
                         }}
                       >
-                        {data.name}
+                        {data.creativeName}
                       </Typography>
                     </TableCell>
 
@@ -121,8 +126,8 @@ const AdCreatives = () => {
                           fontSize: "15px",
                           fontWeight: "500",
                         }}
-                      >Image
-                        {/* {data.image} */}
+                      >
+                        {data.fileName}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
@@ -134,9 +139,24 @@ const AdCreatives = () => {
                         {data.message}
                       </Typography>
                     </TableCell>
-                    {/* <TableCell align="right">
-                    <AdSetModal selectedCampaign={data.campaignId} selectedObjective={data.objective}/>
-                    </TableCell> */}
+                    <TableCell align="right">
+                    <Button 
+                       onClick={() => {
+                        router.push('/ads' + '?' + ScheduleAd('selectedAdsetId' ,data.adsetId, 'selectedCreativeId', data.creativeId))
+                      }}
+                      variant="contained"
+                      sx={{
+                        marginRight: "10px",
+                        backgroundColor: "#597FB5 !important",
+                        color: "#fff !important",
+                        "&:hover": {
+                          backgroundColor: "#405D80 !important",
+                        },
+                      }}>
+                        Schedule ad
+                      </Button>         
+                    {/* <AdSetModal selectedCampaign={data.campaignId} selectedObjective={data.objective}/> */}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

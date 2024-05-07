@@ -22,7 +22,6 @@ import specialAdCategories from "@/public/jsonData/specialAdCategories.json";
 import { CampaignPayload } from "../../_models/adAccount.model";
 import { CreateCampaignService } from "../../_services/adAccountService";
 import { Toast } from "primereact/toast";
-import campaignStore from "@/app/_store/adStore";
 
 const AdCampaignForm = ({ onReturn }: any) => {
 // const AdCampaignForm = () => {
@@ -31,7 +30,6 @@ const AdCampaignForm = ({ onReturn }: any) => {
   const [objective, setObjective] = useState("");
   const [status, setStatus] = useState("");
   const [specialAdCategory, setSpecialAdCategory] = useState<string[]>([]);
-  const store = campaignStore();
 
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();

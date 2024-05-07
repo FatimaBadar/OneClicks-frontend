@@ -272,103 +272,109 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
       <ThemeProvider theme={defaultTheme}>
         <Typography
           component="h2"
-          sx={{ fontWeight: 700, color: "green", textAlign: "left" }}
+          sx={{ fontWeight: 700, color: "#272144", textAlign: "left" }}
         >
           Create a new Adset
         </Typography>
 
-        <Box sx={{ width: "100%", mt: 3, display: "flex" }}>
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={12}
+            md={3}
+            sx={{ display: "grid", alignItems: "center" }}
+          >
+            <Box
+        component="form"
+        onSubmit={getAvailableInterestsData}
+        sx={{ width: "100%", mt: 3, display: "flex" }}
+      >
+        <Typography sx={{ fontWeight: 600 }}>
+          Search available interests
+        </Typography>
+        <TextField
+          size="small"
+          margin="dense"
+          required
+          type="text"
+          variant="outlined"
+          placeholder="Search Interests"
+          autoFocus
+          autoComplete="interests"
+          value={interests}
+          onChange={(e) => setInterests(e.target.value)}
+        />
+        <IconButton type="submit" aria-label="search">
+          <SearchIcon style={{ fill: "blue" }} />
+        </IconButton>
+            </Box>
+
+            <Box
+              component="form"
+              onSubmit={getAvailableCityData}
+              sx={{ width: "100%", mt: 3, display: "flex" }}
+            >
+              <Typography sx={{ fontWeight: 600 }}>
+                Search available cities
+              </Typography>
+              <TextField
+                size="small"
+                margin="dense"
+                required
+                type="text"
+                placeholder="Search Cities"
+                variant="outlined"
+                autoFocus
+                autoComplete="cities"
+                value={cities}
+                onChange={(e) => setCities(e.target.value)}
+              />
+              <IconButton type="submit" aria-label="search">
+                <SearchIcon style={{ fill: "blue" }} />
+              </IconButton>
+            </Box>
+
+            <Box
+              component="form"
+              onSubmit={getAvailableIndustryData}
+              sx={{ width: "100%", mt: 3, display: "flex" }}
+            >
+              <Typography sx={{ fontWeight: 600 }}>
+                Search available industries
+              </Typography>
+              <TextField
+                size="small"
+                margin="dense"
+                required
+                type="text"
+                variant="outlined"
+                autoFocus
+                placeholder="Search Industries"
+                autoComplete="industries"
+                value={industries}
+                onChange={(e) => setIndustries(e.target.value)}
+              />
+              <IconButton type="submit" aria-label="search">
+                <SearchIcon style={{ fill: "blue" }} />
+              </IconButton>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} md={9}>
           <Box
             component="form"
-            onSubmit={getAvailableInterestsData}
-            sx={{ width: "100%", mt: 3, display: "flex" }}
+            onSubmit={handleNextClick}
+            sx={{
+              width: "100%",
+              mt: 3,
+            }}
           >
-            <Typography sx={{ fontWeight: 600 }}>
-              Search available interests
-            </Typography>
-            <TextField
-              size="small"
-              margin="dense"
-              required
-              type="text"
-              variant="outlined"
-              placeholder="Search Interests"
-              autoFocus
-              autoComplete="interests"
-              value={interests}
-              onChange={(e) => setInterests(e.target.value)}
-            />
-            <IconButton type="submit" aria-label="search">
-              <SearchIcon style={{ fill: "blue" }} />
-            </IconButton>
-          </Box>
-
-          <Box
-            component="form"
-            onSubmit={getAvailableCityData}
-            sx={{ width: "100%", mt: 3, display: "flex" }}
-          >
-            <Typography sx={{ fontWeight: 600 }}>
-              Search available cities
-            </Typography>
-            <TextField
-              size="small"
-              margin="dense"
-              required
-              type="text"
-              placeholder="Search Cities"
-              variant="outlined"
-              autoFocus
-              autoComplete="cities"
-              value={cities}
-              onChange={(e) => setCities(e.target.value)}
-            />
-            <IconButton type="submit" aria-label="search">
-              <SearchIcon style={{ fill: "blue" }} />
-            </IconButton>
-          </Box>
-
-          <Box
-            component="form"
-            onSubmit={getAvailableIndustryData}
-            sx={{ width: "100%", mt: 3, display: "flex" }}
-          >
-            <Typography sx={{ fontWeight: 600 }}>
-              Search available industries
-            </Typography>
-            <TextField
-              size="small"
-              margin="dense"
-              required
-              type="text"
-              variant="outlined"
-              autoFocus
-              placeholder="Search Industries"
-              autoComplete="industries"
-              value={industries}
-              onChange={(e) => setIndustries(e.target.value)}
-            />
-            <IconButton type="submit" aria-label="search">
-              <SearchIcon style={{ fill: "blue" }} />
-            </IconButton>
-          </Box>
-        </Box>
-
-        <Box
-          component="form"
-          onSubmit={handleNextClick}
-          sx={{
-            width: "100%",
-            mt: 3,
-          }}
-        >
-          <Grid container>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
               <Grid container sx={{ display: "flex" }}>
                 <Grid
                   item
                   xs={12}
-                  md={6}
+                  md={5}
                   sx={{ display: "grid", alignItems: "center" }}
                 >
                   <Typography sx={{ fontWeight: 600 }}>Adset Name</Typography>
@@ -475,12 +481,12 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
               </Grid>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
               <Grid container>
                 <Grid
                   item
                   xs={12}
-                  md={6}
+                  md={5}
                   sx={{ display: "grid", alignItems: "center" }}
                 >
                   <Typography sx={{ fontWeight: 600 }}>Industries</Typography>
@@ -490,8 +496,8 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                 </Grid>
 
                 <Grid
-                  item
-                  xs={12}
+                  item                 
+                   xs={12}
                   md={6}
                   sx={{ display: "grid", justifyContent: "center" }}
                 >
@@ -583,8 +589,10 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                 </Button>
               </Grid>
             </Grid>
+            
+          </Box>
           </Grid>
-        </Box>
+          </Grid>
       </ThemeProvider>
     </>
   );
