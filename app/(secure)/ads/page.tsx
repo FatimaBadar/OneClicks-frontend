@@ -10,14 +10,18 @@ import {
   TableHead,
   TableRow,
   Chip,
-  Button
+  Button,
 } from "@mui/material";
 
 import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 import Navbar from "@/app/_components/Navbar";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Ads } from "@/app/_models/adAccount.model";
-import { ScheduleAdService, getAllAdsPayloadService, getAllAdsService } from "@/app/_services/adAccountService";
+import {
+  ScheduleAdService,
+  getAllAdsPayloadService,
+  getAllAdsService,
+} from "@/app/_services/adAccountService";
 import AdForm from "@/app/_components/Ads/AdForm";
 
 const typeColor = {
@@ -38,13 +42,14 @@ const AdPage = () => {
   const type = "Facebook";
   const pbg = typeColor.Facebook;
 
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   var selectedAdsetId: string | null = searchParams.get("selectedAdsetId");
   if (selectedAdsetId == null) selectedAdsetId = "";
 
-  var selectedCreativeId: string | null = searchParams.get("selectedCreativeId");
+  var selectedCreativeId: string | null =
+    searchParams.get("selectedCreativeId");
   if (selectedCreativeId == null) selectedCreativeId = "";
 
   useEffect(() => {
@@ -63,164 +68,158 @@ const AdPage = () => {
   };
 
   const ScheduleAds = async (e: FormEvent) => {
-    const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
-    const adaccountId = localStorage?.getItem('adAccountId') ??  "";
+    const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
+    const adaccountId = localStorage?.getItem("adAccountId") ?? "";
 
     const tempAdsData: Ads = {
-        adName,
-        adsetId,
-        adsetName,
-        creativeId,
-        status,
-        accessToken: accessTokenfb,
-        adAccountId: adaccountId
+      adName,
+      adsetId,
+      adsetName,
+      creativeId,
+      status,
+      accessToken: accessTokenfb,
+      adAccountId: adaccountId,
     };
     try {
-        const response = await ScheduleAdService(tempAdsData);
-        if (response.statusCode == "200") {
-            setId(response.responseData);
-        }
+      const response = await ScheduleAdService(tempAdsData);
+      if (response.statusCode == "200") {
+        setId(response.responseData);
+      }
     } catch (error) {
-    console.error(error);
+      console.error(error);
     }
-  }
+  };
 
   return (
     <>
       <Navbar />
-      <Box sx={{ mt: 10, 
-        ml:10, mr: 10, mb: 5 }}>
-        <AdForm/>
+      <Box sx={{ mt: 10, ml: 10, mr: 10, mb: 5 }}>
+        <AdForm />
       </Box>
-      {/* <Box sx={{ mt: 15 }}> */}
-        <DashboardCard>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <Typography variant="h5" fontWeight={550}>
-              Ads
-            </Typography>
-          </Box>
+      <Box sx={{ mt: 15 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexDirection: "row",
+            backgroundColor: "#D6E0FE",
+            height: "55px",
+          }}
+        >
+          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px" }}>
+            Ads
+          </Typography>
+        </Box>
 
-          <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
-            <Table
-              aria-label="simple table"
-              sx={{
-                whiteSpace: "nowrap",
-                mt: 2,
-              }}
-            >
-              <TableHead>
-                <TableRow>
+        <Box sx={{ overflow: "auto", width: { xs: "100%", sm: "auto" } }}>
+          <Table aria-label="simple table">
+            <TableHead sx={{ backgroundColor: "#EEF8FD" }}>
+              <TableRow>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Ad Name
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Adset Name
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Creative Id
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Type
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Status
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Ad Account Id
+                  </Typography>
+                </TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {ads?.map((data, key) => (
+                <TableRow key={data.id}>
                   <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Ad Name
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {data.adName}
                     </Typography>
                   </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Adset Name
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Creative Id
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Type
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Status
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Ad Account Id
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right"></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {ads?.map((data, key) => (
-                  <TableRow key={data.id}>
-                    <TableCell>
-                      <Typography
-                        sx={{
-                          fontSize: "15px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {data.adName}
-                      </Typography>
-                    </TableCell>
 
-                    <TableCell>
-                      <Typography
-                        sx={{
-                          fontSize: "15px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {data.adsetName}
+                  <TableCell>
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {data.adsetName}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {data.creativeId}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      sx={{
+                        px: "4px",
+                        backgroundColor: pbg,
+                        color: "#fff",
+                      }}
+                      size="small"
+                      label={type}
+                    ></Chip>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography variant="subtitle2" fontWeight={600}>
+                        {data.status}
                       </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography
-                        sx={{
-                          fontSize: "15px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {data.creativeId}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        sx={{
-                          px: "4px",
-                          backgroundColor: pbg,
-                          color: "#fff",
-                        }}
-                        size="small"
-                        label={type}
-                      ></Chip>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography variant="subtitle2" fontWeight={600}>
-                          {data.status}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography
-                        color="textSecondary"
-                        variant="subtitle2"
-                        fontWeight={400}
-                      >
-                        {data.adAccountId}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Button 
-                    //    onClick={() => {
-                    //     router.push('/adsets' + '?' + CreateAdsets('selectedCampaignId' ,data.campaignId, 'selectedObjective', data.objective))
-                    //   }}
+                    </Box>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography
+                      color="textSecondary"
+                      variant="subtitle2"
+                      fontWeight={400}
+                    >
+                      {data.adAccountId}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button
+                      //    onClick={() => {
+                      //     router.push('/adsets' + '?' + CreateAdsets('selectedCampaignId' ,data.campaignId, 'selectedObjective', data.objective))
+                      //   }}
                       variant="contained"
                       sx={{
                         marginRight: "10px",
@@ -231,18 +230,17 @@ const AdPage = () => {
                         },
                       }}
                       onClick={ScheduleAds}
-                      >
-                        Create ad
-                      </Button>
+                    >
+                      Create ad
+                    </Button>
                     {/* <AdSetModal selectedCampaign={data.campaignId} selectedObjective={data.objective}/> */}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Box>
-        </DashboardCard>
-      {/* </Box> */}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Box>
+      </Box>
     </>
   );
 };

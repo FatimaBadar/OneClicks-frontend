@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
   Chip,
-  Button
+  Button,
 } from "@mui/material";
 
 import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
@@ -32,10 +32,10 @@ const Adcampaigns = () => {
   const impressions = 0;
   const clicks = 0;
 
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);  
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     getCampaigns();
@@ -43,11 +43,13 @@ const Adcampaigns = () => {
 
   const getCampaigns = async () => {
     try {
-      
-      const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
-      const adaccountId = localStorage?.getItem('adAccountId') ??  "";
+      const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
+      const adaccountId = localStorage?.getItem("adAccountId") ?? "";
 
-      const response = await getAllCampaignsService(adaccountId.toString(), accessTokenfb);
+      const response = await getAllCampaignsService(
+        adaccountId.toString(),
+        accessTokenfb
+      );
       if (response.statusCode == "200") {
         setCampaigns(response.responseData);
       }
@@ -57,170 +59,182 @@ const Adcampaigns = () => {
   };
 
   const CreateAdsets = useCallback(
-    (name1: string, value: string, name2:string, value2: string) => {
-      const params = new URLSearchParams(searchParams.toString())
+    (name1: string, value: string, name2: string, value2: string) => {
+      const params = new URLSearchParams(searchParams.toString());
       params.set(name1, value);
       params.set(name2, value2);
-  
-      return params.toString()
+
+      return params.toString();
     },
     [searchParams]
-  )
+  );
 
   return (
     <>
       <Navbar />
       <Box sx={{ mt: 15 }}>
-        <DashboardCard>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <Typography variant="h5" fontWeight={550}>
-              Ad Campaigns
-            </Typography>
-            <div>
-              <AdCampaignModal />
-            </div>
-          </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexDirection: "row",
+            backgroundColor: "#D6E0FE",
+            height: "55px",
+          }}
+        >
+          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px" }}>
+            Ad Campaigns
+          </Typography>
+          <div>
+            <AdCampaignModal />
+          </div>
+        </Box>
 
-          <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
-            <Table
-              aria-label="simple table"
-              sx={{
-                whiteSpace: "nowrap",
-                mt: 2,
-              }}
-            >
-              <TableHead>
-                <TableRow>
+        <Box sx={{ overflow: "auto", width: { xs: "100%", sm: "auto" } }}>
+          <Table aria-label="simple table">
+            <TableHead sx={{ backgroundColor: "#EEF8FD" }}>
+              <TableRow>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Campaign Name
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Objective
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Type
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Status
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography
+                    align="center"
+                    variant="subtitle2"
+                    fontWeight={600}
+                  >
+                    Impressions
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography
+                    align="center"
+                    variant="subtitle2"
+                    fontWeight={600}
+                  >
+                    Clicks
+                  </Typography>
+                </TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {campaigns?.map((data, key) => (
+                <TableRow key={data.campaignId}>
                   <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Campaign Name
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {data.campaignName}
                     </Typography>
                   </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Objective
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Type
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Status
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Impressions
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2" fontWeight={600}>
-                      Clicks
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right"></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {campaigns?.map((data, key) => (
-                  <TableRow key={data.campaignId}>
-                    <TableCell>
-                      <Typography
-                        sx={{
-                          fontSize: "15px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {data.campaignName}
-                      </Typography>
-                    </TableCell>
 
-                    <TableCell>
-                      <Typography
-                        sx={{
-                          fontSize: "15px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {data.objective}
-                      </Typography>
-                    </TableCell>
+                  <TableCell>
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {data.objective}
+                    </Typography>
+                  </TableCell>
 
-                    <TableCell>
-                      <Chip
-                        sx={{
-                          px: "4px",
-                          backgroundColor: pbg,
-                          color: "#fff",
-                        }}
-                        size="small"
-                        label={type}
-                      ></Chip>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Typography variant="subtitle2" fontWeight={600}>
-                          {data.status}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography
-                        color="textSecondary"
-                        variant="subtitle2"
-                        fontWeight={400}
-                      >
-                        {impressions}
+                  <TableCell>
+                    <Chip
+                      sx={{
+                        px: "4px",
+                        backgroundColor: pbg,
+                        color: "#fff",
+                      }}
+                      size="small"
+                      label={type}
+                    ></Chip>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography variant="subtitle2" fontWeight={600}>
+                        {data.status}
                       </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Typography
-                        color="textSecondary"
-                        variant="subtitle2"
-                        fontWeight={400}
-                      >
-                        {clicks}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Button 
-                       onClick={() => {
-                        router.push('/adsets' + '?' + CreateAdsets('selectedCampaignId' ,data.campaignId, 'selectedObjective', data.objective))
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography
+                      color="textSecondary"
+                      variant="subtitle2"
+                      fontWeight={400}
+                      sx={{ textAlign: "center", justifyContent: "center" }}
+                    >
+                      {impressions}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography
+                      color="textSecondary"
+                      variant="subtitle2"
+                      fontWeight={400}
+                      sx={{ display: "flex", justifyContent: "center" }}
+                    >
+                      {clicks}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button
+                      onClick={() => {
+                        router.push(
+                          "/adsets" +
+                            "?" +
+                            CreateAdsets(
+                              "selectedCampaignId",
+                              data.campaignId,
+                              "selectedObjective",
+                              data.objective
+                            )
+                        );
                       }}
                       variant="contained"
                       sx={{
-                        marginRight: "10px",
                         backgroundColor: "#597FB5 !important",
                         color: "#fff !important",
                         "&:hover": {
                           backgroundColor: "#405D80 !important",
                         },
-                      }}>
-                        Create ad
-                      </Button>
-                    {/* <AdSetModal selectedCampaign={data.campaignId} selectedObjective={data.objective}/> */}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Box>
-        </DashboardCard>
+                      }}
+                    >
+                      Create ad
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Box>
       </Box>
     </>
   );

@@ -116,10 +116,10 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
       industry.push(temp);
     });
 
-    const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
-    const adaccountId = localStorage?.getItem('adAccountId') ??  "";
+    const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
+    const adaccountId = localStorage?.getItem("adAccountId") ?? "";
     //"message": "(#100) billing_event must be one of the following values: APP_INSTALLS, CLICKS, IMPRESSIONS, LINK_CLICKS, NONE, OFFER_CLAIMS, PAGE_LIKES, POST_ENGAGEMENT, THRUPLAY, PURCHASE, LISTING_INTERACTION",
-   //Billing event invalid for optimisation goal",
+    //Billing event invalid for optimisation goal",
     //"error_user_msg": "The specified billing event is not a valid option for the optimisation goal provided. If you are modifying the optimisation goal, please make sure that your billing event will still be consistent with your new optimisation goal.",
     const tempAdSetData: AdsetPayload = {
       adAccountId: adaccountId.toString(),
@@ -147,12 +147,10 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
       setOptimizationGoal("");
       setBillingEvent("");
       setBidAmount(0),
-      setDailyBudget(0),
-      setGeolocations([]),
-      setIndustries("")
-      setInterests(""),
-      setStartTime(""),
-      setStatus("");
+        setDailyBudget(0),
+        setGeolocations([]),
+        setIndustries("");
+      setInterests(""), setStartTime(""), setStatus("");
       setReturnIndustryData([]);
       setReturnInterestsData([]);
       setReturnCityData([]);
@@ -165,7 +163,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableInterestsData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+      const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const response = await GetInterestsSearchData(interests, accessTokenfb);
       if (response.statusCode == "200") {
         setInterestsSearchData(response.responseData);
@@ -179,7 +177,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableCityData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+      const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const response = await GetCitySearchData(cities, accessTokenfb);
       if (response.statusCode === "200") {
         setCitySearchData(response.responseData);
@@ -193,7 +191,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableIndustryData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
+      const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const response = await GetIndustrySearchData(accessTokenfb);
       if (response.statusCode == "200") {
         showSuccessToast(response.message);
@@ -272,49 +270,46 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
       <ThemeProvider theme={defaultTheme}>
         <Typography
           component="h2"
-          sx={{ fontWeight: 700, color: "#272144", textAlign: "left" }}
+          sx={{ fontWeight: 700, color: "#272144", textAlign: "left", mb: 2 }}
         >
           Create a new Adset
         </Typography>
 
-        <Grid container spacing={2}>
-          <Grid
-            item
-            xs={12}
-            md={3}
-            sx={{ display: "grid", alignItems: "center" }}
-          >
+        <Grid 
+        container spacing={2} columns={12}
+        >
+          <Grid item sm={12} md={4} lg={4} xs={12}>
             <Box
-        component="form"
-        onSubmit={getAvailableInterestsData}
-        sx={{ width: "100%", mt: 3, display: "flex" }}
-      >
-        <Typography sx={{ fontWeight: 600 }}>
-          Search available interests
-        </Typography>
-        <TextField
-          size="small"
-          margin="dense"
-          required
-          type="text"
-          variant="outlined"
-          placeholder="Search Interests"
-          autoFocus
-          autoComplete="interests"
-          value={interests}
-          onChange={(e) => setInterests(e.target.value)}
-        />
-        <IconButton type="submit" aria-label="search">
-          <SearchIcon style={{ fill: "blue" }} />
-        </IconButton>
+              component="form"
+              onSubmit={getAvailableInterestsData}
+              sx={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
+                Search available interests
+              </Typography>
+              <TextField
+                size="small"
+                margin="dense"
+                required
+                type="text"
+                variant="outlined"
+                placeholder="Search Interests"
+                autoFocus
+                autoComplete="interests"
+                value={interests}
+                onChange={(e) => setInterests(e.target.value)}
+              />
+              <IconButton type="submit" aria-label="search">
+                <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
+              </IconButton>
             </Box>
 
             <Box
               component="form"
               onSubmit={getAvailableCityData}
-              sx={{ width: "100%", mt: 3, display: "flex" }}
-            >
-              <Typography sx={{ fontWeight: 600 }}>
+              sx={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
                 Search available cities
               </Typography>
               <TextField
@@ -330,16 +325,16 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                 onChange={(e) => setCities(e.target.value)}
               />
               <IconButton type="submit" aria-label="search">
-                <SearchIcon style={{ fill: "blue" }} />
+              <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
               </IconButton>
             </Box>
 
             <Box
               component="form"
               onSubmit={getAvailableIndustryData}
-              sx={{ width: "100%", mt: 3, display: "flex" }}
-            >
-              <Typography sx={{ fontWeight: 600 }}>
+              sx={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
                 Search available industries
               </Typography>
               <TextField
@@ -355,227 +350,273 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                 onChange={(e) => setIndustries(e.target.value)}
               />
               <IconButton type="submit" aria-label="search">
-                <SearchIcon style={{ fill: "blue" }} />
+              <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
               </IconButton>
-            </Box>
+            </Box>          
           </Grid>
 
-          <Grid item xs={12} md={9}>
-          <Box
-            component="form"
-            onSubmit={handleNextClick}
-            sx={{
-              width: "100%",
-              mt: 3,
-            }}
-          >
-            <Grid item xs={12} md={5}>
-              <Grid container sx={{ display: "flex" }}>
-                <Grid
-                  item
-                  xs={12}
-                  md={5}
-                  sx={{ display: "grid", alignItems: "center" }}
-                >
-                  <Typography sx={{ fontWeight: 600 }}>Adset Name</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>
-                    Optimization Goal
-                  </Typography>
-                  <Typography sx={{ fontWeight: 600 }}>
-                    Billing Event
-                  </Typography>
-                  <Typography sx={{ fontWeight: 600 }}>Bid Amount</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>Daily Budget</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>Cities</Typography>
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  sx={{ display: "grid", justifyContent: "center" }}
-                >
-                  <TextField
-                    size="small"
-                    margin="dense"
-                    required
-                    type="text"
-                    variant="outlined"
-                    autoFocus
-                    autoComplete="adsetName"
-                    value={adsetName}
-                    onChange={(e) => setAdsetName(e.target.value)}
-                  />
-
-                  <FormControl variant="outlined" margin="dense">
-                    <Select
-                      value={optimizationGoal}
-                      onChange={(e) => setOptimizationGoal(e.target.value)}
-                      label="Optimization Goal"
-                      sx={{ height: "32px" }}
+          <Grid item sm={12} md={8} lg={8} xs={12}>
+            <Box>
+              <Grid container spacing={2} columns={8}>
+                <Grid item  sm={12} md={4} lg={4} xs={12}> 
+                {/* //xs={4}  */}
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 600, alignContent: "center" }}
                     >
-                      {optimization
-                        .find((obj) => obj.codeWord === objective)
-                        ?.["optimizationGoal"].map((goal, index) => (
-                          <MenuItem key={index} value={goal.codeWord}>
-                            {goal.codeWord} - {goal.description}
+                      Adset Name
+                    </Typography>
+                    <TextField
+                      size="small"
+                      margin="dense"
+                      required
+                      type="text"
+                      variant="outlined"
+                      autoFocus
+                      autoComplete="adsetName"
+                      value={adsetName}
+                      onChange={(e) => setAdsetName(e.target.value)}
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 600, alignContent: "center" }}
+                    >
+                      Optimization Goal
+                    </Typography>
+                    <FormControl variant="outlined" margin="dense"
+                     sx={{ width: "50%"}}>
+                      <Select
+                        value={optimizationGoal}
+                        onChange={(e) => setOptimizationGoal(e.target.value)}
+                        sx={{ height: "32px" }}
+                      >
+                        {optimization
+                          .find((obj) => obj.codeWord === objective)
+                          ?.["optimizationGoal"].map((goal, index) => (
+                            <MenuItem key={index} value={goal.codeWord}>
+                              {goal.codeWord} - {goal.description}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 600, alignContent: "center" }}
+                    >
+                      Billing Event
+                    </Typography>
+                    <FormControl variant="outlined" margin="dense"
+                     sx={{ width: "50%"}}>
+                      <Select
+                        value={billingEvent}
+                        onChange={(e) => setBillingEvent(e.target.value)}
+                        sx={{ height: "32px" }}
+                      >
+                        {billingEvents.map((obj, id) => (
+                          <MenuItem key={id} value={obj.codeWord}>
+                            {obj.codeWord} - {obj.description}
                           </MenuItem>
                         ))}
-                    </Select>
-                  </FormControl>
+                      </Select>
+                    </FormControl>
+                  </Box>
 
-                  <FormControl variant="outlined" margin="dense">
-                    <Select
-                      value={billingEvent}
-                      onChange={(e) => setBillingEvent(e.target.value)}
-                      label="Billing Event"
-                      sx={{ height: "32px" }}
-                    >
-                      {billingEvents.map((obj, id) => (
-                        <MenuItem key={id} value={obj.codeWord}>
-                          {obj.codeWord} - {obj.description}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <TextField
-                    size="small"
-                    margin="dense"
-                    required
-                    type="number"
-                    variant="outlined"
-                    autoFocus
-                    autoComplete="bidAmount"
-                    value={bidAmount}
-                    onChange={(e) => setBidAmount(parseFloat(e.target.value))}
-                  />
-
-                  <TextField
-                    size="small"
-                    margin="dense"
-                    required
-                    type="number"
-                    variant="outlined"
-                    autoFocus
-                    autoComplete="dailyBudget"
-                    value={dailyBudget}
-                    onChange={(e) => setDailyBudget(parseFloat(e.target.value))}
-                  />
-
-                  <FormControl variant="outlined" margin="dense">
-                    <Select
-                      value={returnCityData}
-                      onChange={handleCitySearchData}
-                      multiple
-                      sx={{ height: "32px" }}
-                    >
-                      {citySearchData.map((obj, id) => (
-                        <MenuItem key={id} value={obj.key}>
-                          {obj.cityName}, {obj.countryName}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12} md={5}>
-              <Grid container>
-                <Grid
-                  item
-                  xs={12}
-                  md={5}
-                  sx={{ display: "grid", alignItems: "center" }}
-                >
-                  <Typography sx={{ fontWeight: 600 }}>Industries</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>Interests</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>Start Time</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>Status</Typography>
-                </Grid>
-
-                <Grid
-                  item                 
-                   xs={12}
-                  md={6}
-                  sx={{ display: "grid", justifyContent: "center" }}
-                >
-                  <FormControl variant="outlined" margin="dense">
-                    <Select
-                      value={returnIndustryData}
-                      onChange={handleIndustrySearchData}
-                      multiple
-                      sx={{ height: "32px" }}
-                    >
-                      {industrySearchData.map((obj, id) => (
-                        <MenuItem key={id} value={obj.id}>
-                          {obj.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <FormControl variant="outlined" margin="dense">
-                    <Select
-                      value={returnInterestsData}
-                      onChange={handleInterestsSearchData}
-                      multiple
-                      sx={{ height: "32px" }}
-                    >
-                      {interestsSearchData.map((obj, id) => (
-                        <MenuItem key={id} value={obj.id}>
-                          {obj.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <TextField
-                    size="small"
-                    margin="dense"
-                    required
-                    type="datetime-local"
-                    variant="outlined"
-                    autoFocus
-                    autoComplete="startTime"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                  />
-
-                  <FormControl
-                    component="fieldset"
-                    variant="outlined"
-                    margin="dense"
-                    size="small"
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <RadioGroup
-                      row
-                      aria-label="status"
-                      name="status"
-                      value={status}
-                      onChange={(e) => setStatus(e.target.value)}
-                      sx={{ justifyContent: "center", height: "15px" }}
+                    <Typography
+                      sx={{ fontWeight: 600, alignContent: "center" }}
                     >
-                      <FormControlLabel
-                        value="ACTIVE"
-                        control={<Radio />}
-                        label="Active"
-                      />
-                      <FormControlLabel
-                        value="PAUSED"
-                        control={<Radio />}
-                        label="Paused"
-                      />
-                    </RadioGroup>
-                  </FormControl>
+                      Bid Amount
+                    </Typography>
+                    <TextField
+                      size="small"
+                      margin="dense"
+                      required
+                      type="number"
+                      variant="outlined"
+                      autoFocus
+                      autoComplete="bidAmount"
+                      value={bidAmount}
+                      onChange={(e) => setBidAmount(parseFloat(e.target.value))}
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 600, alignContent: "center" }}
+                    >
+                      {" "}
+                      Daily Budget
+                    </Typography>
+                    <TextField
+                      size="small"
+                      margin="dense"
+                      required
+                      type="number"
+                      variant="outlined"
+                      autoFocus
+                      autoComplete="dailyBudget"
+                      value={dailyBudget}
+                      onChange={(e) =>
+                        setDailyBudget(parseFloat(e.target.value))
+                      }
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 600, alignContent: "center" }}
+                    >
+                      Cities
+                    </Typography>
+                    <FormControl variant="outlined" margin="dense"
+                    sx={{ width: "50%"}}>
+                     <Select
+                        value={returnCityData}
+                        onChange={handleCitySearchData}
+                        multiple
+                        sx={{ height: "32px" }}
+                      >
+                        {citySearchData.map((obj, id) => (
+                          <MenuItem key={id} value={obj.key}>
+                            {obj.cityName}, {obj.countryName}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
                 </Grid>
-                <Button
+
+                <Grid item sm={12} md={4} lg={4} xs={12}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 600, alignContent: "center" }}
+                    >
+                      Industries
+                    </Typography>
+                    <FormControl variant="outlined"	margin="dense"
+                    sx={{ width: "55%"}}>
+                      <Select
+                        value={returnIndustryData}
+                        onChange={handleIndustrySearchData}
+                        multiple
+                        sx={{ height: "32px"}}
+                        	
+                      >
+                        {industrySearchData.map((obj, id) => (
+                          <MenuItem key={id} value={obj.id}>
+                            {obj.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 600, alignContent: "center" }}
+                    >
+                      Interests
+                    </Typography>
+                    <FormControl variant="outlined" margin="dense"
+                     sx={{ width: "55%"}}>
+                      <Select
+                        value={returnInterestsData}
+                        onChange={handleInterestsSearchData}
+                        multiple
+                        sx={{ height: "32px" }}
+                      >
+                        {interestsSearchData.map((obj, id) => (
+                          <MenuItem key={id} value={obj.id}>
+                            {obj.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 600, alignContent: "center" }}
+                    >
+                      Start Time
+                    </Typography>
+                    <TextField
+                      size="small"
+                      margin="dense"
+                      required
+                      type="datetime-local"
+                      variant="outlined"
+                      autoFocus
+                      autoComplete="startTime"
+                      value={startTime}
+                      onChange={(e) => setStartTime(e.target.value)}
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 600, alignContent: "center" }}
+                    >
+                      Status
+                    </Typography>
+                    <FormControl
+                      component="fieldset"
+                      variant="outlined"
+                      margin="dense"
+                      size="small"
+                    >
+                      <RadioGroup
+                        row
+                        aria-label="status"
+                        name="status"
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        sx={{ justifyContent: "center", height: "15px" }}
+                      >
+                        <FormControlLabel
+                          value="ACTIVE"
+                          control={<Radio />}
+                          label="Active"
+                        />
+                        <FormControlLabel
+                          value="PAUSED"
+                          control={<Radio />}
+                          label="Paused"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </Box>
+
+                  <Button
                   type="submit"
                   variant="contained"
                   sx={{
-                    mt: 3,
-                    width: "50%",
+                    mt: 8,
+                    width: "100%",
                     alignItems: "right",
                     display: "flex",
                     backgroundColor: "#597FB5 !important",
@@ -587,12 +628,12 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                 >
                   Create
                 </Button>
+                </Grid>
               </Grid>
-            </Grid>
-            
-          </Box>
+             
+            </Box>
           </Grid>
-          </Grid>
+        </Grid>
       </ThemeProvider>
     </>
   );
