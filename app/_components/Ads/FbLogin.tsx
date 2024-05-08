@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { ConnectAdAccount } from "../../_services/adAccountService";
 import { Toast } from 'primereact/toast';
+import router from "next/router";
 
 const app_id = process.env.FACEBOOK_ID;
 
@@ -65,6 +66,22 @@ const toast = useRef<Toast>(null);
       showErrorToast('Could not connect ad account');
     }
   }
+  const oauthSignIn = () => {
+    const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
+
+    const params = {
+      client_id: '195870252277-kgqnfto3d27fhvvhivk7m3ikfkc4qhvl.apps.googleusercontent.com',
+      redirect_uri: 'https://localhost:3000/home',
+      response_type: 'code',
+      scope: 'https://www.googleapis.com/auth/adwords',
+      include_granted_scopes: 'true',
+      state: 'try_sample_request',
+      access_type : 'offline'
+    };
+
+    const queryString = new URLSearchParams(params).toString();
+    router.push(`${oauth2Endpoint}?${queryString}`);
+  };
 
   const fblogin = () => {
     window.FB.login(

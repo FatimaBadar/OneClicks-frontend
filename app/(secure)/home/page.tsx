@@ -20,15 +20,27 @@ export default function Home() {
   const [checkLogin, setcheckLogin] = useState<boolean>(true);
   console.log('user store in home: ', store.authUser);
 
-  // useEffect(() => {
-  //   if (store.authUser) {
-  //     setcheckLogin(true);
-  //   } else {      
-  //     setcheckLogin(false);
-  //     router.push('/account/login');
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (store.authUser) {
+      setcheckLogin(true);
+    } else {      
+      setcheckLogin(false);
+      router.push('/account/login');
+    }
+  }, []);
+  const getAccessTokenFromURL = () => {
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    console.log(params)
+    const access_token = params.get('code'); 
 
+    if (access_token) {
+      console.log('Access token:', access_token);
+      localStorage.setItem('access_tokenGoogle', access_token as string);
+ 
+    } else {
+      console.log('Access token not found in the URL');
+    }
+  };
   return (
     <>
       {/* {checkLogin && ( */}

@@ -8,10 +8,26 @@ import { useRouter, useSearchParams } from 'next/navigation';
 const GoogleAccountLogin =() => {
     const router = useRouter();
   const searchParams = useSearchParams()
+  const getAccessTokenFromURL = () => {
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    console.log(params)
+    const access_token = params.get('code'); 
 
+    if (access_token) {
+      console.log('Access token:', access_token);
+      localStorage.setItem('access_tokenGoogle', access_token as string);
+      trySampleRequest();
+    } else {
+      console.log('Access token not found in the URL');
+    }
+  };
   useEffect(() => {
-    const access_token = searchParams.get('access_token');
+    getAccessTokenFromURL();
+    const access_token =  localStorage.getItem('access_tokenGoogle')
     console.log(access_token)
+    console.log("geehhe")
+    console.log(access_token);
+
     if (access_token) {
       localStorage.setItem('access_tokenGoogle', access_token as string);
       trySampleRequest();
@@ -39,7 +55,7 @@ const GoogleAccountLogin =() => {
 
     const params = {
       client_id: '195870252277-kgqnfto3d27fhvvhivk7m3ikfkc4qhvl.apps.googleusercontent.com',
-      redirect_uri: 'https://localhost:3000',
+      redirect_uri: 'https://localhost:3000/test',
       response_type: 'code',
       scope: 'https://www.googleapis.com/auth/adwords',
       include_granted_scopes: 'true',

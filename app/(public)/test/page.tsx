@@ -1,21 +1,23 @@
 'use client';
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import SelectManagerAccModal from '@/app/_components/GoogleAds/SelectManagerAccModal';
+import GoogleAccountLogin from '@/app/_components/GoogleAccountLogin';
 
 const Oauth = () => {
   const router = useRouter();
   const searchParams = useSearchParams()
 
-  useEffect(() => {
-    const access_token = searchParams.get('access_token');
-    console.log(access_token)
-    if (access_token) {
-      localStorage.setItem('access_tokenGoogle', access_token as string);
-      trySampleRequest();
-    } else {
-      oauthSignIn();
-    }
-  }, []);
+  // useEffect(() => {
+  //   const access_token = searchParams.get('access_token');
+  //   console.log(access_token)
+  //   if (access_token) {
+  //     localStorage.setItem('access_tokenGoogle', access_token as string);
+  //     trySampleRequest();
+  //   } else {
+  //     oauthSignIn();
+  //   }
+  // }, []);
 
   //end
   const trySampleRequest = () => {
@@ -38,7 +40,7 @@ const Oauth = () => {
 
     const params = {
       client_id: '195870252277-kgqnfto3d27fhvvhivk7m3ikfkc4qhvl.apps.googleusercontent.com',
-      redirect_uri: 'https://localhost:3000',
+      redirect_uri: 'https://localhost:3000/test',
       response_type: 'code',
       scope: 'https://www.googleapis.com/auth/adwords',
       include_granted_scopes: 'true',
@@ -67,12 +69,15 @@ const Oauth = () => {
       })
       .catch(error => console.error('Error:', error));
     }
+    else
+      console.log("kkkkkkk")
   };
 
   return (
     <div>
       <div>Redirecting...</div>
       <button onClick={revokeAccess}>Revoke Access</button>
+    <GoogleAccountLogin></GoogleAccountLogin>
     </div>
   );
 };
