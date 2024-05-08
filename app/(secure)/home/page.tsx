@@ -12,40 +12,68 @@ import MonthlyEarnings from '@/app/_components/HomeComponent/MonthlyEarnings';
 import AdAccountsSummary from '@/app/_components/HomeComponent/AdAccountsSummary';
 import ContactsCreated from '@/app/_components/HomeComponent/ContactsCreated';
 import Navbar from '@/app/_components/Navbar';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import SelectManagerAccModal from '@/app/_components/GoogleAds/SelectManagerAccModal';
+import { GetRefreshToken } from '@/app/_services/googleService';
 
 export default function Home() {
-  const store = useStore();
   const router = useRouter();
-  const [checkLogin, setcheckLogin] = useState<boolean>(true);
-  console.log('user store in home: ', store.authUser);
+
+  const { loggedIn, setLoggedIn, setLoggedOut} = useStore((state) => ({
+    loggedIn: state.loggedIn,
+    setLoggedIn: state.setLoggedIn,
+    setLoggedOut: state.setLoggedOut,
+  }));
+  const [openManagerAccModal, setOpenManagerAccModal] = useState<boolean>(false);
 
   useEffect(() => {
-    if (store.authUser) {
-      setcheckLogin(true);
-    } else {      
-      setcheckLogin(false);
-      router.push('/account/login');
+    getAccessTokenFromURL();
+
+    if (!loggedIn) { 
+      console.log("loggedout")
+      // router.push('/account/login');
     }
   }, []);
-  const getAccessTokenFromURL = () => {
-    const params = new URLSearchParams(window.location.hash.slice(1));
-    console.log(params)
-    const access_token = params.get('code'); 
 
-    if (access_token) {
-      console.log('Access token:', access_token);
-      localStorage.setItem('access_tokenGoogle', access_token as string);
- 
-    } else {
-      console.log('Access token not found in the URL');
+  const searchParams = useSearchParams();
+  
+  const getRefreshToken= async (accessTokenGoogle: string) => {
+    try {
+      const response = await GetRefreshToken(accessTokenGoogle);
+      if (response.statusCode == "200") {
+        localStorage.setItem('accesstoken_Google', response.responseData);
+
+        const accesstoken_Google = localStorage?.getItem('accesstoken_Google') ??  "";
+        const managerId = localStorage?.getItem('managerId') ??  "";
+        const clientId = localStorage?.getItem('clientId') ??  "";
+
+        if(!accesstoken_Google || !managerId || !clientId){
+          setOpenManagerAccModal(true);
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
+
+  const getAccessTokenFromURL = () => {
+    const accessTokenGoogle : string | null = searchParams.get("code");
+    console.log("acc: ", accessTokenGoogle)
+    if (accessTokenGoogle) {
+      getRefreshToken(decodeURIComponent(accessTokenGoogle));
+      console.log("acc: ", accessTokenGoogle)
+    } 
+  };
+
   return (
     <>
       {/* {checkLogin && ( */}
         <div>
           <Navbar />
+
+          { openManagerAccModal ?
+          <SelectManagerAccModal />  : ""}
+
           <PageContainer title="Dashboard" description="this is Dashboard">
             <Box sx={{ mt: 15 }}>
               <Grid container spacing={3}>

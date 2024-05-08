@@ -13,7 +13,8 @@ import {
   Button,
 } from "@mui/material";
 import DashboardCard from "./DashboardCard";
-import FbLogin from "../Ads/FbLogin";
+import AccountLogin from "../Ads/AdAccountLogin";
+import CreateAd from "../Ads/CreateAd";
 
 const typeColor = {
   Facebook: "rgb(19, 222, 185)",
@@ -83,21 +84,8 @@ const AdAccountsSummary = () => {
           Dashboard
         </Typography>
         <div>
-          <Button
-            href="/ads"
-            variant="contained"
-            sx={{
-              marginRight: "10px",
-              backgroundColor: "#597FB5 !important",
-              color: "#fff !important",
-              "&:hover": {
-                backgroundColor: "#405D80 !important",
-              },
-            }}
-          >
-            Create an ad
-          </Button>
-          <FbLogin />
+          <CreateAd />
+          <AccountLogin />
         </div>
       </Box>
 

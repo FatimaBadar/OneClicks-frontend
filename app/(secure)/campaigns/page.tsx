@@ -33,10 +33,18 @@ const Adcampaigns = () => {
   const clicks = 0;
 
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [adAccountType, setAccountType] = useState("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  if (searchParams.get("account") != ""){
+    var account: string | null = searchParams.get("account");
+    if (account != null){
+      setAccountType(account)
+    }
+  }
+  
   useEffect(() => {
     getCampaigns();
   }, []);

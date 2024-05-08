@@ -217,7 +217,7 @@ export const Navbar: React.FC = () => {
                       width="140px"
                       sx={{ '&:hover': { color: '#405D80' } }}
                     >
-                      Home
+                      Home 
                     </Typography>
                   </Link>
                 </MenuItem>

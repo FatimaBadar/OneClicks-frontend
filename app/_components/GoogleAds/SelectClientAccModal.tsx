@@ -1,28 +1,31 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { Toast } from "primereact/toast";
-import { useRouter } from "next/router"; 
+import { GetCLientAccounts } from "@/app/_services/googleService";
 
 const SelectClientAccountModal: React.FC = () => {
   const [open, setOpen] = useState(true); 
   const [selectedClient, setSelectedClient] = useState<string>("");
   const [clientAccounts, setClientAccounts] = useState<string[]>([]);
   const toast = useRef<Toast>(null);
-  const router = useRouter();
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleSelectClient = () => {
-    if (selectedClient) {
-      router.push(`/AnotherComponent?client=${selectedClient}`);
-    } else {
-      // Show a toast or alert indicating that no client account is selected
+  useEffect(() => {
+    fetchClientAccounts();
+   }, [])
+    
+   const handleSelectClient = () => {
+     if(selectedClient){
+       handleClose();
+     }
+     else {
       toast.current?.show({
         severity: "error",
         summary: "Error",
@@ -30,17 +33,19 @@ const SelectClientAccountModal: React.FC = () => {
         life: 30000,
       });
     }
-  };
-
-  const fetchClientAccounts = () => {
-    // Logic to fetch client accounts from API or local storage
-    const mockClientAccounts = ["Client Account 1", "Client Account 2"]; 
-    setClientAccounts(mockClientAccounts);
-  };
-
-  React.useEffect(() => {
-    fetchClientAccounts(); 
-  }, []);
+   };
+ 
+   const fetchClientAccounts= async () => {
+     try {
+       const accessToken = localStorage?.getItem("accesstoken_Google") ?? "";
+       const response = await GetCLientAccounts(accessToken);
+       if (response.statusCode == "200") {
+         setClientAccounts(response.responseData);
+       }
+     } catch (error) {
+       console.log(error);
+     }
+   };
 
   return (
     <Dialog open={open} onClose={handleClose}>

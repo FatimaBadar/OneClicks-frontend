@@ -1,17 +1,22 @@
-import React, { useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { Toast } from "primereact/toast";
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/navigation"; 
+import { GetManagerAccounts } from "@/app/_services/googleService";
+import SelectClientAccountModal from "./SelectClientAccModal";
 
 const SelectManagerAccModal: React.FC = () => {
   const [open, setOpen] = useState(true);
   const [scroll, setScroll] = useState<DialogProps["scroll"]>("paper");
   const [selectedManager, setSelectedManager] = useState<string>("");
+
   const [managerAccounts, setManagerAccounts] = useState<string[]>([]);
+  const [openClientAccModal, setOpenClientAccModal] = useState<boolean>(false);
+
   const toast = useRef<Toast>(null);
   const router = useRouter();
 
@@ -24,26 +29,28 @@ const SelectManagerAccModal: React.FC = () => {
     setOpen(false);
   };
 
+  useEffect(() => {
+   fetchManagerAccounts();
+  }, [])
+  
+
   const handleSelectManager = () => {
-    router.push(`/SelectClientAccModal?manager=${selectedManager}`);
-  };
-
-  const fetchManagerAccounts = () => {
-    const mockManagerAccounts = ["Manager Account 1", "Manager Account 2"];
-    setManagerAccounts(mockManagerAccounts);
-  };
-
-  const descriptionElementRef = useRef<HTMLElement>(null);
-
-  React.useEffect(() => {
-    if (open) {
-      const { current: descriptionElement } = descriptionElementRef;
-      if (descriptionElement !== null) {
-        descriptionElement.focus();
-      }
-      fetchManagerAccounts();
+    if(selectedManager){
+      setOpenClientAccModal(true);
     }
-  }, [open]);
+  };
+
+  const fetchManagerAccounts= async () => {
+    try {
+      const accessToken = localStorage?.getItem("accesstoken_Google") ?? "";
+      const response = await GetManagerAccounts(accessToken);
+      if (response.statusCode == "200") {
+        setManagerAccounts(response.responseData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -100,7 +107,10 @@ const SelectManagerAccModal: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+
+      {openClientAccModal ? 
+      <SelectClientAccountModal/> : ""}
+      </React.Fragment>
   );
 };
 

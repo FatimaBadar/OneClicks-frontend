@@ -1,9 +1,9 @@
 'use client';
-import FbLogin from "@/app/_components/Ads/FbLogin";
+import AdAccountLogin from "@/app/_components/Ads/AdAccountLogin";
 import React from 'react'
 
 export default function page() {
   return (
-    <FbLogin/>
+    <AdAccountLogin/>
   )
 }
