@@ -44,8 +44,8 @@ export default function Home() {
         localStorage.setItem('accesstoken_Google', response.responseData);
 
         const accesstoken_Google = localStorage?.getItem('accesstoken_Google') ??  "";
-        const managerId = localStorage?.getItem('managerId') ??  "";
-        const clientId = localStorage?.getItem('clientId') ??  "";
+        const managerId = localStorage?.getItem('managerId');
+        const clientId = localStorage?.getItem('clientId');
 
         if(!accesstoken_Google || !managerId || !clientId){
           setOpenManagerAccModal(true);
@@ -57,12 +57,22 @@ export default function Home() {
   };
 
   const getAccessTokenFromURL = () => {
-    const accessTokenGoogle : string | null = searchParams.get("code");
-    console.log("acc: ", accessTokenGoogle)
-    if (accessTokenGoogle) {
-      getRefreshToken(decodeURIComponent(accessTokenGoogle));
+    const accesstoken_Google = localStorage?.getItem('accesstoken_Google')
+    if(!accesstoken_Google)
+    {
+      const accessTokenGoogle : string | null = searchParams.get("code");
       console.log("acc: ", accessTokenGoogle)
-    } 
+      if (accessTokenGoogle) {
+        getRefreshToken(decodeURIComponent(accessTokenGoogle));
+        console.log("acc: ", accessTokenGoogle)
+      } 
+    }
+    else  {
+      const managerId = localStorage?.getItem('selectedManagerId');
+      const clientId = localStorage?.getItem('selectedClientId');
+      if(!managerId || !clientId)
+      setOpenManagerAccModal(true);}
+
   };
 
   return (

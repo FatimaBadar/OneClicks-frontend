@@ -6,26 +6,45 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { Toast } from "primereact/toast";
 import { GetCLientAccounts } from "@/app/_services/googleService";
+import { AccountHierarchyDto } from "@/app/_models/Google.model";
 
-const SelectClientAccountModal: React.FC = () => {
-  const [open, setOpen] = useState(true); 
-  const [selectedClient, setSelectedClient] = useState<string>("");
-  const [clientAccounts, setClientAccounts] = useState<string[]>([]);
+interface SelectClientAccountModalProps {
+  open: boolean;
+  onClose: () => void;
+  managerIds: string; // Define managerIds prop
+}
+
+const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
+  open,
+  onClose,
+  managerIds,
+}) => {
+  const [selectedClient, setSelectedClient] =
+    useState<AccountHierarchyDto | null>(null);
+  const [clientAccounts, setClientAccounts] = useState<AccountHierarchyDto[]>(
+    []
+  );
   const toast = useRef<Toast>(null);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   useEffect(() => {
     fetchClientAccounts();
-   }, [])
-    
-   const handleSelectClient = () => {
-     if(selectedClient){
-       handleClose();
-     }
-     else {
+  }, []);
+
+  useEffect(() => {
+    if (selectedClient) {
+      localStorage.setItem(
+        "selectedClientId",
+        selectedClient.customerId.toString()
+      );
+      const idPart = managerIds.split("/")[1]; // Split the string by '/' and take the second part
+      const id = parseInt(idPart, 10);
+      localStorage.setItem("selectedManagerId", id.toString());
+    }
+  }, [selectedClient]);
+  const handleSelectClient = () => {
+    if (selectedClient) {
+      onClose();
+    } else {
       toast.current?.show({
         severity: "error",
         summary: "Error",
@@ -33,27 +52,35 @@ const SelectClientAccountModal: React.FC = () => {
         life: 30000,
       });
     }
-   };
- 
-   const fetchClientAccounts= async () => {
-     try {
-       const accessToken = localStorage?.getItem("accesstoken_Google") ?? "";
-       const response = await GetCLientAccounts(accessToken);
-       if (response.statusCode == "200") {
-         setClientAccounts(response.responseData);
-       }
-     } catch (error) {
-       console.log(error);
-     }
-   };
+  };
+
+  const fetchClientAccounts = async () => {
+    try {
+      const accessToken = localStorage?.getItem("accesstoken_Google") ?? "";
+      // Pass managerIds to GetCLientAccounts function
+      const response = await GetCLientAccounts(accessToken, managerIds);
+      if (response.statusCode == "200") {
+        setClientAccounts(response.responseData[0].childAccounts);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={() => onClose()}>
       <DialogTitle>Select Client Account</DialogTitle>
       <DialogContent>
         <select
-          value={selectedClient}
-          onChange={(e) => setSelectedClient(e.target.value)}
+          value={selectedClient ? selectedClient.customerId.toString() : ""}
+          onChange={(e) => {
+            const selectedAccountId = e.target.value;
+            const selectedAccount =
+              clientAccounts.find(
+                (account) => account.customerId.toString() === selectedAccountId
+              ) || null;
+            setSelectedClient(selectedAccount);
+          }}
         >
           <option value="">Select Client Account</option>
           {clientAccounts.length === 0 && (
@@ -63,14 +90,14 @@ const SelectClientAccountModal: React.FC = () => {
             </option>
           )}
           {clientAccounts.map((client, index) => (
-            <option key={index} value={client}>
-              {client}
+            <option key={index} value={client.customerId.toString()}>
+              {client.descriptiveName}
             </option>
           ))}
         </select>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={() => onClose()}>Cancel</Button>
         <Button onClick={handleSelectClient} color="primary">
           Select
         </Button>

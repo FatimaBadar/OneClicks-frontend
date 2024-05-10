@@ -1,4 +1,5 @@
 import useFetch from "../_helpers/useFetch";
+import { AccountHierarchyDto } from "../_models/Google.model";
 import { ResponseVM } from "../_models/response.model";
 
 // const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
@@ -28,14 +29,14 @@ export async function GetRefreshToken(accessToken: string):  Promise<ResponseVM<
 
 export async function GetManagerAccounts(accessToken: string):  Promise<ResponseVM<string[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetManagerAccounts?accessToken=${accessToken}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetManagerAccounts?refreshToken=${accessToken}`);
     
     return handleResponse<ResponseVM<string[]>>(response).then((data) => data);
 }
 
-export async function GetCLientAccounts(accessToken: string):  Promise<ResponseVM<string[]>>{
+export async function GetCLientAccounts(accessToken: string, customerId:string):  Promise<ResponseVM<AccountHierarchyDto[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetCLientAccounts?accessToken=${accessToken}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetCLientAccounts?refreshToken=${accessToken}&customerId=${customerId}`);
     
-    return handleResponse<ResponseVM<string[]>>(response).then((data) => data);
+    return handleResponse<ResponseVM<AccountHierarchyDto[]>>(response).then((data) => data);
 }

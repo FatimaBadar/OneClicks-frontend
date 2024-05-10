@@ -40,7 +40,7 @@ const Oauth = () => {
 
     const params = {
       client_id: '195870252277-kgqnfto3d27fhvvhivk7m3ikfkc4qhvl.apps.googleusercontent.com',
-      redirect_uri: 'https://localhost:3000/test',
+      redirect_uri: 'https://localhost:3000',
       response_type: 'code',
       scope: 'https://www.googleapis.com/auth/adwords',
       include_granted_scopes: 'true',
@@ -53,7 +53,7 @@ const Oauth = () => {
   };
 
   const revokeAccess = () => {
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem('access_tokenGoogle');
     if (accessToken) {
       fetch(`https://oauth2.googleapis.com/revoke?token=${accessToken}`, {
         method: 'POST',

@@ -37,6 +37,7 @@ const SelectManagerAccModal: React.FC = () => {
   const handleSelectManager = () => {
     if(selectedManager){
       setOpenClientAccModal(true);
+      handleClose();
     }
   };
 
@@ -109,7 +110,9 @@ const SelectManagerAccModal: React.FC = () => {
       </Dialog>
 
       {openClientAccModal ? 
-      <SelectClientAccountModal/> : ""}
+  <SelectClientAccountModal open={openClientAccModal} onClose={() => setOpenClientAccModal(false)} managerIds={selectedManager}/> 
+  : ""}
+
       </React.Fragment>
   );
 };
