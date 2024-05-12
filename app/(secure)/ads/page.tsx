@@ -24,11 +24,9 @@ import {
 } from "@/app/_services/adAccountService";
 import AdForm from "@/app/_components/Ads/AdForm";
 
-const typeColor = {
-  Facebook: "rgb(19, 222, 185)",
-  Instagram: "rgb(250, 137, 107)",
-  Google: "rgb(73, 190, 255)",
-};
+const Facebook= "rgb(19, 222, 185)";
+const Instagram= "rgb(250, 137, 107)";
+const Google="rgb(73, 190, 255)";
 
 const AdPage = () => {
   const [ads, setAds] = useState<Ads[]>([]);
@@ -38,9 +36,7 @@ const AdPage = () => {
   const [adsetName, setAdsetName] = useState("");
   const [creativeId, setCreativeId] = useState("");
   const [status, setStatus] = useState("");
-
-  const type = "Facebook";
-  const pbg = typeColor.Facebook;
+  const [type, setType] = useState("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -57,14 +53,18 @@ const AdPage = () => {
   }, []);
 
   const getAdsData = async () => {
-    // try {
-    //   const response = await getAllAdsPayloadService();
-    //   if (response.statusCode == "200") {
-    //     // setAds(response.responseData);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    try {
+      
+    const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
+    const adaccountId = localStorage?.getItem("adAccountId") ?? "";
+
+      const response = await getAllAdsService(adaccountId.toString(), accessTokenfb);
+      if (response.statusCode == "200") {
+        setAds(response.responseData);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const ScheduleAds = async (e: FormEvent) => {
@@ -79,6 +79,7 @@ const AdPage = () => {
       status,
       accessToken: accessTokenfb,
       adAccountId: adaccountId,
+      type: "Facebook"
     };
     try {
       const response = await ScheduleAdService(tempAdsData);
@@ -187,11 +188,11 @@ const AdPage = () => {
                     <Chip
                       sx={{
                         px: "4px",
-                        backgroundColor: pbg,
+                        backgroundColor: {type: "Facebook" ? Facebook : Google},
                         color: "#fff",
                       }}
                       size="small"
-                      label={type}
+                      label={data.type}
                     ></Chip>
                   </TableCell>
                   <TableCell align="right">

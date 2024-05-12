@@ -21,10 +21,8 @@ import objectives from "@/public/jsonData/objectives.json";
 import specialAdCategories from "@/public/jsonData/specialAdCategories.json";
 import { CampaignPayload } from "../../_models/adAccount.model";
 import { CreateCampaignService } from "../../_services/adAccountService";
-import { Toast } from "primereact/toast";
 
 const AdCampaignForm = ({ onReturn }: any) => {
-// const AdCampaignForm = () => {
 
   const [campaignName, setCampaignName] = useState("");
   const [objective, setObjective] = useState("");
@@ -43,7 +41,8 @@ const AdCampaignForm = ({ onReturn }: any) => {
       status: status,
       specialAdCategories: specialAdCategory,
       accessToken: accessTokenfb,
-      adAccountId: adaccountId.toString()
+      adAccountId: adaccountId.toString(),
+      type: "Facebook"
     };
     console.log(tempCampaignData);
 

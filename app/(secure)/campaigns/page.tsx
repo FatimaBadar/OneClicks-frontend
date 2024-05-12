@@ -13,22 +13,18 @@ import {
   Button,
 } from "@mui/material";
 
-import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 import AdCampaignModal from "@/app/_components/Ads/AdCampaignModal";
 import Navbar from "@/app/_components/Navbar";
 import { getAllCampaignsService } from "@/app/_services/adAccountService";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Campaign } from "@/app/_models/adAccount.model";
+import GoogleAdCampaignModal from "@/app/_components/GoogleAds/GoogleAdCampaignModal";
 
-const typeColor = {
-  Facebook: "rgb(19, 222, 185)",
-  Instagram: "rgb(250, 137, 107)",
-  Google: "rgb(73, 190, 255)",
-};
+const Facebook= "rgb(19, 222, 185)";
+const Instagram= "rgb(250, 137, 107)";
+const Google="rgb(73, 190, 255)";
 
 const Adcampaigns = () => {
-  const type = "Facebook";
-  const pbg = typeColor.Facebook;
   const impressions = 0;
   const clicks = 0;
 
@@ -96,6 +92,7 @@ const Adcampaigns = () => {
           </Typography>
           <div>
             <AdCampaignModal />
+            <GoogleAdCampaignModal/>
           </div>
         </Box>
 
@@ -173,11 +170,11 @@ const Adcampaigns = () => {
                     <Chip
                       sx={{
                         px: "4px",
-                        backgroundColor: pbg,
+                        backgroundColor: {type: "Facebook" ? Facebook : Google},
                         color: "#fff",
                       }}
                       size="small"
-                      label={type}
+                      label={data.type}
                     ></Chip>
                   </TableCell>
                   <TableCell align="right">

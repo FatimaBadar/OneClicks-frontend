@@ -6,3 +6,33 @@ export interface AccountHierarchyDto {
     childAccounts: AccountHierarchyDto[];
   }
   
+export interface CampaignPayload{
+  campaignName: string
+  advertisingChannelType: string
+  status: string
+  targetGoogleSearch: boolean
+  targetSearchNetwork: boolean
+  budget: string;
+  startDate: string
+  endDate: string,
+  customerId: string,
+  refreshToken: string,
+  type: string
+}
+
+export interface Campaign{
+  id: string
+  campaignName: string
+  campaignId: string
+  advertisingChannelType: string
+  status: string
+  targetGoogleSearch: boolean
+  targetSearchNetwork: boolean
+  budget: string;
+  startDate: string
+  endDate: string,
+  customerId: number,
+  refreshToken: string,
+  type: string
+}
+  

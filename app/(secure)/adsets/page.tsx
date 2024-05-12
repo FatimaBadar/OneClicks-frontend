@@ -18,16 +18,11 @@ import AdsetForm from "@/app/_components/Ads/AdSetForm";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Adset } from "@/app/_models/adAccount.model";
 
-const typeColor = {
-  Facebook: "rgb(19, 222, 185)",
-  Instagram: "rgb(250, 137, 107)",
-  Google: "rgb(73, 190, 255)",
-};
+const Facebook= "rgb(19, 222, 185)";
+const Instagram= "rgb(250, 137, 107)";
+const Google="rgb(73, 190, 255)";
 
 const Adsets = () => {
-  const type = "Facebook";
-  const pbg = typeColor.Facebook;
-
   const [adsets, setAdsets] = useState<Adset[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -70,7 +65,6 @@ const Adsets = () => {
       );
       if (response.statusCode == "200") {
         setAdsets(response.responseData);
-        console.log("adsets: ", adsets);
       }
     } catch (error) {
       console.error(error);
@@ -169,11 +163,11 @@ const Adsets = () => {
                     <Chip
                       sx={{
                         px: "4px",
-                        backgroundColor: pbg,
+                        backgroundColor: {type: "Facebook" ? Facebook : Google},
                         color: "#fff",
                       }}
                       size="small"
-                      label={type}
+                      label={data.type}
                     ></Chip>
                   </TableCell>
                   <TableCell>

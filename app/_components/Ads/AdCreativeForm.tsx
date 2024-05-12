@@ -81,7 +81,8 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
       adsetId: adset,
       message,
       AdAccountId: adAccountId,
-      accessToken: accessTokenfb,
+      accessToken: accessTokenfb,      
+      type: "Facebook"
     };
     try {
       const response = await CreateAdcreativeService(tempAdCreativeData);

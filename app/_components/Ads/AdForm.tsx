@@ -103,6 +103,7 @@ const AdForm = () => {
       status,
       accessToken: accessTokenfb,
       adAccountId: adaccountId.toString(),
+      type: "Facebook"
     };
 
     try {

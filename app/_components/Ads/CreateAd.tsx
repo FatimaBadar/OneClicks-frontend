@@ -9,9 +9,7 @@ import {
   alpha,
   styled,
 } from "@mui/material";
-import React, { useCallback, useEffect, useRef } from "react";
-import { ConnectAdAccount } from "../../_services/adAccountService";
-import { Toast } from "primereact/toast";
+import React, { useCallback} from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useRouter, useSearchParams } from "next/navigation";
 

@@ -3,19 +3,18 @@
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import {
   Button,
   Typography,
 
 } from "@mui/material";
-import AdCampaignForm from "./AdCampaignForm";
+import GoogleAdCampaignForm from "./GoogleAdCampaignForm";
 import React, { useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import { useRouter } from "next/navigation";
 
-const AdCampaignModal: React.FC = () => {
+const GoogleAdCampaignModal: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState<DialogProps["scroll"]>("paper");
   const [objective, setObjective] = useState("");
@@ -57,6 +56,7 @@ const AdCampaignModal: React.FC = () => {
       handleClose()
       showSuccessToast("Couldnt create new campaign");
     }
+    // setObjective(e);
   };
 
   const descriptionElementRef = React.useRef<HTMLElement>(null);
@@ -83,7 +83,7 @@ const AdCampaignModal: React.FC = () => {
           },
         }}
       >
-        Create New Facebook Campaign
+        Create New Google Campaign
       </Button>
 
       <Dialog
@@ -95,11 +95,11 @@ const AdCampaignModal: React.FC = () => {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">
-            Create a Facebook Campaign
+            Create a Campaign
         </DialogTitle>
 
         <DialogContent dividers={scroll === "paper"}>
-            <AdCampaignForm onReturn={handleReturn} />
+            <GoogleAdCampaignForm onReturn={handleReturn} />
         </DialogContent>
 
         <DialogActions>
@@ -109,4 +109,4 @@ const AdCampaignModal: React.FC = () => {
     </React.Fragment>
   );
 };
-export default AdCampaignModal;
+export default GoogleAdCampaignModal;

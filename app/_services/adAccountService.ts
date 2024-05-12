@@ -117,9 +117,9 @@ export async function ScheduleAdService(payload: Ads): Promise<ResponseVM<string
     return handleResponse<ResponseVM<string>>(response).then((data) => data);
 }
 
-export async function getAllAdsService():  Promise<ResponseVM<Ads[]>>{
+export async function getAllAdsService(adAccountId: string, accessToken: string):  Promise<ResponseVM<Ads[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAds`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAds?accessToken=${accessToken}&adAccountId=${adAccountId}`);
     
     return handleResponse<ResponseVM<Ads[]>>(response).then((data) => data);
 }

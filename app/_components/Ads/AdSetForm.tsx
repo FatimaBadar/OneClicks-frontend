@@ -135,6 +135,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
       startTime,
       status,
       accessToken: accessTokenfb,
+      type: "Facebook"
     };
     console.log(tempAdSetData);
 
@@ -356,11 +357,11 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
           </Grid>
 
           <Grid item sm={12} md={8} lg={8} xs={12}>
-            <Box>
+            <Box component="form" onSubmit={handleNextClick}>
               <Grid container spacing={2} columns={8}>
                 <Grid item  sm={12} md={4} lg={4} xs={12}> 
                 {/* //xs={4}  */}
-                  <Box
+                  <Box                 
                     sx={{ display: "flex", justifyContent: "space-between" }}
                   >
                     <Typography

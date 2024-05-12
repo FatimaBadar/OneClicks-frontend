@@ -20,7 +20,8 @@ export interface CampaignPayload {
     specialAdCategories: string[],
     status: string,
     adAccountId: string,
-    accessToken: string
+    accessToken: string,
+    type: string
 }
 
 export interface Campaign {
@@ -31,7 +32,8 @@ export interface Campaign {
     specialAdCategories: string[],
     status: string,
     adAccountId: string,
-    accessToken: string
+    accessToken: string,
+    type: string
 }
 export interface AdsetPayload{
     adAccountId : string
@@ -46,7 +48,8 @@ export interface AdsetPayload{
     industries: Interest[], 
     startTime: string,
     status: string,
-    accessToken: string
+    accessToken: string,
+    type: string
 }
 
 export interface Adset{
@@ -63,7 +66,8 @@ export interface Adset{
     startTime: string,
     status: string,
     accessToken: string
-    adAccountId: string
+    adAccountId: string,
+    type: string
 }
 
 export interface Interest{
@@ -109,7 +113,8 @@ export interface AdCreativePayload{
     imageHash: string,
     message: string,
     AdAccountId: string,
-    accessToken: string
+    accessToken: string,
+    type: string
 }
 
 export interface ImageHash{
@@ -122,7 +127,8 @@ export interface AdCreative{
     adsetId: string,
     imageHash: string,
     fileName: string
-    message: string
+    message: string,
+    type: string
 }
 
 export interface Ads{
@@ -133,13 +139,14 @@ export interface Ads{
     creativeId: string,
     status: string,
     accessToken: string
-    adAccountId: string
+    adAccountId: string,
+    type: string
 }
 
 export interface AdPayloadData{
     campaignData: CampaignData[],
     adSetData: AdsetData[],
-    adCreativeData: CreativeData[] 
+    adCreativeData: CreativeData[]
 }
 
 export interface CampaignData{
