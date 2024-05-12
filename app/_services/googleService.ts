@@ -1,5 +1,5 @@
 import useFetch from "../_helpers/useFetch";
-import { AccountHierarchyDto } from "../_models/Google.model";
+import { AccountHierarchyDto, CampaignPayload } from "../_models/Google.model";
 import { ResponseVM } from "../_models/response.model";
 
 // const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
@@ -41,9 +41,9 @@ export async function GetCLientAccounts(accessToken: string, customerId:string):
     return handleResponse<ResponseVM<AccountHierarchyDto[]>>(response).then((data) => data);
 }
 
-export async function CreateAdcampaignService(accessToken: string, customerId:string): Promise<ResponseVM<string>>{
+export async function CreateAdcampaignService(payload: CampaignPayload): Promise<ResponseVM<string>>{
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Google/CreateCampaign?refreshToken=${accessToken}&customerId=${customerId}`);
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Google/CreateCampaign`, payload);
 
     return handleResponse<ResponseVM<string>>(response).then((data) => data);
 }

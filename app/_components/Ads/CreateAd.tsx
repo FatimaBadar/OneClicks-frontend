@@ -109,11 +109,11 @@ const CreateAd: React.FC = () => {
         onClose={handleClose}
       >
         <MenuItem  
-        onClick={() => {router.push("/adcampaigns" +"?" + CreateAd("account","facebook" ) );}}
+        onClick={() => {router.push("/campaigns" +"?" + CreateAd("account","facebook" ) );}}
         disableRipple>
           <Button
             variant="contained"
-            href="/ads"
+            href="/campaigns"
             sx={{
               backgroundColor: "#597FB5 !important",
               color: "#fff !important",
@@ -127,7 +127,7 @@ const CreateAd: React.FC = () => {
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem disableRipple
-        onClick={() => {router.push("/adcampaigns" +"?" + CreateAd("state","google" ) );}}>
+        onClick={() => {router.push("/campaigns" +"?" + CreateAd("state","google" ) );}}>
           <Button
             variant="contained"
             sx={{

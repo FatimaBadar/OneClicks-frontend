@@ -95,7 +95,7 @@ const GoogleAdCampaignModal: React.FC = () => {
         aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">
-            Create a Campaign
+            Create a Google Campaign
         </DialogTitle>
 
         <DialogContent dividers={scroll === "paper"}>

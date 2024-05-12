@@ -12,10 +12,12 @@ export interface CampaignPayload{
   status: string
   targetGoogleSearch: boolean
   targetSearchNetwork: boolean
-  budget: string;
+  budgetName: string;
+  budgetAmount: string;
+  budgetDeliveryMethod: string;
   startDate: string
   endDate: string,
-  customerId: string,
+  customerId: number,
   refreshToken: string,
   type: string
 }

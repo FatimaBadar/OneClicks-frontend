@@ -43,8 +43,8 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const [adsetName, setAdsetName] = useState("");
   const [optimizationGoal, setOptimizationGoal] = useState("");
   const [billingEvent, setBillingEvent] = useState("");
-  const [bidAmount, setBidAmount] = useState(0);
-  const [dailyBudget, setDailyBudget] = useState(0);
+  const [bidAmount, setBidAmount] = useState(10);
+  const [dailyBudget, setDailyBudget] = useState(100000);
   const [geolocations, setGeolocations] = useState<string[]>([]);
   const [status, setStatus] = useState("");
 
@@ -447,6 +447,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                       type="number"
                       variant="outlined"
                       autoFocus
+                      InputProps={{ inputProps: { min: 10} }}
                       autoComplete="bidAmount"
                       value={bidAmount}
                       onChange={(e) => setBidAmount(parseFloat(e.target.value))}
@@ -459,7 +460,6 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                     <Typography
                       sx={{ fontWeight: 600, alignContent: "center" }}
                     >
-                      {" "}
                       Daily Budget
                     </Typography>
                     <TextField
@@ -469,6 +469,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                       type="number"
                       variant="outlined"
                       autoFocus
+                      InputProps={{ inputProps: { min: 100000} }}
                       autoComplete="dailyBudget"
                       value={dailyBudget}
                       onChange={(e) =>

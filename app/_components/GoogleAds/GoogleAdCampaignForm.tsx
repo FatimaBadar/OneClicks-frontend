@@ -1,6 +1,6 @@
 "use client";
 import React, { FormEvent, useState, useRef } from "react";
-import Select  from "@mui/material/Select";
+import Select from "@mui/material/Select";
 
 import {
   Button,
@@ -15,8 +15,12 @@ import {
   createTheme,
   ThemeProvider,
   FormLabel,
+  Accordion,
+  AccordionSummary,
+  Typography,
+  AccordionDetails,
 } from "@mui/material";
-
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { CreateAdcampaignService } from "@/app/_services/googleService";
 import { CampaignPayload } from "@/app/_models/Google.model";
 
@@ -30,6 +34,10 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
     boolean | null
   >();
   const [budget, setBudget] = useState("");
+  const [budgetName, setBudgetName] = useState("");
+  const [budgetAmount, setBudgetAmount] = useState(10000);
+  const [budgetDeliveryMethod, setBudgetDeliveryMethod] = useState("");
+
   const [status, setStatus] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -50,33 +58,40 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
     "UNSPECIFIED",
     "VIDEO",
   ];
+  const DeliveryMethodOptions = ["Standard", "Accelerated"];
+
+  function convertDateFormat(currentDate: Date){
+    var convertedDate = currentDate.getFullYear().toString() + "/" +
+              (currentDate.getMonth() + 1).toString().padStart(2, '0') + "/" +
+              currentDate.getDate().toString().padStart(2, '0');
+    return convertedDate
+  }
 
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
 
     const accessTokengoogle = localStorage?.getItem("accesstoken_Google") ?? "";
     const customerId = localStorage?.getItem("selectedManagerId") ?? "";
-
+    
     const tempCampaignData: CampaignPayload = {
       campaignName,
       advertisingChannelType,
       targetGoogleSearch: targetGoogleSearch ? targetGoogleSearch : false,
       targetSearchNetwork: targetSearchNetwork ? targetSearchNetwork : false,
-      budget,
+      budgetName,
+      budgetAmount: budgetAmount.toString(),
+      budgetDeliveryMethod,
       status,
-      startDate,
-      endDate,
+      startDate: convertDateFormat(new Date(startDate)) ,
+      endDate: convertDateFormat(new Date(endDate)),
       refreshToken: accessTokengoogle,
-      customerId: customerId,
+      customerId: parseFloat(customerId),
       type: "Google",
     };
     console.log(tempCampaignData);
 
     try {
-      const response = await CreateAdcampaignService(
-        accessTokengoogle,
-        customerId.toString()
-      );
+      const response = await CreateAdcampaignService(tempCampaignData);
       if (response.statusCode == "200") {
         console.log(response.responseData);
         //setCampaigns(response.responseData);
@@ -90,8 +105,9 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
       setEndDate("");
       setStartDate("");
       setStatus("");
-    } catch (error) {
-      onReturn(false);
+    } 
+    catch (error) {
+   //   onReturn(false);
       console.error(error);
     }
   };
@@ -152,7 +168,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
             <Select
               value={advertisingChannelType}
               onChange={(e) => setAvertisingChannelType(e.target.value)}
-              label="Objective"
+              label="Advertising Channel Type"
             >
               {advertisingChannelTypeDropdown.map((obj, id) => (
                 <MenuItem key={id} value={obj}>
@@ -162,21 +178,58 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
             </Select>
           </FormControl>
 
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ArrowDropDownIcon />}
+              aria-controls="panel2-content"
+              id="panel2-header"
+            >
+              <Typography>Set Budget</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <TextField
+                margin="normal"
+                required
+                label="Name"
+                type="text"
+                variant="outlined"
+                autoFocus
+                autoComplete="name"
+                value={budgetName}
+                onChange={(e) => setBudgetName(e.target.value)}
+                sx={{ display: "flex" }}
+              />
+              <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel>Budget Delivery Method</InputLabel>
+                <Select
+                  value={budgetDeliveryMethod}
+                  onChange={(e) => setBudgetDeliveryMethod(e.target.value)}
+                  label="Budget Delivery Method"
+                >
+                  {DeliveryMethodOptions.map((obj, id) => (
+                    <MenuItem key={id} value={obj}>
+                      {obj}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-
-          <TextField
-            margin="normal"
-            required
-            label="Budget"
-            type="number"
-            variant="outlined"
-            autoFocus
-            autoComplete="budget"
-            value={budget}
-            onChange={(e) => setBudget(e.target.value)}
-            sx={{ display: "flex" }}
-            // focused
-          />
+              <TextField
+                margin="normal"
+                required
+                label="Budget Amount"
+                type="number"
+                variant="outlined"
+                autoFocus
+                autoComplete="budgetAmount"
+                InputProps={{ inputProps: { min: 10000} }}
+                value={budgetAmount}
+                onChange={(e) => setBudgetAmount(parseFloat(e.target.value))}
+                sx={{ display: "flex" }}
+                // focused
+              />
+            </AccordionDetails>
+          </Accordion>
 
           <TextField
             margin="normal"
@@ -204,9 +257,18 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
             sx={{ display: "flex" }}
             // focused
           />
+          <Typography sx={{color: "darkblue"}}>Note: This campaign will be created as Manual CPC (Cost Per Click)</Typography>
 
-          <FormControl component="fieldset" fullWidth margin="normal"
-          sx={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
+          <FormControl
+            component="fieldset"
+            fullWidth
+            margin="normal"
+            sx={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-evenly",
+            }}
+          >
             <FormLabel id="demo-row-radio-buttons-group-label">
               Target Google Search
             </FormLabel>
@@ -215,7 +277,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
               aria-label="targetGoogleSearch"
               name="status"
               value={targetGoogleSearch}
-              onChange={(e) => setTargetGoogleSearch(e.target.value === 'true')}
+              onChange={(e) => setTargetGoogleSearch(e.target.value === "true")}
               sx={{ justifyContent: "center" }}
             >
               <FormControlLabel
@@ -232,8 +294,17 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
             </RadioGroup>
           </FormControl>
 
-          <FormControl component="fieldset" fullWidth margin="normal"
-          sx={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
+
+          <FormControl
+            component="fieldset"
+            fullWidth
+            margin="normal"
+            sx={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-evenly",
+            }}
+          >
             <FormLabel id="demo-row-radio-buttons-group-label">
               Target Search Network
             </FormLabel>
@@ -242,7 +313,9 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
               aria-label="targetSearchNetwork"
               name="status"
               value={targetSearchNetwork}
-              onChange={(e) => setTargetSearchNetwork(e.target.value === 'true')}
+              onChange={(e) =>
+                setTargetSearchNetwork(e.target.value === "true")
+              }
               sx={{ justifyContent: "center" }}
             >
               <FormControlLabel
@@ -258,9 +331,17 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
               />
             </RadioGroup>
           </FormControl>
-          
-          <FormControl component="fieldset" fullWidth margin="normal" 
-          sx={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
+
+          <FormControl
+            component="fieldset"
+            fullWidth
+            margin="normal"
+            sx={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-evenly",
+            }}
+          >
             <FormLabel id="demo-row-radio-buttons-group-label">
               Status
             </FormLabel>
