@@ -15,15 +15,18 @@ import {
   createTheme,
   ThemeProvider,
   FormLabel,
+  Divider,
 } from "@mui/material";
 
 import objectives from "@/public/jsonData/objectives.json";
 import specialAdCategories from "@/public/jsonData/specialAdCategories.json";
 import { CampaignPayload } from "../../_models/adAccount.model";
 import { CreateCampaignService } from "../../_services/adAccountService";
+import { Dropdown } from "primereact/dropdown";
+import { MultiSelect } from "primereact/multiselect";
+import { ScrollPanel } from "primereact/scrollpanel";
 
 const AdCampaignForm = ({ onReturn }: any) => {
-
   const [campaignName, setCampaignName] = useState("");
   const [objective, setObjective] = useState("");
   const [status, setStatus] = useState("");
@@ -32,8 +35,8 @@ const AdCampaignForm = ({ onReturn }: any) => {
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
 
-    const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
-    const adaccountId = localStorage?.getItem('adAccountId') ??  "";
+    const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
+    const adaccountId = localStorage?.getItem("adAccountId") ?? "";
 
     const tempCampaignData: CampaignPayload = {
       campaignName: campaignName,
@@ -42,14 +45,14 @@ const AdCampaignForm = ({ onReturn }: any) => {
       specialAdCategories: specialAdCategory,
       accessToken: accessTokenfb,
       adAccountId: adaccountId.toString(),
-      type: "Facebook"
+      type: "Facebook",
     };
     console.log(tempCampaignData);
 
     try {
       const response = await CreateCampaignService(tempCampaignData);
       if (response.statusCode == "200") {
-        localStorage.setItem('campaignId', response.responseData.campaignId);
+        localStorage.setItem("campaignId", response.responseData.campaignId);
         onReturn(true);
       }
 
@@ -96,7 +99,6 @@ const AdCampaignForm = ({ onReturn }: any) => {
       },
     },
   });
-
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
@@ -124,21 +126,63 @@ const AdCampaignForm = ({ onReturn }: any) => {
           />
 
           <FormControl fullWidth variant="outlined" margin="normal">
-            <InputLabel>Objective</InputLabel>
-            <Select
+            {/* <Box sx={{display: "flex",  flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-evenly",}}>
+            <Dropdown
               value={objective}
               onChange={(e) => setObjective(e.target.value)}
-              label="Objective"
-            >
-              {objectives.map((obj, id) => (
-                <MenuItem key={id} value={obj.codeWord}>
-                  {obj.name} - {obj.description}
-                </MenuItem>
-              ))}
-            </Select>
+              options={objectives.map((obj, id) => ({
+                label: `${obj.name} - ${obj.description}`,
+                value: obj.codeWord,
+              }))}
+              placeholder="Objective"
+              className="w-full"
+              style={{
+                height: "45px",
+                width: "100%",
+                fontFamily:
+                  'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                fontSize: "1rem",
+                fontWeight: "200",
+                alignItems: "center",
+                boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
+                borderRadius: "4px",
+                borderColor: "rgba(0, 0, 0, 0.23)",
+              }}
+              virtualScrollerOptions={{ itemSize: 38 }}
+            />
+          </Box> */}
+            <InputLabel>Objective</InputLabel>
+            
+              <Select
+                value={objective}
+                onChange={(e) => setObjective(e.target.value)}
+                label="Objective"
+              >
+                <ScrollPanel>
+                {objectives.map((obj, id) => (
+                  <MenuItem
+                    key={id}
+                    value={obj.codeWord}
+                    sx={{ width: "200px", height: "35px", fontSize: "small" }}
+                  >
+                    {obj.name} - "{obj.description}"
+                  </MenuItem>
+                ))}</ScrollPanel>
+              </Select>
           </FormControl>
 
-          <FormControl component="fieldset" fullWidth margin="normal">
+          <FormControl
+            component="fieldset"
+            fullWidth
+            margin="normal"
+            sx={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-evenly",
+            }}
+          >
             <FormLabel id="demo-row-radio-buttons-group-label">
               Status
             </FormLabel>
@@ -165,6 +209,33 @@ const AdCampaignForm = ({ onReturn }: any) => {
             </RadioGroup>
           </FormControl>
 
+          {/* <Box sx={{display: "flex",  flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-evenly",}}>
+            <MultiSelect
+              value={specialAdCategory}
+              onChange={(e) => handleSpecialAdCategoryChange(e.target.value)}
+              options={specialAdCategories.map((obj, id) => ({
+                label: `${obj.name} - ${obj.description}`,
+                value: obj.codeWord,
+              }))}
+              placeholder="Special Ad Category"
+              className="w-full"
+              style={{
+                height: "45px",
+                width: "100%",
+                fontFamily:
+                  'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                fontSize: "1rem",
+                fontWeight: "200",
+                alignItems: "center",
+                boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
+                borderRadius: "4px",
+                borderColor: "rgba(0, 0, 0, 0.23)",
+              }}
+              virtualScrollerOptions={{ itemSize: 38 }}
+            />
+          </Box> */}
           <FormControl fullWidth variant="outlined" margin="normal">
             <InputLabel>Special Ad Category</InputLabel>
             <Select
@@ -173,11 +244,17 @@ const AdCampaignForm = ({ onReturn }: any) => {
               onChange={handleSpecialAdCategoryChange}
               label="Special Ad Category"
             >
+              <ScrollPanel>
               {specialAdCategories.map((ads, id) => (
-                <MenuItem key={id} value={ads.codeWord}>
-                  {ads.name} - {ads.description}
+                <MenuItem
+                  key={id}
+                  value={ads.codeWord}
+                  sx={{ width: "200px", height: "35px", fontSize: "small" }}
+                >
+                  {ads.name}  - "{ads.description}"
                 </MenuItem>
               ))}
+              </ScrollPanel>
             </Select>
           </FormControl>
 

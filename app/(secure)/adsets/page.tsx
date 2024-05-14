@@ -27,11 +27,11 @@ const Adsets = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  var selectedCampaignId: string | null =
-    searchParams.get("selectedCampaignId");
-  if (selectedCampaignId == null) selectedCampaignId = "";
-  var selectedObjective: string | null = searchParams.get("selectedObjective");
-  if (selectedObjective == null) selectedObjective = "";
+  var f_CampaignId: string | null =
+    searchParams.get("f_CampaignId");
+  if (f_CampaignId == null) f_CampaignId = "";
+  var f_Objective: string | null = searchParams.get("f_Objective");
+  if (f_Objective == null) f_Objective = "";
 
   const CreateAdcreative = (name1: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -75,10 +75,10 @@ const Adsets = () => {
     <>
       <Navbar />
       <Box sx={{ mt: 10, ml: 10, mr: 10 }}>
-        {selectedCampaignId ? (
+        {f_CampaignId ? (
           <AdsetForm
-            campaign={selectedCampaignId}
-            objective={selectedObjective}
+            campaign={f_CampaignId}
+            objective={f_Objective}
           />
         ) : (
           ""
@@ -163,7 +163,7 @@ const Adsets = () => {
                     <Chip
                       sx={{
                         px: "4px",
-                        backgroundColor: {type: "Facebook" ? Facebook : Google},
+                        backgroundColor: data.type === "Facebook" ? Facebook : data.type === "Instagram" ? Instagram : Google,
                         color: "#fff",
                       }}
                       size="small"
@@ -204,7 +204,7 @@ const Adsets = () => {
                         router.push(
                           "/adcreatives" +
                             "?" +
-                            CreateAdcreative("selectedAdsetId", data.adsetId)
+                            CreateAdcreative("f_AdsetId", data.adsetId)
                         );
                       }}
                       variant="contained"
@@ -226,10 +226,10 @@ const Adsets = () => {
                           "/ads" +
                             "?" +
                             ScheduleAd(
-                              "selectedAdsetId",
+                              "f_AdsetId",
                               data.adsetId,
-                              "selectedCreativeId",
-                              selectedCampaignId ?? ""
+                              "f_CampaignId",
+                              f_CampaignId ?? ""
                             )
                         );
                       }}

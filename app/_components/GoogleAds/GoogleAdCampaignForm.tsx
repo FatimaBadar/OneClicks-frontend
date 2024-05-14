@@ -23,6 +23,7 @@ import {
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { CreateAdcampaignService } from "@/app/_services/googleService";
 import { CampaignPayload } from "@/app/_models/Google.model";
+import { ScrollPanel } from "primereact/scrollpanel";
 
 const GoogleAdCampaignForm = ({ onReturn }: any) => {
   const [campaignName, setCampaignName] = useState("");
@@ -33,7 +34,6 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
   const [targetSearchNetwork, setTargetSearchNetwork] = useState<
     boolean | null
   >();
-  const [budget, setBudget] = useState("");
   const [budgetName, setBudgetName] = useState("");
   const [budgetAmount, setBudgetAmount] = useState(10000);
   const [budgetDeliveryMethod, setBudgetDeliveryMethod] = useState("");
@@ -71,7 +71,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
     e.preventDefault();
 
     const accessTokengoogle = localStorage?.getItem("accesstoken_Google") ?? "";
-    const customerId = localStorage?.getItem("selectedManagerId") ?? "";
+    const customerId = localStorage?.getItem("g_ManagerId") ?? "";
     
     const tempCampaignData: CampaignPayload = {
       campaignName,
@@ -101,7 +101,9 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
       setAvertisingChannelType("");
       setTargetGoogleSearch(null);
       setTargetSearchNetwork(null);
-      setBudget("");
+      setBudgetAmount(0);
+      setBudgetDeliveryMethod("")
+      setBudgetName("")
       setEndDate("");
       setStartDate("");
       setStatus("");
@@ -170,11 +172,14 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
               onChange={(e) => setAvertisingChannelType(e.target.value)}
               label="Advertising Channel Type"
             >
+               <ScrollPanel>
               {advertisingChannelTypeDropdown.map((obj, id) => (
-                <MenuItem key={id} value={obj}>
+                <MenuItem key={id} value={obj}
+                sx={{ width: "200px", height: "15px", fontSize: "small" }}
+                >
                   {obj}
                 </MenuItem>
-              ))}
+              ))}</ScrollPanel>
             </Select>
           </FormControl>
 
@@ -207,7 +212,9 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
                   label="Budget Delivery Method"
                 >
                   {DeliveryMethodOptions.map((obj, id) => (
-                    <MenuItem key={id} value={obj}>
+                    <MenuItem key={id} value={obj}
+                    sx={{ width: "200px", height: "15px", fontSize: "small" }}
+                    >
                       {obj}
                     </MenuItem>
                   ))}

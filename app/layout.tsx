@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 import Chatbot from './_components/Chatbot';
 import Hydrations from './hydration';
+import "primereact/resources/themes/md-light-indigo/theme.css";
 
 export const metadata: Metadata = {
   title: 'OneClicks',

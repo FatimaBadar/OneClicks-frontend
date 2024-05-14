@@ -16,7 +16,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import SelectManagerAccModal from '@/app/_components/GoogleAds/SelectManagerAccModal';
 import { GetRefreshToken } from '@/app/_services/googleService';
 
-export default function Home() {
+class HomeProps {
+  clickToGetManagerId: boolean = false ;
+}
+
+// export default function Home() {
+const Home: React.FC<HomeProps> = ({ clickToGetManagerId }) => {
   const router = useRouter();
 
   const { loggedIn, setLoggedIn, setLoggedOut} = useStore((state) => ({
@@ -44,8 +49,8 @@ export default function Home() {
         localStorage.setItem('accesstoken_Google', response.responseData);
 
         const accesstoken_Google = localStorage?.getItem('accesstoken_Google') ??  "";
-        const managerId = localStorage?.getItem('managerId');
-        const clientId = localStorage?.getItem('clientId');
+        const managerId = localStorage?.getItem('g_managerId');
+        const clientId = localStorage?.getItem('g_clientId');
 
         if(!accesstoken_Google || !managerId || !clientId){
           setOpenManagerAccModal(true);
@@ -68,10 +73,13 @@ export default function Home() {
       } 
     }
     else  {
-      const managerId = localStorage?.getItem('selectedManagerId');
-      const clientId = localStorage?.getItem('selectedClientId');
-      if(!managerId || !clientId)
-      setOpenManagerAccModal(true);}
+      const g_ManagerId = localStorage?.getItem('g_ManagerId');
+      const g_ClientId = localStorage?.getItem('g_ClientId');
+      if(clickToGetManagerId){
+        if(!g_ManagerId || !g_ClientId)
+          setOpenManagerAccModal(true);
+        }
+      }
 
   };
 
@@ -122,3 +130,4 @@ export default function Home() {
     </>
   );
 }
+export default Home;

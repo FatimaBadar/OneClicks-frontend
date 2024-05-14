@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Button,
+  Chip,
 } from "@mui/material";
 import Navbar from "@/app/_components/Navbar";
 import { AdCreative } from "@/app/_models/adAccount.model";
@@ -17,13 +18,17 @@ import AdCreativeForm from "@/app/_components/Ads/AdCreativeForm";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getAllAdcreativesService } from "@/app/_services/adAccountService";
 
+const Facebook= "rgb(19, 222, 185)";
+const Instagram= "rgb(250, 137, 107)";
+const Google="rgb(73, 190, 255)";
+
 const AdCreatives = () => {
   const [creatives, setCreatives] = useState<AdCreative[]>([]);
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  var selectedAdsetId: string | null = searchParams.get("selectedAdsetId");
-  if (selectedAdsetId == null) selectedAdsetId = "";
+  var f_AdsetId: string | null = searchParams.get("f_AdsetId");
+  if (f_AdsetId == null) f_AdsetId = "";
 
   useEffect(() => {
     getAdCreatives();
@@ -56,7 +61,7 @@ const AdCreatives = () => {
     <>
       <Navbar />
       <Box sx={{ mt: 15 }}>
-        <AdCreativeForm adset={selectedAdsetId} />
+        <AdCreativeForm adset={f_AdsetId} />
       </Box>
 
       <Box sx={{ mt: 5 }}>
@@ -94,6 +99,11 @@ const AdCreatives = () => {
               </TableCell>
               <TableCell align="center">
                 <Typography variant="subtitle2" fontWeight={600}>
+                  Type
+                </Typography>
+              </TableCell>
+              <TableCell align="center">
+                <Typography variant="subtitle2" fontWeight={600}>
                   Message
                 </Typography>
               </TableCell>
@@ -124,6 +134,17 @@ const AdCreatives = () => {
                     {data.fileName}
                   </Typography>
                 </TableCell>
+                <TableCell>
+                    <Chip
+                      sx={{
+                        px: "4px",
+                        backgroundColor: data.type === "Facebook" ? Facebook : data.type === "Instagram" ? Instagram : Google,
+                        color: "#fff",
+                      }}
+                      size="small"
+                      label={data.type}
+                    ></Chip>
+                  </TableCell>
                 <TableCell align="center">
                   <Typography
                     color="textSecondary"
@@ -140,9 +161,9 @@ const AdCreatives = () => {
                         "/ads" +
                           "?" +
                           ScheduleAd(
-                            "selectedAdsetId",
+                            "f_AdsetId",
                             data.adsetId,
-                            "selectedCreativeId",
+                            "f_CreativeId",
                             data.creativeId
                           )
                       );

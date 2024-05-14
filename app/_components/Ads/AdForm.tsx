@@ -27,6 +27,7 @@ import {
   ScheduleAdService,
   getAllAdsPayloadService,
 } from "@/app/_services/adAccountService";
+import { Dropdown } from "primereact/dropdown";
 
 const AdForm = () => {
   const [adName, setAdName] = useState("");
@@ -103,7 +104,7 @@ const AdForm = () => {
       status,
       accessToken: accessTokenfb,
       adAccountId: adaccountId.toString(),
-      type: "Facebook"
+      type: "Facebook",
     };
 
     try {
@@ -161,7 +162,14 @@ const AdForm = () => {
       },
     },
   });
-
+  const [selectedCity, setSelectedCity] = useState(null);
+  const city = [
+      { name: 'New York', code: 'NY' },
+      { name: 'Rome', code: 'RM' },
+      { name: 'London', code: 'LDN' },
+      { name: 'Istanbul', code: 'IST' },
+      { name: 'Paris', code: 'PRS' }
+  ];   
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
@@ -183,9 +191,8 @@ const AdForm = () => {
         >
           <Grid container spacing={2} columns={12}>
             <Grid item sm={12} md={6} lg={6} xs={12}>
-              <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
-                  {" "}
                   Ad Name
                 </Typography>
                 <TextField
@@ -201,7 +208,13 @@ const AdForm = () => {
                 />
               </Box>
 
-              <Box sx={{ display: "flex", justifyContent: "space-evenly", alignItems: "baseline"}}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "baseline",
+                }}
+              >
                 <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
                   Status
                 </Typography>
@@ -235,7 +248,7 @@ const AdForm = () => {
             </Grid>
 
             <Grid item sm={12} md={6} lg={6} xs={12}>
-              <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
                   Select Campaign
                 </Typography>
@@ -258,7 +271,7 @@ const AdForm = () => {
                 </FormControl>
               </Box>
 
-              <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
                   Select Adset
                 </Typography>
@@ -283,7 +296,7 @@ const AdForm = () => {
                 </FormControl>
               </Box>
 
-              <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
                   Select Creative
                 </Typography>
@@ -306,157 +319,35 @@ const AdForm = () => {
                 </FormControl>
               </Box>
             </Grid>
-
-            {/* <Grid container>
-            <Grid item xs={12}>
-              <Grid container sx={{ display: "flex" }}>
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  sx={{ display: "grid", alignItems: "center" }}
-                >
-                  <Typography sx={{ fontWeight: 600 }}>Ad Name</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>Status</Typography>
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  sx={{ display: "grid", justifyContent: "center" }}
-                >
-                  <TextField
-                    size="small"
-                    margin="dense"
-                    required
-                    type="text"
-                    variant="outlined"
-                    autoFocus
-                    autoComplete="adName"
-                    value={adName}
-                    onChange={(e) => setAdName(e.target.value)}
-                  />
-
-                  <FormControl
-                    component="fieldset"
-                    variant="outlined"
-                    margin="dense"
-                    size="small"
-                  >
-                    <RadioGroup
-                      row
-                      aria-label="status"
-                      name="status"
-                      value={status}
-                      onChange={(e) => setStatus(e.target.value)}
-                      sx={{ justifyContent: "center", height: "15px" }}
-                    >
-                      <FormControlLabel
-                        value="ACTIVE"
-                        control={<Radio />}
-                        label="Active"
-                      />
-                      <FormControlLabel
-                        value="PAUSED"
-                        control={<Radio />}
-                        label="Paused"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-              </Grid>
-            </Grid> */}
-
-            {/* <Grid item xs={12} md={6}>
-              <Grid container>
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  sx={{ display: "grid", alignItems: "center" }}
-                >
-                  <Typography sx={{ fontWeight: 600 }}>
-                    Select Campaign
-                  </Typography>
-                  <Typography sx={{ fontWeight: 600 }}>Select Adset</Typography>
-                  <Typography sx={{ fontWeight: 600 }}>
-                    Select Creative
-                  </Typography>
-                </Grid>
-
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  sx={{ display: "grid", justifyContent: "center" }}
-                >
-                  <FormControl variant="outlined" margin="dense">
-                    <Select
-                      value={campaignId}
-                      onChange={handleCampaignData}
-                      sx={{ height: "32px" }}
-                    >
-                      {campaignData.map((obj, id) => (
-                        <MenuItem key={id} value={obj.id}>
-                          {obj.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <FormControl variant="outlined" margin="dense">
-                    <Select
-                      value={adsetId}
-                      onChange={handleAdsetData}
-                      sx={{ height: "32px" }}
-                    >
-                      {adsetData
-                        .filter((obj) => obj.campaignId === campaignId)
-                        .map((obj) => (
-                          <MenuItem key={obj.id} value={obj.id}>
-                            {obj.name}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
-
-                  <FormControl variant="outlined" margin="dense">
-                    <Select
-                      value={creativeId}
-                      onChange={handleCreativeData}
-                      sx={{ height: "32px" }}
-                    >
-                      {creativeData.map((obj, id) => (
-                        <MenuItem key={id} value={obj.id}>
-                          {obj.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    mt: 3,
-                    width: "50%",
-                    alignItems: "right",
-                    display: "flex",
-                    backgroundColor: "#597FB5 !important",
-                    color: "#fff !important",
-                    "&:hover": {
-                      backgroundColor: "#405D80 !important",
-                    },
-                  }}
-                >
-                  Create
-                </Button>
-              </Grid>
-            </Grid> */}
+            <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              mt: 3,
+              width: "50%",
+              alignItems: "right",
+              display: "flex",
+              backgroundColor: "#597FB5 !important",
+              color: "#fff !important",
+              "&:hover": {
+                backgroundColor: "#405D80 !important",
+              },
+            }}
+          >
+            Create
+          </Button>
           </Grid>
+
+
+        
         </Box>
+
       </ThemeProvider>
+
+      <div className="card flex justify-content-center">
+  <Dropdown value={selectedCity} onChange={(e) => setSelectedCity(e.value)} options={city} optionLabel="name" 
+      placeholder="Select a City" className="w-full md:w-14rem" />
+</div>
     </>
   );
 };

@@ -79,12 +79,12 @@ const AccountLogin: React.FC = () => {
       showErrorToast("Could not connect ad account");
     }
   }
-  const oauthSignIn = () => {
+  const oauthSignIn = (clickToGetManagerId: boolean) => {
     const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
 
     const params = {
       client_id: '195870252277-kgqnfto3d27fhvvhivk7m3ikfkc4qhvl.apps.googleusercontent.com',
-      redirect_uri: 'https://localhost:3000/home',
+      redirect_uri: 'https://localhost:3000/home?googleAuth=' + clickToGetManagerId,
       response_type: 'code',
       scope: 'https://www.googleapis.com/auth/adwords',
       include_granted_scopes: 'true',
@@ -209,7 +209,7 @@ const AccountLogin: React.FC = () => {
           </Button>
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={oauthSignIn} disableRipple>
+        <MenuItem onClick={() => oauthSignIn(true)} disableRipple>
           <Button
             variant="contained"
             sx={{

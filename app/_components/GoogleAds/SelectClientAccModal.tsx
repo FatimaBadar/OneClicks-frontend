@@ -5,7 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { Toast } from "primereact/toast";
-import { GetCLientAccounts } from "@/app/_services/googleService";
+import { GetClientAccounts } from "@/app/_services/googleService";
 import { AccountHierarchyDto } from "@/app/_models/Google.model";
 
 interface SelectClientAccountModalProps {
@@ -33,14 +33,15 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
   useEffect(() => {
     if (selectedClient) {
       localStorage.setItem(
-        "selectedClientId",
+        "g_ClientId",
         selectedClient.customerId.toString()
       );
       const idPart = managerIds.split("/")[1]; // Split the string by '/' and take the second part
       const id = parseInt(idPart, 10);
-      localStorage.setItem("selectedManagerId", id.toString());
+      localStorage.setItem("g_ManagerId", id.toString());
     }
   }, [selectedClient]);
+
   const handleSelectClient = () => {
     if (selectedClient) {
       onClose();
@@ -58,7 +59,7 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
     try {
       const accessToken = localStorage?.getItem("accesstoken_Google") ?? "";
       // Pass managerIds to GetCLientAccounts function
-      const response = await GetCLientAccounts(accessToken, managerIds);
+      const response = await GetClientAccounts(accessToken, managerIds);
       if (response.statusCode == "200") {
         setClientAccounts(response.responseData[0].childAccounts);
       }

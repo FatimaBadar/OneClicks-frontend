@@ -83,7 +83,7 @@ const AdCampaignModal: React.FC = () => {
           },
         }}
       >
-        Create New Facebook Campaign
+        Facebook
       </Button>
 
       <Dialog

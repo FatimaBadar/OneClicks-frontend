@@ -83,7 +83,7 @@ const GoogleAdCampaignModal: React.FC = () => {
           },
         }}
       >
-        Create New Google Campaign
+        Google
       </Button>
 
       <Dialog

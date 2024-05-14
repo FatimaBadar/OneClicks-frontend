@@ -41,12 +41,12 @@ const AdPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  var selectedAdsetId: string | null = searchParams.get("selectedAdsetId");
-  if (selectedAdsetId == null) selectedAdsetId = "";
+  var f_AdsetId: string | null = searchParams.get("f_AdsetId");
+  if (f_AdsetId == null) f_AdsetId = "";
 
-  var selectedCreativeId: string | null =
-    searchParams.get("selectedCreativeId");
-  if (selectedCreativeId == null) selectedCreativeId = "";
+  var f_CreativeId: string | null =
+    searchParams.get("f_CreativeId");
+  if (f_CreativeId == null) f_CreativeId = "";
 
   useEffect(() => {
     getAdsData();
@@ -94,7 +94,7 @@ const AdPage = () => {
   return (
     <>
       <Navbar />
-      <Box sx={{ mt: 10, ml: 10, mr: 10, mb: 5 }}>
+      <Box sx={{ mt: 10, ml: 20, mr: 20, mb: 5 }}>
         <AdForm />
       </Box>
       <Box sx={{ mt: 15 }}>
@@ -188,7 +188,7 @@ const AdPage = () => {
                     <Chip
                       sx={{
                         px: "4px",
-                        backgroundColor: {type: "Facebook" ? Facebook : Google},
+                        backgroundColor: data.type === "Facebook" ? Facebook : data.type === "Instagram" ? Instagram : Google,
                         color: "#fff",
                       }}
                       size="small"
@@ -218,9 +218,6 @@ const AdPage = () => {
                   </TableCell>
                   <TableCell align="right">
                     <Button
-                      //    onClick={() => {
-                      //     router.push('/adsets' + '?' + CreateAdsets('selectedCampaignId' ,data.campaignId, 'selectedObjective', data.objective))
-                      //   }}
                       variant="contained"
                       sx={{
                         marginRight: "10px",
@@ -234,7 +231,6 @@ const AdPage = () => {
                     >
                       Create ad
                     </Button>
-                    {/* <AdSetModal selectedCampaign={data.campaignId} selectedObjective={data.objective}/> */}
                   </TableCell>
                 </TableRow>
               ))}

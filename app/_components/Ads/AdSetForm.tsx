@@ -5,7 +5,6 @@ import {
   Button,
   TextField,
   FormControl,
-  MenuItem,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -34,6 +33,8 @@ import {
   GetInterestsSearchData,
 } from "../../_services/adAccountService";
 import { Toast } from "primereact/toast";
+import { Dropdown } from "primereact/dropdown";
+import { MultiSelect } from "primereact/multiselect";
 
 interface AdSetProps {
   campaign: string;
@@ -135,7 +136,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
       startTime,
       status,
       accessToken: accessTokenfb,
-      type: "Facebook"
+      type: "Facebook",
     };
     console.log(tempAdSetData);
 
@@ -256,13 +257,6 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
           },
         },
       },
-      // MuiSelect: {
-      //   styleOverrides: {
-      //     select: {
-      //       height: "13px",
-      //     },
-      // }
-      // }
     },
   });
 
@@ -276,9 +270,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
           Create a new Adset
         </Typography>
 
-        <Grid 
-        container spacing={2} columns={12}
-        >
+        <Grid container spacing={2} columns={12}>
           <Grid item sm={12} md={4} lg={4} xs={12}>
             <Box
               component="form"
@@ -288,6 +280,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
               <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
                 Search available interests
               </Typography>
+              <Box sx={{display: "flex"}}>
               <TextField
                 size="small"
                 margin="dense"
@@ -298,21 +291,26 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                 autoFocus
                 autoComplete="interests"
                 value={interests}
+                sx={{width:"170px"}}
                 onChange={(e) => setInterests(e.target.value)}
-              />
+              />       
               <IconButton type="submit" aria-label="search">
                 <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
-              </IconButton>
+              </IconButton>   
+              </Box>  
             </Box>
 
             <Box
               component="form"
               onSubmit={getAvailableCityData}
               sx={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <Typography
+                sx={{ fontWeight: 600, alignContent: "center", mr: "24px" }}
               >
-                <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
                 Search available cities
               </Typography>
+              <Box sx={{display: "flex"}}>
               <TextField
                 size="small"
                 margin="dense"
@@ -324,20 +322,25 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                 autoComplete="cities"
                 value={cities}
                 onChange={(e) => setCities(e.target.value)}
+                sx={{width:"170px"}}
               />
               <IconButton type="submit" aria-label="search">
-              <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
+                <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
               </IconButton>
+              </Box>
             </Box>
 
             <Box
               component="form"
               onSubmit={getAvailableIndustryData}
               sx={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <Typography
+                sx={{ fontWeight: 600, alignContent: "center", mr: "-10px" }}
               >
-                <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
                 Search available industries
               </Typography>
+              <Box sx={{display: "flex"}}>
               <TextField
                 size="small"
                 margin="dense"
@@ -349,19 +352,20 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                 autoComplete="industries"
                 value={industries}
                 onChange={(e) => setIndustries(e.target.value)}
+                sx={{width:"170px"}}
               />
               <IconButton type="submit" aria-label="search">
-              <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
-              </IconButton>
-            </Box>          
+                <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
+              </IconButton></Box>
+            </Box>
           </Grid>
 
           <Grid item sm={12} md={8} lg={8} xs={12}>
             <Box component="form" onSubmit={handleNextClick}>
               <Grid container spacing={2} columns={8}>
-                <Grid item  sm={12} md={4} lg={4} xs={12}> 
-                {/* //xs={4}  */}
-                  <Box                 
+                <Grid item sm={12} md={4} lg={4} xs={12}>
+                  {/* //xs={4}  */}
+                  <Box
                     sx={{ display: "flex", justifyContent: "space-between" }}
                   >
                     <Typography
@@ -383,29 +387,37 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                   </Box>
 
                   <Box
-                    sx={{ display: "flex", justifyContent: "space-between" }}
+                    sx={{ display: "flex", justifyContent: "space-between" , mb: "5px"}}
                   >
                     <Typography
                       sx={{ fontWeight: 600, alignContent: "center" }}
                     >
                       Optimization Goal
                     </Typography>
-                    <FormControl variant="outlined" margin="dense"
-                     sx={{ width: "50%"}}>
-                      <Select
-                        value={optimizationGoal}
-                        onChange={(e) => setOptimizationGoal(e.target.value)}
-                        sx={{ height: "32px" }}
-                      >
-                        {optimization
-                          .find((obj) => obj.codeWord === objective)
-                          ?.["optimizationGoal"].map((goal, index) => (
-                            <MenuItem key={index} value={goal.codeWord}>
-                              {goal.codeWord} - {goal.description}
-                            </MenuItem>
-                          ))}
-                      </Select>
-                    </FormControl>
+                    <Dropdown
+                      value={optimizationGoal}
+                      onChange={(e) => setOptimizationGoal(e.target.value)}
+                      options={optimization
+                        .find((obj) => obj.codeWord === objective)
+                        ?.["optimizationGoal"].map((goal, index) => ({
+                          label: `${goal.codeWord} - \n${goal.description}`,
+                          value: goal.codeWord,
+                        }))}                     
+                      className="w-full"
+                      style={{
+                        height: "32px",
+                        width: "210px",
+                        fontFamily:
+                          'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                        fontSize: "1rem",
+                        fontWeight: "200",
+                        alignItems: "center",
+                        boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
+                        borderRadius: "4px",
+                        borderColor: "rgba(0, 0, 0, 0.23)"}}
+                      virtualScrollerOptions={{ itemSize: 38 }}
+                      
+                    />
                   </Box>
 
                   <Box
@@ -416,20 +428,29 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                     >
                       Billing Event
                     </Typography>
-                    <FormControl variant="outlined" margin="dense"
-                     sx={{ width: "50%"}}>
-                      <Select
-                        value={billingEvent}
-                        onChange={(e) => setBillingEvent(e.target.value)}
-                        sx={{ height: "32px" }}
-                      >
-                        {billingEvents.map((obj, id) => (
-                          <MenuItem key={id} value={obj.codeWord}>
-                            {obj.codeWord} - {obj.description}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <Dropdown
+                      value={billingEvent}
+                      onChange={(e) => setBillingEvent(e.target.value)}
+                      options={billingEvents.map((obj, id) => ({
+                        label: `${obj.codeWord} - ${obj.description}`,
+                        value: obj.codeWord,
+                      }))}  
+                      className="w-full"
+                      style={{
+                        height: "32px",
+                        width: "210px",
+                        fontFamily:
+                          'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                        fontSize: "small",
+                        fontWeight: "200",
+                        alignItems: "center",
+                        boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
+                        borderRadius: "4px",
+                        borderColor: "rgba(0, 0, 0, 0.23)",
+                      }}
+                      virtualScrollerOptions={{ itemSize: 38 ,
+                      }}
+                    />
                   </Box>
 
                   <Box
@@ -447,7 +468,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                       type="number"
                       variant="outlined"
                       autoFocus
-                      InputProps={{ inputProps: { min: 10} }}
+                      InputProps={{ inputProps: { min: 10 } }}
                       autoComplete="bidAmount"
                       value={bidAmount}
                       onChange={(e) => setBidAmount(parseFloat(e.target.value))}
@@ -469,7 +490,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                       type="number"
                       variant="outlined"
                       autoFocus
-                      InputProps={{ inputProps: { min: 100000} }}
+                      InputProps={{ inputProps: { min: 100000 } }}
                       autoComplete="dailyBudget"
                       value={dailyBudget}
                       onChange={(e) =>
@@ -486,49 +507,64 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                     >
                       Cities
                     </Typography>
-                    <FormControl variant="outlined" margin="dense"
-                    sx={{ width: "50%"}}>
-                     <Select
-                        value={returnCityData}
-                        onChange={handleCitySearchData}
-                        multiple
-                        sx={{ height: "32px" }}
-                      >
-                        {citySearchData.map((obj, id) => (
-                          <MenuItem key={id} value={obj.key}>
-                            {obj.cityName}, {obj.countryName}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <MultiSelect
+                      value={returnCityData}
+                      onChange={(e) => handleCitySearchData(e.target.value)}
+                      options= {citySearchData.map((obj, id) => ({
+                        label: `${obj.cityName}, ${obj.countryName}`,
+                        value: obj.key,
+                        
+                      }))}
+                      className="w-full"
+                      // scrollHeight="{citySearchData.length}+200px"
+                      style={{
+                        height: "32px",
+                        width: "210px",
+                        fontFamily:
+                          'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                        fontSize: "1rem",
+                        fontWeight: "200",
+                        alignItems: "center",
+                        boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
+                        borderRadius: "4px",
+                        borderColor: "rgba(0, 0, 0, 0.23)"}}
+                      virtualScrollerOptions={{ itemSize: 38 }}
+                    />
                   </Box>
                 </Grid>
 
                 <Grid item sm={12} md={4} lg={4} xs={12}>
                   <Box
-                    sx={{ display: "flex", justifyContent: "space-between" }}
+                    sx={{ display: "flex", justifyContent: "space-between" , mb: "5px"}}
                   >
                     <Typography
                       sx={{ fontWeight: 600, alignContent: "center" }}
                     >
                       Industries
                     </Typography>
-                    <FormControl variant="outlined"	margin="dense"
-                    sx={{ width: "55%"}}>
-                      <Select
-                        value={returnIndustryData}
-                        onChange={handleIndustrySearchData}
-                        multiple
-                        sx={{ height: "32px"}}
-                        	
-                      >
-                        {industrySearchData.map((obj, id) => (
-                          <MenuItem key={id} value={obj.id}>
-                            {obj.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <MultiSelect
+                      value={returnIndustryData}
+                      onChange={(e) => handleIndustrySearchData(e.target.value)}
+                      options= {industrySearchData.map((obj, id) => ({
+                        label: `${obj.name}`,
+                        value: obj.id,
+                        
+                      }))}
+                      className="w-full"
+                      // scrollHeight="{citySearchData.length}"
+                      style={{
+                        height: "32px",
+                        width: "210px",
+                        fontFamily:
+                          'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                        fontSize: "1rem",
+                        fontWeight: "200",
+                        alignItems: "center",
+                        boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
+                        borderRadius: "4px",
+                        borderColor: "rgba(0, 0, 0, 0.23)"}}
+                      virtualScrollerOptions={{ itemSize: 38 }}
+                    />
                   </Box>
 
                   <Box
@@ -539,21 +575,34 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                     >
                       Interests
                     </Typography>
-                    <FormControl variant="outlined" margin="dense"
-                     sx={{ width: "55%"}}>
-                      <Select
-                        value={returnInterestsData}
-                        onChange={handleInterestsSearchData}
-                        multiple
-                        sx={{ height: "32px" }}
-                      >
-                        {interestsSearchData.map((obj, id) => (
-                          <MenuItem key={id} value={obj.id}>
-                            {obj.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <MultiSelect
+                      value={returnInterestsData}
+                      onChange={(e) => handleInterestsSearchData(e.target.value)}
+                      options= {interestsSearchData.map((obj, id) => ({
+                        label: `${obj.name}`,
+                        value: obj.id,
+                        
+                      }))}
+                      className="w-full"
+                      // scrollHeight="{interestsSearchData.length}+200"
+                      style={{
+                        height: "32px",
+                        width: "210px",
+                        fontFamily:
+                          'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+                        fontSize: "1rem",
+                        fontWeight: "200",
+                        alignItems: "center",
+                        boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
+                        borderRadius: "4px",
+                        borderColor: "rgba(0, 0, 0, 0.23)"
+                      }}
+                      virtualScrollerOptions={{ itemSize: 38 }}
+
+                      // panelHeaderTemplate={
+                      //   <div style={{ paddingLeft: "17px" }}></div>
+                      // }
+                    />
                   </Box>
 
                   <Box
@@ -573,6 +622,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                       autoFocus
                       autoComplete="startTime"
                       value={startTime}
+                      sx={{width: "210px"}}
                       onChange={(e) => setStartTime(e.target.value)}
                     />
                   </Box>
@@ -614,25 +664,24 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                   </Box>
 
                   <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    mt: 8,
-                    width: "100%",
-                    alignItems: "right",
-                    display: "flex",
-                    backgroundColor: "#597FB5 !important",
-                    color: "#fff !important",
-                    "&:hover": {
-                      backgroundColor: "#405D80 !important",
-                    },
-                  }}
-                >
-                  Create
-                </Button>
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      mt: 8,
+                      width: "100%",
+                      alignItems: "right",
+                      display: "flex",
+                      backgroundColor: "#597FB5 !important",
+                      color: "#fff !important",
+                      "&:hover": {
+                        backgroundColor: "#405D80 !important",
+                      },
+                    }}
+                  >
+                    Create
+                  </Button>
                 </Grid>
               </Grid>
-             
             </Box>
           </Grid>
         </Grid>

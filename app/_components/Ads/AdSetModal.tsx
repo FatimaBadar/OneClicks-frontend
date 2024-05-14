@@ -15,11 +15,11 @@ import React, { useState } from "react";
 import AdImageForm from "./AdImage";
 
 interface AdSetModalProps {
-    selectedCampaign: string;
-    selectedObjective: string;
+    f_Campaign: string;
+    f_Objective: string;
 }
   
-const AdSetModal: React.FC<AdSetModalProps> = ({ selectedCampaign, selectedObjective }) => {
+const AdSetModal: React.FC<AdSetModalProps> = ({ f_Campaign, f_Objective }) => {
 // const AdSetModal = () => {
 
   const [open, setOpen] = React.useState(false);
@@ -94,7 +94,7 @@ const AdSetModal: React.FC<AdSetModalProps> = ({ selectedCampaign, selectedObjec
           > */}
           {!showAdImageForm ? ( 
             // <AdsetForm/>
-            <AdsetForm campaign={selectedCampaign} objective={selectedObjective}/>
+            <AdsetForm campaign={f_Campaign} objective={f_Objective}/>
           ) : ( 
             <AdImageForm/>
           )}

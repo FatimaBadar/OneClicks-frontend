@@ -1,5 +1,5 @@
 import useFetch from "../_helpers/useFetch";
-import { AccountHierarchyDto, CampaignPayload } from "../_models/Google.model";
+import { AccountHierarchyDto, AdGroupPayload, CampaignPayload, GoogleCampaign } from "../_models/Google.model";
 import { ResponseVM } from "../_models/response.model";
 
 // const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
@@ -34,7 +34,7 @@ export async function GetManagerAccounts(accessToken: string):  Promise<Response
     return handleResponse<ResponseVM<string[]>>(response).then((data) => data);
 }
 
-export async function GetCLientAccounts(accessToken: string, customerId:string): Promise<ResponseVM<AccountHierarchyDto[]>>{
+export async function GetClientAccounts(accessToken: string, customerId:string): Promise<ResponseVM<AccountHierarchyDto[]>>{
     const fetch = useFetch();
     const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetCLientAccounts?refreshToken=${accessToken}&customerId=${customerId}`);
     
@@ -44,6 +44,21 @@ export async function GetCLientAccounts(accessToken: string, customerId:string):
 export async function CreateAdcampaignService(payload: CampaignPayload): Promise<ResponseVM<string>>{
     const fetch = useFetch();
     const response = await fetch.post(`${SERVER_ENDPOINT}/api/Google/CreateCampaign`, payload);
+
+    return handleResponse<ResponseVM<string>>(response).then((data) => data);
+}
+
+export async function GetAllGoogleCampaignsService(accessToken: string, customerId: number): Promise<GoogleCampaign[]>{
+    const fetch = useFetch();
+    customerId = 2989534382;
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetAllCampaigns?customerId=${customerId}`);
+    
+    return handleResponse<GoogleCampaign[]>(response).then((data) => data);
+}
+
+export async function CreateAdGroupService(payload: AdGroupPayload): Promise<ResponseVM<string>>{
+    const fetch = useFetch();
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Google/CreateAdGroup`, payload);
 
     return handleResponse<ResponseVM<string>>(response).then((data) => data);
 }

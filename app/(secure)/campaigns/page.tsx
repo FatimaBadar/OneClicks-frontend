@@ -13,35 +13,39 @@ import {
   Button,
 } from "@mui/material";
 
-import AdCampaignModal from "@/app/_components/Ads/AdCampaignModal";
 import Navbar from "@/app/_components/Navbar";
 import { getAllCampaignsService } from "@/app/_services/adAccountService";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Campaign } from "@/app/_models/adAccount.model";
-import GoogleAdCampaignModal from "@/app/_components/GoogleAds/GoogleAdCampaignModal";
+import CreateCampaignDropdown from "@/app/_components/CreateCampaignDropdown";
+import { GoogleCampaign } from "@/app/_models/Google.model";
+import { GetAllGoogleCampaignsService } from "@/app/_services/googleService";
+import { CombinedCampaign } from "@/app/_models/ad.model";
 
-const Facebook= "rgb(19, 222, 185)";
-const Instagram= "rgb(250, 137, 107)";
-const Google="rgb(73, 190, 255)";
+const Facebook = "rgb(19, 222, 185)";
+const Instagram = "rgb(250, 137, 107)";
+const Google = "rgb(73, 190, 255)";
 
 const Adcampaigns = () => {
   const impressions = 0;
   const clicks = 0;
 
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [facebookCampaigns, setFacebookCampaigns] = useState<Campaign[]>([]);
+  const [googleCampaigns, setGoogleCampaigns] = useState<GoogleCampaign[]>([]);
+  const [combinedCampaigns, setCombinedCampaigns] = useState<CombinedCampaign[]>([]);
+
   const [adAccountType, setAccountType] = useState("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  if (searchParams.get("account") != ""){
-    var account: string | null = searchParams.get("account");
-    if (account != null){
-      setAccountType(account)
-    }
-  }
-  
   useEffect(() => {
+    if (searchParams.get("account") != "") {
+      var account: string | null = searchParams.get("account");
+      if (account != null) {
+        setAccountType(account);
+      }
+    }
     getCampaigns();
   }, []);
 
@@ -50,12 +54,19 @@ const Adcampaigns = () => {
       const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const adaccountId = localStorage?.getItem("adAccountId") ?? "";
 
-      const response = await getAllCampaignsService(
-        adaccountId.toString(),
-        accessTokenfb
-      );
+      const accessTokengoogle = localStorage?.getItem("accesstoken_Google") ?? "";
+      const customerId = localStorage?.getItem("g_managerId") ?? "";
+
+      const response = await getAllCampaignsService(adaccountId.toString(), accessTokenfb);
       if (response.statusCode == "200") {
-        setCampaigns(response.responseData);
+        setFacebookCampaigns(response.responseData);
+
+        const response2 = await GetAllGoogleCampaignsService(accessTokengoogle, parseFloat(customerId));
+        if(response2){
+          setGoogleCampaigns(response2);
+
+          setCombinedCampaigns([...facebookCampaigns, ...googleCampaigns]);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -73,6 +84,14 @@ const Adcampaigns = () => {
     [searchParams]
   );
 
+  const CreateAdgroups = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams]
+  );
   return (
     <>
       <Navbar />
@@ -91,8 +110,7 @@ const Adcampaigns = () => {
             Ad Campaigns
           </Typography>
           <div>
-            <AdCampaignModal />
-            <GoogleAdCampaignModal/>
+            <CreateCampaignDropdown />
           </div>
         </Box>
 
@@ -142,7 +160,7 @@ const Adcampaigns = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {campaigns?.map((data, key) => (
+              {combinedCampaigns?.map((data, key) => (
                 <TableRow key={data.campaignId}>
                   <TableCell>
                     <Typography
@@ -162,7 +180,7 @@ const Adcampaigns = () => {
                         fontWeight: "500",
                       }}
                     >
-                      {data.objective}
+                       {data.type === "Facebook" ? data.objective : data.manualCpc}
                     </Typography>
                   </TableCell>
 
@@ -170,7 +188,12 @@ const Adcampaigns = () => {
                     <Chip
                       sx={{
                         px: "4px",
-                        backgroundColor: {type: "Facebook" ? Facebook : Google},
+                        backgroundColor:
+                          data.type === "Facebook"
+                            ? Facebook
+                            : data.type === "Instagram"
+                            ? Instagram
+                            : Google,
                         color: "#fff",
                       }}
                       size="small"
@@ -210,19 +233,20 @@ const Adcampaigns = () => {
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Button
+                  {data.type === "Facebook" ?
+                    <Button                     
                       onClick={() => {
                         router.push(
                           "/adsets" +
                             "?" +
                             CreateAdsets(
-                              "selectedCampaignId",
+                              "f_CampaignId",
                               data.campaignId,
-                              "selectedObjective",
-                              data.objective
+                              "f_Objective",
+                              data.objective? data.objective : ""
                             )
                         );
-                      }}
+                      }}                    
                       variant="contained"
                       sx={{
                         backgroundColor: "#597FB5 !important",
@@ -231,9 +255,32 @@ const Adcampaigns = () => {
                           backgroundColor: "#405D80 !important",
                         },
                       }}
-                    >
-                      Create ad
+                    >Create ad
                     </Button>
+                    :
+                       <Button                     
+                       onClick={() => {
+                         router.push(
+                           "/adsets" +
+                             "?" +
+                             CreateAdgroups(
+                               "g_CampaignId",
+                               data.campaignId
+                             )
+                         );
+                       }}                    
+                       variant="contained"
+                       sx={{
+                         backgroundColor: "#597FB5 !important",
+                         color: "#fff !important",
+                         "&:hover": {
+                           backgroundColor: "#405D80 !important",
+                         },
+                       }}
+                     >
+                       Create ad
+                     </Button>
+                  }
                   </TableCell>
                 </TableRow>
               ))}

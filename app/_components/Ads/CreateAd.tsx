@@ -113,7 +113,6 @@ const CreateAd: React.FC = () => {
         disableRipple>
           <Button
             variant="contained"
-            href="/campaigns"
             sx={{
               backgroundColor: "#597FB5 !important",
               color: "#fff !important",
