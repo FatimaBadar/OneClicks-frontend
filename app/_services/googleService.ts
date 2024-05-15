@@ -75,12 +75,13 @@ export async function CreateAdGroupService(payload: AdGroupPayload): Promise<Res
     return handleResponse<ResponseVM<string>>(response).then((data) => data);
 }
 
-export async function GetAllAdsService(refreshToken: string, customerId: number): Promise<ResponseVM<AdGroup[]>>{
+export async function GetAllAdsService(refreshToken: string, clientId: number, customerId: number): Promise<ResponseVM<AdGroup[]>>{
     const fetch = useFetch();
+    clientId = 2989534382
     customerId = 4520819258;
     refreshToken = "1//03v7pNMJs1LOPCgYIARAAGAMSNwF-L9IrDpDmkd1-ga1Y6jAaYrYtfqi6Re3xy31rPhoVQvl7OgAuTDgmkdxnsqHV7kCERZ-WuNc"
 
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetAllAds?refreshToken=${refreshToken}&customerId=${customerId}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetAllAds?refreshToken=${refreshToken}&customerId=${clientId}&managerId=${customerId}`);
     
     return handleResponse<ResponseVM<AdGroup[]>>(response).then((data) => data);
 }

@@ -160,7 +160,7 @@ const AdCampaignForm = ({ onReturn }: any) => {
                 onChange={(e) => setObjective(e.target.value)}
                 label="Objective"
               >
-                <ScrollPanel>
+                {/* <ScrollPanel> */}
                 {objectives.map((obj, id) => (
                   <MenuItem
                     key={id}
@@ -169,7 +169,8 @@ const AdCampaignForm = ({ onReturn }: any) => {
                   >
                     {obj.name} - "{obj.description}"
                   </MenuItem>
-                ))}</ScrollPanel>
+                ))}
+                {/* </ScrollPanel> */}
               </Select>
           </FormControl>
 
@@ -236,7 +237,28 @@ const AdCampaignForm = ({ onReturn }: any) => {
               virtualScrollerOptions={{ itemSize: 38 }}
             />
           </Box> */}
-          <FormControl fullWidth variant="outlined" margin="normal">
+            <FormControl fullWidth variant="outlined" margin="normal">
+            <InputLabel>Special Ad Category</InputLabel>
+            <Select
+              value={specialAdCategory}
+              onChange={handleSpecialAdCategoryChange}
+              multiple
+              label="Special Ad Category"
+            >
+               {/* <ScrollPanel> */}
+               {specialAdCategories.map((ads, id) => (
+                <MenuItem 
+                key={id}
+                value={ads.codeWord}
+                sx={{ width: "200px", height: "15px", fontSize: "small" }}
+                >
+                  {ads.name}  - "{ads.description}"
+                </MenuItem>
+              ))}
+              {/* </ScrollPanel> */}
+            </Select>
+          </FormControl>
+          {/* <FormControl fullWidth variant="outlined" margin="normal">
             <InputLabel>Special Ad Category</InputLabel>
             <Select
               value={specialAdCategory}
@@ -256,7 +278,7 @@ const AdCampaignForm = ({ onReturn }: any) => {
               ))}
               </ScrollPanel>
             </Select>
-          </FormControl>
+          </FormControl> */}
 
           <Button
             type="submit"

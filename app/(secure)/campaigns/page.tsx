@@ -32,7 +32,10 @@ const Adcampaigns = () => {
 
   const [facebookCampaigns, setFacebookCampaigns] = useState<Campaign[]>([]);
   const [googleCampaigns, setGoogleCampaigns] = useState<GoogleCampaign[]>([]);
-  const [combinedCampaigns, setCombinedCampaigns] = useState<CombinedCampaign[]>([]);
+  const [combinedCampaigns, setCombinedCampaigns] = useState<
+    CombinedCampaign[]
+  >([...facebookCampaigns, ...googleCampaigns]);
+  // setCombinedCampaigns();
 
   const [adAccountType, setAccountType] = useState("");
 
@@ -40,38 +43,76 @@ const Adcampaigns = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    getFacebookCampaigns();
+   // getGoogleCampaigns();
+
     if (searchParams.get("account") != "") {
       var account: string | null = searchParams.get("account");
       if (account != null) {
         setAccountType(account);
       }
     }
-    getCampaigns();
+    // if(googleCampaigns.length>0 || facebookCampaigns.length>0){
+    //   setCombinedCampaigns([...facebookCampaigns, ...googleCampaigns]);
+    // }
   }, []);
 
-  const getCampaigns = async () => {
+  const getFacebookCampaigns = async () => {
+    
+    const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
+    const adaccountId = localStorage?.getItem("adAccountId") ?? "";
     try {
-      const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
-      const adaccountId = localStorage?.getItem("adAccountId") ?? "";
 
-      const accessTokengoogle = localStorage?.getItem("accesstoken_Google") ?? "";
-      const customerId = localStorage?.getItem("g_managerId") ?? "";
-
-      const response = await getAllCampaignsService(adaccountId.toString(), accessTokenfb);
-      if (response.statusCode == "200") {
+      const response = await getAllCampaignsService(
+        adaccountId.toString(),
+        accessTokenfb
+      );
+      if (response.statusCode === "200") {
         setFacebookCampaigns(response.responseData);
+        //setCombinedCampaigns(response.responseData);
 
-        const response2 = await GetAllGoogleCampaignsService( accessTokengoogle,parseFloat(customerId))
-        if(response2){
-          setGoogleCampaigns(response2);
-
-          setCombinedCampaigns([...facebookCampaigns, ...googleCampaigns]);
+        try {
+          const accessTokengoogle =
+            localStorage?.getItem("accesstoken_Google") ?? "";
+          const customerId = localStorage?.getItem("g_managerId") ?? "";
+    
+          const response2 = await GetAllGoogleCampaignsService(
+            accessTokengoogle,
+            parseFloat(customerId)
+          );
+          if (response2) {
+            setGoogleCampaigns(response2);
+            setCombinedCampaigns([...response.responseData,...response2]);
+            console.log(googleCampaigns);
+          }
+        } catch (error) {
+          console.error(error);
         }
+
       }
     } catch (error) {
       console.error(error);
     }
-  };
+  }
+  // const getGoogleCampaigns = async () => {
+  //   try {
+  //     const accessTokengoogle =
+  //       localStorage?.getItem("accesstoken_Google") ?? "";
+  //     const customerId = localStorage?.getItem("g_managerId") ?? "";
+
+  //     const response2 = await GetAllGoogleCampaignsService(
+  //       accessTokengoogle,
+  //       parseFloat(customerId)
+  //     );
+  //     if (response2) {
+  //       setGoogleCampaigns(response2);
+  //       setCombinedCampaigns([...response2]);
+  //       console.log(googleCampaigns);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const CreateAdsets = useCallback(
     (name1: string, value: string, name2: string, value2: string) => {
@@ -180,7 +221,9 @@ const Adcampaigns = () => {
                         fontWeight: "500",
                       }}
                     >
-                       {data.type === "Facebook" ? data.objective : data.manualCpc}
+                      {data.type === "Facebook"
+                        ? data.objective
+                        : data.manualCpc}
                     </Typography>
                   </TableCell>
 
@@ -233,54 +276,52 @@ const Adcampaigns = () => {
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                  {data.type === "Facebook" ?
-                    <Button                     
-                      onClick={() => {
-                        router.push(
-                          "/adsets" +
-                            "?" +
-                            CreateAdsets(
-                              "f_CampaignId",
-                              data.campaignId,
-                              "f_Objective",
-                              data.objective? data.objective : ""
-                            )
-                        );
-                      }}                    
-                      variant="contained"
-                      sx={{
-                        backgroundColor: "#597FB5 !important",
-                        color: "#fff !important",
-                        "&:hover": {
-                          backgroundColor: "#405D80 !important",
-                        },
-                      }}
-                    >Create ad
-                    </Button>
-                    :
-                       <Button                     
-                       onClick={() => {
-                         router.push(
-                           "/adsets" +
-                             "?" +
-                             CreateAdgroups(
-                               "g_CampaignId",
-                               data.campaignId
-                             )
-                         );
-                       }}                    
-                       variant="contained"
-                       sx={{
-                         backgroundColor: "#597FB5 !important",
-                         color: "#fff !important",
-                         "&:hover": {
-                           backgroundColor: "#405D80 !important",
-                         },
-                       }}
-                     >
-                       Create ad
-                     </Button>
-                  }
+                    {data.type === "Facebook" ? (
+                      <Button
+                        onClick={() => {
+                          router.push(
+                            "/adsets" +
+                              "?" +
+                              CreateAdsets(
+                                "f_CampaignId",
+                                data.campaignId,
+                                "f_Objective",
+                                data.objective ? data.objective : ""
+                              )
+                          );
+                        }}
+                        variant="contained"
+                        sx={{
+                          backgroundColor: "#597FB5 !important",
+                          color: "#fff !important",
+                          "&:hover": {
+                            backgroundColor: "#405D80 !important",
+                          },
+                        }}
+                      >
+                        Create ad
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          router.push(
+                            "/adgroups" +
+                              "?" +
+                              CreateAdgroups("g_CampaignId", data.campaignId)
+                          );
+                        }}
+                        variant="contained"
+                        sx={{
+                          backgroundColor: "#597FB5 !important",
+                          color: "#fff !important",
+                          "&:hover": {
+                            backgroundColor: "#405D80 !important",
+                          },
+                        }}
+                      >
+                        Create ad
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

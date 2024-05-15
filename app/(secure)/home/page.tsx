@@ -16,12 +16,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import SelectManagerAccModal from '@/app/_components/GoogleAds/SelectManagerAccModal';
 import { GetRefreshToken } from '@/app/_services/googleService';
 
-class HomeProps {
-  clickToGetManagerId: boolean = false ;
-}
+// interface HomeProps {
+//   clickToGetManagerId: boolean ;
+// }
 
-// export default function Home() {
-const Home: React.FC<HomeProps> = ({ clickToGetManagerId }) => {
+export default function Home() {
+// const Home: React.FC<HomeProps> = ({ clickToGetManagerId= false }) => {
   const router = useRouter();
 
   const { loggedIn, setLoggedIn, setLoggedOut} = useStore((state) => ({
@@ -75,11 +75,11 @@ const Home: React.FC<HomeProps> = ({ clickToGetManagerId }) => {
     else  {
       const g_ManagerId = localStorage?.getItem('g_ManagerId');
       const g_ClientId = localStorage?.getItem('g_ClientId');
-      if(clickToGetManagerId){
+      // if(clickToGetManagerId){
         if(!g_ManagerId || !g_ClientId)
           setOpenManagerAccModal(true);
         }
-      }
+      // }
 
   };
 
@@ -118,10 +118,10 @@ const Home: React.FC<HomeProps> = ({ clickToGetManagerId }) => {
                   </Grid>
                 </Grid>
 
-                <Grid item xs={12} lg={4}>
+                <Grid item xs={12} lg={5}>
                   <RecentActivity />
                 </Grid>
-                <Grid item xs={12} lg={8}>
+                <Grid item xs={12} lg={7}>
                   <ContactsToLead />
                 </Grid>
               
@@ -133,4 +133,4 @@ const Home: React.FC<HomeProps> = ({ clickToGetManagerId }) => {
     </>
   );
 }
-export default Home;
+// export default Home;

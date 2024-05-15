@@ -23,6 +23,7 @@ import {
   getAllAdsService,
 } from "@/app/_services/adAccountService";
 import AdForm from "@/app/_components/Ads/AdForm";
+import PaymentComponent from "../../_components/Ads/PaymentComponent";
 
 const Facebook= "rgb(19, 222, 185)";
 const Instagram= "rgb(250, 137, 107)";
@@ -95,6 +96,7 @@ const AdPage = () => {
     <>
       <Navbar />
       <Box sx={{ mt: 10, ml: 20, mr: 20, mb: 5 }}>
+      <PaymentComponent/>
         <AdForm />
       </Box>
       <Box sx={{ mt: 15 }}>

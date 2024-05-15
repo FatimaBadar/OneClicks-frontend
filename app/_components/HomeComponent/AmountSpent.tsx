@@ -20,7 +20,7 @@ const AmountSpent = () => {
   const fetchData = async () => {
     try {
       const accesstoken_Google = localStorage?.getItem('accesstoken_fb') ?? "";
-      const response = await GetBudgetAmountFacebook(adAccountId, accesstoken_Google);
+      const response = await GetBudgetAmountFacebook(adAccountId.toString(), accesstoken_Google);
       if (response.statusCode === "200") {
         setAmount(response.responseData.toString());
       }

@@ -24,7 +24,6 @@ export interface CampaignPayload{
 }
 
 export interface GoogleCampaign{
-  id: string
   campaignId: string
   campaignName: string
   manualCpc: string
@@ -78,10 +77,11 @@ export interface GeoTargetingData {
 }
 
 export interface AdGroup{
-  adId: string
+  adId: number
+  adGroupName: string
   adName: string
-  headlines: string[]
-  descriptions: string[]
+  headlines: { text: string }[];
+  descriptions: { text: string }[];
   status: string
   type: string
 }

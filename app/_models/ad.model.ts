@@ -1,5 +1,4 @@
 export interface CombinedCampaign{
-    id: string
     campaignId: string
     campaignName: string
     objective?: string

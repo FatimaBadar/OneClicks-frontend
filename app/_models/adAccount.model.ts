@@ -25,14 +25,10 @@ export interface CampaignPayload {
 }
 
 export interface Campaign {
-    id:  string,
     campaignId: string,
     campaignName: string,
-    objective: string,
-    specialAdCategories: string[],
-    status: string,
-    adAccountId: string,
-    accessToken: string,
+    objective: string,   
+    status: string,    
     type: string
 }
 export interface AdsetPayload{

@@ -104,7 +104,6 @@ const AdSearchForm = () => {
         parseFloat(customerId)
       );
       if (response) {
-        console.log(response);
         setCampaignData(response);
       }
     } catch (error) {
@@ -141,8 +140,6 @@ const AdSearchForm = () => {
 
     const tempCityName: string[] = geotargetingData.filter(x => x.CountryCode == countryCode)?.map(x=>x.Name) ?? ""
     const tempCountryCode: string = geotargetingData.find(x => cityName.includes(x.Name))?.CountryCode ?? "";
-    console.log("cityname: ", cityName)
-    console.log("countryCode: ", tempCountryCode)
 //    .map(x=>x.CountryCode) ?? "" 
  
     const tempGeoTargeting: GeoTargeting = {
@@ -224,7 +221,7 @@ const AdSearchForm = () => {
           component="h2"
           sx={{ fontWeight: 700, color: "#272144", textAlign: "left" }}
         >
-          Create an Ad Group
+          Create an Ad
         </Typography>
         <Box
           component="form"

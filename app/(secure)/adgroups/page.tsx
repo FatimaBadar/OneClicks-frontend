@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -13,26 +13,16 @@ import {
   Button,
 } from "@mui/material";
 import Navbar from "@/app/_components/Navbar";
-import { getAllAdsetsService } from "@/app/_services/adAccountService";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Adset } from "@/app/_models/adAccount.model";
 import AdSearchForm from "@/app/_components/GoogleAds/AdSearchForm";
 import { GetAllAdsService } from "@/app/_services/googleService";
 import { AdGroup } from "@/app/_models/Google.model";
 
-const Facebook= "rgb(19, 222, 185)";
-const Instagram= "rgb(250, 137, 107)";
-const Google="rgb(73, 190, 255)";
+const Facebook = "rgb(19, 222, 185)";
+const Instagram = "rgb(250, 137, 107)";
+const Google = "rgb(73, 190, 255)";
 
 const Adsets = () => {
-  const searchParams = useSearchParams();
   const [googleAds, setGoogleAds] = useState<AdGroup[]>([]);
-
-  var f_CampaignId: string | null =
-    searchParams.get("f_CampaignId");
-  if (f_CampaignId == null) f_CampaignId = "";
-  var f_Objective: string | null = searchParams.get("f_Objective");
-  if (f_Objective == null) f_Objective = "";
 
   useEffect(() => {
     getAds();
@@ -40,14 +30,18 @@ const Adsets = () => {
 
   const getAds = async () => {
     try {
-
-      const accessTokengoogle = localStorage?.getItem("accesstoken_Google") ?? "";
+      const accessTokengoogle =
+        localStorage?.getItem("accesstoken_Google") ?? "";
       const customerId = localStorage?.getItem("g_managerId") ?? "";
+      const clientId = localStorage?.getItem("g_clientId") ?? "";
 
-      const response = await GetAllAdsService(accessTokengoogle,parseFloat(customerId));
+      const response = await GetAllAdsService(
+        accessTokengoogle,
+        parseFloat(clientId),
+        parseFloat(customerId)
+      );
       if (response.statusCode == "200") {
         setGoogleAds(response.responseData);
-        console.log(response.responseData)
       }
     } catch (error) {
       console.error(error);
@@ -58,7 +52,7 @@ const Adsets = () => {
     <>
       <Navbar />
       <Box sx={{ mt: 10, ml: 10, mr: 10 }}>
-        <AdSearchForm/>
+        <AdSearchForm />
         {/* {f_CampaignId ? (
           <AdsetForm
             campaign={f_CampaignId}
@@ -81,7 +75,7 @@ const Adsets = () => {
           }}
         >
           <Typography variant="h6" fontWeight={550} sx={{ ml: "15px" }}>
-            Ad adsets
+            Google Ads
           </Typography>
         </Box>
 
@@ -94,27 +88,30 @@ const Adsets = () => {
                     Ad Name
                   </Typography>
                 </TableCell>
+
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
                     Headlines
                   </Typography>
                 </TableCell>
+
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
                     Descriptions
                   </Typography>
                 </TableCell>
+
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
                     Type
                   </Typography>
                 </TableCell>
-                <TableCell >
+
+                <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
                     Status
                   </Typography>
                 </TableCell>
-  
               </TableRow>
             </TableHead>
             <TableBody>
@@ -127,7 +124,7 @@ const Adsets = () => {
                         fontWeight: "500",
                       }}
                     >
-                      {data.adName}
+                      {data.adGroupName}
                     </Typography>
                   </TableCell>
 
@@ -138,32 +135,47 @@ const Adsets = () => {
                         fontWeight: "500",
                       }}
                     >
-                      {data.headlines}
+                      {data.headlines.map((headline, index) => (
+                        <React.Fragment key={index}>
+                          {headline.text}
+                          <br />
+                        </React.Fragment>
+                      ))}
                     </Typography>
                   </TableCell>
 
-                  <TableCell align="center">
-                    <Box
+                  <TableCell>
+                    {/* <Box
                       sx={{
                         display: "flex",
                         justifyContent: "center",
                       }}
-                    >
+                    > */}
                       <Typography
                         color="textSecondary"
                         variant="subtitle2"
                         fontWeight={600}
                       >
-                        {data.descriptions}
+                         {data.descriptions.map((description, index) => (
+                        <React.Fragment key={index}>
+                          {description.text}
+                          <br />
+                        </React.Fragment>
+                      ))}
                       </Typography>
-                    </Box>
+                    {/* </Box> */}
                   </TableCell>
 
-                  <TableCell>
+                  <TableCell width={"200px"}>
                     <Chip
                       sx={{
                         px: "4px",
-                        backgroundColor: data.type === "Facebook" ? Facebook : data.type === "Instagram" ? Instagram : Google,
+                        backgroundColor:
+                          data.type === "Facebook"
+                            ? Facebook
+                            : data.type === "Instagram"
+                            ? Instagram
+                            : Google,
                         color: "#fff",
                       }}
                       size="small"
@@ -175,7 +187,8 @@ const Adsets = () => {
                     <Box
                       sx={{
                         display: "flex",
-                        alignItems: "center",
+                        // alignItems: "center",
+                        width: "100px"
                       }}
                     >
                       <Typography variant="subtitle2" fontWeight={600}>
@@ -183,7 +196,7 @@ const Adsets = () => {
                       </Typography>
                     </Box>
                   </TableCell>
-                 
+
                   {/* <TableCell align="center">
                     <Button
                       onClick={() => {
@@ -205,7 +218,6 @@ const Adsets = () => {
                       Create ad
                     </Button>
                   </TableCell> */}
-
                 </TableRow>
               ))}
             </TableBody>

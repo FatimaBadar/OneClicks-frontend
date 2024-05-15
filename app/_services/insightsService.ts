@@ -1,4 +1,5 @@
 import useFetch from "../_helpers/useFetch";
+import { InsightsData } from "../_models/insight.model";
 import { ResponseVM } from "../_models/response.model";
 
 const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
@@ -19,9 +20,16 @@ async function handleResponse<T>(response: Response): Promise<T> {
     return data as T;
 }
 
+export async function GetRecentActivityService():  Promise<ResponseVM<InsightsData[]>>{
+    const fetch = useFetch();
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Insights/GetRecentActivity`);
+    
+    return handleResponse<ResponseVM<InsightsData[]>>(response).then((data) => data);
+}
+
 export async function GetBudgetAmountFacebook(adAccountId: string, accessToken: string):  Promise<ResponseVM<number>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/insights/GetBudgetAmountFacebook?accessToken=${accessToken}&adAccountId=${adAccountId}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Insights/GetBudgetAmountFacebook?accessToken=${accessToken}&adAccountId=${adAccountId}`);
     
     return handleResponse<ResponseVM<number>>(response).then((data) => data);
 }

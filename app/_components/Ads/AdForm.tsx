@@ -27,7 +27,6 @@ import {
   ScheduleAdService,
   getAllAdsPayloadService,
 } from "@/app/_services/adAccountService";
-import { Dropdown } from "primereact/dropdown";
 
 const AdForm = () => {
   const [adName, setAdName] = useState("");
@@ -78,11 +77,12 @@ const AdForm = () => {
         adaccountId.toString(),
         accessTokenfb
       );
-      if (response.statusCode == "200") {
+      if (response.statusCode === "200") {
         console.log(response.responseData);
         setCampaignData(response.responseData.campaignData);
-        setAdsetData(response.responseData.adSetData);
         setCreativeData(response.responseData.adCreativeData);
+        console.log(response.responseData.adSetData);
+        setAdsetData(response.responseData.adSetData);
       }
     } catch (error) {
       console.error(error);
@@ -164,12 +164,12 @@ const AdForm = () => {
   });
   const [selectedCity, setSelectedCity] = useState(null);
   const city = [
-      { name: 'New York', code: 'NY' },
-      { name: 'Rome', code: 'RM' },
-      { name: 'London', code: 'LDN' },
-      { name: 'Istanbul', code: 'IST' },
-      { name: 'Paris', code: 'PRS' }
-  ];   
+    { name: "New York", code: "NY" },
+    { name: "Rome", code: "RM" },
+    { name: "London", code: "LDN" },
+    { name: "Istanbul", code: "IST" },
+    { name: "Paris", code: "PRS" },
+  ];
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
@@ -285,13 +285,17 @@ const AdForm = () => {
                     onChange={handleAdsetData}
                     sx={{ height: "32px" }}
                   >
-                    {adsetData
-                      .filter((obj) => obj.campaignId === campaignId)
-                      .map((obj) => (
-                        <MenuItem key={obj.id} value={obj.id}>
-                          {obj.name}
-                        </MenuItem>
-                      ))}
+                    {campaignId === "" ? (
+                      <Typography>Select a campaign first</Typography>
+                    ) : (
+                      adsetData
+                        .filter((obj) => obj.campaignId === campaignId)
+                        .map((obj) => (
+                          <MenuItem key={obj.id} value={obj.id}>
+                            {obj.name}
+                          </MenuItem>
+                        ))
+                    )}
                   </Select>
                 </FormControl>
               </Box>
@@ -320,34 +324,25 @@ const AdForm = () => {
               </Box>
             </Grid>
             <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              mt: 3,
-              width: "50%",
-              alignItems: "right",
-              display: "flex",
-              backgroundColor: "#597FB5 !important",
-              color: "#fff !important",
-              "&:hover": {
-                backgroundColor: "#405D80 !important",
-              },
-            }}
-          >
-            Create
-          </Button>
+              type="submit"
+              variant="contained"
+              sx={{
+                mt: 3,
+                width: "50%",
+                alignItems: "right",
+                display: "flex",
+                backgroundColor: "#597FB5 !important",
+                color: "#fff !important",
+                "&:hover": {
+                  backgroundColor: "#405D80 !important",
+                },
+              }}
+            >
+              Create
+            </Button>
           </Grid>
-
-
-        
         </Box>
-
       </ThemeProvider>
-
-      <div className="card flex justify-content-center">
-  <Dropdown value={selectedCity} onChange={(e) => setSelectedCity(e.value)} options={city} optionLabel="name" 
-      placeholder="Select a City" className="w-full md:w-14rem" />
-</div>
     </>
   );
 };
