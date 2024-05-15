@@ -5,7 +5,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { Toast } from "primereact/toast";
-import { GetClientAccounts } from "@/app/_services/googleService";
+import {
+  CreateClientAccountService,
+  GetClientAccounts,
+} from "@/app/_services/googleService";
 import { AccountHierarchyDto } from "@/app/_models/Google.model";
 
 interface SelectClientAccountModalProps {
@@ -24,6 +27,8 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
   const [clientAccounts, setClientAccounts] = useState<AccountHierarchyDto[]>(
     []
   );
+  const [clientId, setClientId] = useState<string>("");
+
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
@@ -32,10 +37,7 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
 
   useEffect(() => {
     if (selectedClient) {
-      localStorage.setItem(
-        "g_ClientId",
-        selectedClient.customerId.toString()
-      );
+      localStorage.setItem("g_ClientId", selectedClient.customerId.toString());
       const idPart = managerIds.split("/")[1]; // Split the string by '/' and take the second part
       const id = parseInt(idPart, 10);
       localStorage.setItem("g_ManagerId", id.toString());
@@ -68,12 +70,51 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
     }
   };
 
+  const createClientAccount = async () => {
+    try {
+      const accessToken = localStorage?.getItem("accesstoken_Google") ?? "";
+
+        const response = await CreateClientAccountService(
+        accessToken,
+        managerIds
+      );
+      if (response.statusCode == "200") {
+        const parts = response.responseData.split("/")
+        setClientId(parts[1]);
+
+        localStorage.setItem("g_ClientId", parts[1]);
+        const idPart = managerIds.split("/")[1]; // Split the string by '/' and take the second part
+        const id = parseInt(idPart, 10);
+        localStorage.setItem("g_ManagerId", id.toString());
+        onClose();
+
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    // return clientId.toString()
+  };
+  // const handleClientChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+  //   const selectedAccountId = e.target.value as string;
+
+  //   const selectedAccount =
+  //     clientAccounts.find(
+  //       (account) => account.customerId.toString() === selectedAccountId
+  //     ) || null;
+  //     if(selectedAccount == null){
+  //       createClientAccount();
+  //     }
+  //   setSelectedClient(selectedAccount);
+  // };
+  
   return (
     <Dialog open={open} onClose={() => onClose()}>
       <DialogTitle>Select Client Account</DialogTitle>
       <DialogContent>
         <select
           value={selectedClient ? selectedClient.customerId.toString() : ""}
+          // onChange={handleClientChange}
+
           onChange={(e) => {
             const selectedAccountId = e.target.value;
             const selectedAccount =
@@ -83,9 +124,9 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
             setSelectedClient(selectedAccount);
           }}
         >
-          <option value="">Select Client Account</option>
+          <option value={""}>Select Client Account</option>
           {clientAccounts.length === 0 && (
-            <option disabled>
+            <option value="">
               No client accounts available. Please create a Google client
               account first.
             </option>
@@ -99,6 +140,9 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={() => onClose()}>Cancel</Button>
+        <Button onClick={createClientAccount} color="primary">
+          Create Client
+        </Button>
         <Button onClick={handleSelectClient} color="primary">
           Select
         </Button>

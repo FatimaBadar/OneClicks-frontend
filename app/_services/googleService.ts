@@ -36,9 +36,16 @@ export async function GetManagerAccounts(accessToken: string):  Promise<Response
 
 export async function GetClientAccounts(accessToken: string, customerId:string): Promise<ResponseVM<AccountHierarchyDto[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetCLientAccounts?refreshToken=${accessToken}&customerId=${customerId}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetClientAccounts?refreshToken=${accessToken}&customerId=${customerId}`);
     
     return handleResponse<ResponseVM<AccountHierarchyDto[]>>(response).then((data) => data);
+}
+
+export async function CreateClientAccountService(refreshToken: string, customerId:string): Promise<ResponseVM<string>>{
+    const fetch = useFetch();
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Google/CreateClientAccount`, {refreshToken, customerId});
+    
+    return handleResponse<ResponseVM<string>>(response).then((data) => data);
 }
 
 export async function CreateAdcampaignService(payload: CampaignPayload): Promise<ResponseVM<string>>{

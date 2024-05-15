@@ -13,7 +13,7 @@ import {
   Button,
 } from "@mui/material";
 
-import Navbar from "@/app/_components/Navbar";
+import Navbar from "@/app/_components/Navbar/Navbar";
 import { getAllCampaignsService } from "@/app/_services/adAccountService";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Campaign } from "@/app/_models/adAccount.model";
@@ -147,7 +147,7 @@ const Adcampaigns = () => {
             height: "55px",
           }}
         >
-          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px" }}>
+          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px", color: "darkblue" }}>
             Ad Campaigns
           </Typography>
           <div>
@@ -305,7 +305,7 @@ const Adcampaigns = () => {
                       <Button
                         onClick={() => {
                           router.push(
-                            "/adgroups" +
+                            "/ads/google" +
                               "?" +
                               CreateAdgroups("g_CampaignId", data.campaignId)
                           );

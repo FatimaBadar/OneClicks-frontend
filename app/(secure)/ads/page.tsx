@@ -14,9 +14,9 @@ import {
 } from "@mui/material";
 
 import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
-import Navbar from "@/app/_components/Navbar";
+import Navbar from "@/app/_components/Navbar/Navbar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Ads } from "@/app/_models/adAccount.model";
+import { AdData, Ads } from "@/app/_models/adAccount.model";
 import {
   ScheduleAdService,
   getAllAdsPayloadService,
@@ -30,7 +30,7 @@ const Instagram= "rgb(250, 137, 107)";
 const Google="rgb(73, 190, 255)";
 
 const AdPage = () => {
-  const [ads, setAds] = useState<Ads[]>([]);
+  const [ads, setAds] = useState<AdData[]>([]);
   const [id, setId] = useState("");
   const [adName, setAdName] = useState("");
   const [adsetId, setAdsetId] = useState("");
@@ -96,7 +96,7 @@ const AdPage = () => {
     <>
       <Navbar />
       <Box sx={{ mt: 10, ml: 20, mr: 20, mb: 5 }}>
-      <PaymentComponent/>
+       
         <AdForm />
       </Box>
       <Box sx={{ mt: 15 }}>
@@ -110,7 +110,7 @@ const AdPage = () => {
             height: "55px",
           }}
         >
-          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px" }}>
+          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px", color: "darkblue" }}>
             Ads
           </Typography>
         </Box>
@@ -162,7 +162,7 @@ const AdPage = () => {
                         fontWeight: "500",
                       }}
                     >
-                      {data.adName}
+                      {data.adsetName}
                     </Typography>
                   </TableCell>
 
@@ -183,7 +183,7 @@ const AdPage = () => {
                         fontWeight: "500",
                       }}
                     >
-                      {data.creativeId}
+                      {data.campaignName}
                     </Typography>
                   </TableCell>
                   <TableCell>

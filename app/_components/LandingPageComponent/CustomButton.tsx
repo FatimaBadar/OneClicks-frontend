@@ -18,7 +18,6 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   guideBtn,
   getStartedBtn,
 }) => {
-  // Use the `styled` function to create the styled component
   const StyledButton = styled(Button)(({ theme }: { theme: Theme }) => ({
     backgroundColor: backgroundColor,
     color: color,
@@ -31,8 +30,8 @@ const CustomButton: React.FC<CustomButtonProps> = ({
     display: "block",
     border: "2px solid transparent",
     "&:hover": {
-      backgroundColor: "#405D80",
-      color: "#fff",
+      backgroundColor: "azure",
+      color: "#405D80",
       borderColor: "#405D80",
 
       // "405D80"

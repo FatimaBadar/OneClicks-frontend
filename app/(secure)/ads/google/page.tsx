@@ -12,7 +12,7 @@ import {
   Chip,
   Button,
 } from "@mui/material";
-import Navbar from "@/app/_components/Navbar";
+import Navbar from "@/app/_components/Navbar/Navbar";
 import AdSearchForm from "@/app/_components/GoogleAds/AdSearchForm";
 import { GetAllAdsService } from "@/app/_services/googleService";
 import { AdGroup } from "@/app/_models/Google.model";
@@ -74,7 +74,7 @@ const Adsets = () => {
             height: "55px",
           }}
         >
-          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px" }}>
+          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px", color: "darkblue"  }}>
             Google Ads
           </Typography>
         </Box>

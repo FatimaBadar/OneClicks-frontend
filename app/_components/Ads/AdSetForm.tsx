@@ -263,13 +263,22 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
+        {/* <Typography component="h1" sx={{ fontWeight: 700, color: "#272144", textAlign: "left", mb: 2 }}
+        >Create a new Adset</Typography> */}
         <Typography
-          component="h2"
-          sx={{ fontWeight: 700, color: "#272144", textAlign: "left", mb: 2 }}
+          variant="h5"
+          fontWeight={550}
+          marginBottom={2}
+          sx={{
+            fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+            fontSize: "1.75rem",
+            color: "darkblue",
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
           Create a new Adset
         </Typography>
-
         <Grid container spacing={2} columns={12}>
           <Grid item sm={12} md={4} lg={4} xs={12}>
             <Box
@@ -280,24 +289,26 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
               <Typography sx={{ fontWeight: 600, alignContent: "center" }}>
                 Search available interests
               </Typography>
-              <Box sx={{display: "flex"}}>
-              <TextField
-                size="small"
-                margin="dense"
-                required
-                type="text"
-                variant="outlined"
-                placeholder="Search Interests"
-                autoFocus
-                autoComplete="interests"
-                value={interests}
-                sx={{width:"170px"}}
-                onChange={(e) => setInterests(e.target.value)}
-              />       
-              <IconButton type="submit" aria-label="search">
-                <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
-              </IconButton>   
-              </Box>  
+              <Box sx={{ display: "flex" }}>
+                <TextField
+                  size="small"
+                  margin="dense"
+                  required
+                  type="text"
+                  variant="outlined"
+                  placeholder="Search Interests"
+                  autoFocus
+                  autoComplete="interests"
+                  value={interests}
+                  sx={{ width: "170px" }}
+                  onChange={(e) => setInterests(e.target.value)}
+                />
+                <IconButton type="submit" aria-label="search">
+                  <SearchIcon
+                    style={{ fill: "blue", alignContent: "center" }}
+                  />
+                </IconButton>
+              </Box>
             </Box>
 
             <Box
@@ -310,23 +321,25 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
               >
                 Search available cities
               </Typography>
-              <Box sx={{display: "flex"}}>
-              <TextField
-                size="small"
-                margin="dense"
-                required
-                type="text"
-                placeholder="Search Cities"
-                variant="outlined"
-                autoFocus
-                autoComplete="cities"
-                value={cities}
-                onChange={(e) => setCities(e.target.value)}
-                sx={{width:"170px"}}
-              />
-              <IconButton type="submit" aria-label="search">
-                <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
-              </IconButton>
+              <Box sx={{ display: "flex" }}>
+                <TextField
+                  size="small"
+                  margin="dense"
+                  required
+                  type="text"
+                  placeholder="Search Cities"
+                  variant="outlined"
+                  autoFocus
+                  autoComplete="cities"
+                  value={cities}
+                  onChange={(e) => setCities(e.target.value)}
+                  sx={{ width: "170px" }}
+                />
+                <IconButton type="submit" aria-label="search">
+                  <SearchIcon
+                    style={{ fill: "blue", alignContent: "center" }}
+                  />
+                </IconButton>
               </Box>
             </Box>
 
@@ -340,23 +353,26 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
               >
                 Search available industries
               </Typography>
-              <Box sx={{display: "flex"}}>
-              <TextField
-                size="small"
-                margin="dense"
-                required
-                type="text"
-                variant="outlined"
-                autoFocus
-                placeholder="Search Industries"
-                autoComplete="industries"
-                value={industries}
-                onChange={(e) => setIndustries(e.target.value)}
-                sx={{width:"170px"}}
-              />
-              <IconButton type="submit" aria-label="search">
-                <SearchIcon style={{ fill: "blue", alignContent: "center" }} />
-              </IconButton></Box>
+              <Box sx={{ display: "flex" }}>
+                <TextField
+                  size="small"
+                  margin="dense"
+                  required
+                  type="text"
+                  variant="outlined"
+                  autoFocus
+                  placeholder="Search Industries"
+                  autoComplete="industries"
+                  value={industries}
+                  onChange={(e) => setIndustries(e.target.value)}
+                  sx={{ width: "170px" }}
+                />
+                <IconButton type="submit" aria-label="search">
+                  <SearchIcon
+                    style={{ fill: "blue", alignContent: "center" }}
+                  />
+                </IconButton>
+              </Box>
             </Box>
           </Grid>
 
@@ -387,7 +403,11 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                   </Box>
 
                   <Box
-                    sx={{ display: "flex", justifyContent: "space-between" , mb: "5px"}}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mb: "5px",
+                    }}
                   >
                     <Typography
                       sx={{ fontWeight: 600, alignContent: "center" }}
@@ -402,7 +422,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                         ?.["optimizationGoal"].map((goal, index) => ({
                           label: `${goal.codeWord} - \n${goal.description}`,
                           value: goal.codeWord,
-                        }))}                     
+                        }))}
                       className="w-full"
                       style={{
                         height: "32px",
@@ -414,9 +434,9 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                         alignItems: "center",
                         boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
                         borderRadius: "4px",
-                        borderColor: "rgba(0, 0, 0, 0.23)"}}
+                        borderColor: "rgba(0, 0, 0, 0.23)",
+                      }}
                       virtualScrollerOptions={{ itemSize: 38 }}
-                      
                     />
                   </Box>
 
@@ -434,7 +454,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                       options={billingEvents.map((obj, id) => ({
                         label: `${obj.codeWord} - ${obj.description}`,
                         value: obj.codeWord,
-                      }))}  
+                      }))}
                       className="w-full"
                       style={{
                         height: "32px",
@@ -448,8 +468,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                         borderRadius: "4px",
                         borderColor: "rgba(0, 0, 0, 0.23)",
                       }}
-                      virtualScrollerOptions={{ itemSize: 38 ,
-                      }}
+                      virtualScrollerOptions={{ itemSize: 38 }}
                     />
                   </Box>
 
@@ -510,10 +529,9 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                     <MultiSelect
                       value={returnCityData}
                       onChange={(e) => handleCitySearchData(e.target.value)}
-                      options= {citySearchData.map((obj, id) => ({
+                      options={citySearchData.map((obj, id) => ({
                         label: `${obj.cityName}, ${obj.countryName}`,
                         value: obj.key,
-                        
                       }))}
                       className="w-full"
                       // scrollHeight="{citySearchData.length}+200px"
@@ -527,7 +545,8 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                         alignItems: "center",
                         boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
                         borderRadius: "4px",
-                        borderColor: "rgba(0, 0, 0, 0.23)"}}
+                        borderColor: "rgba(0, 0, 0, 0.23)",
+                      }}
                       virtualScrollerOptions={{ itemSize: 38 }}
                     />
                   </Box>
@@ -535,7 +554,11 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
 
                 <Grid item sm={12} md={4} lg={4} xs={12}>
                   <Box
-                    sx={{ display: "flex", justifyContent: "space-between" , mb: "5px"}}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mb: "5px",
+                    }}
                   >
                     <Typography
                       sx={{ fontWeight: 600, alignContent: "center" }}
@@ -545,10 +568,9 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                     <MultiSelect
                       value={returnIndustryData}
                       onChange={(e) => handleIndustrySearchData(e.target.value)}
-                      options= {industrySearchData.map((obj, id) => ({
+                      options={industrySearchData.map((obj, id) => ({
                         label: `${obj.name}`,
                         value: obj.id,
-                        
                       }))}
                       className="w-full"
                       // scrollHeight="{citySearchData.length}"
@@ -562,7 +584,8 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                         alignItems: "center",
                         boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
                         borderRadius: "4px",
-                        borderColor: "rgba(0, 0, 0, 0.23)"}}
+                        borderColor: "rgba(0, 0, 0, 0.23)",
+                      }}
                       virtualScrollerOptions={{ itemSize: 38 }}
                     />
                   </Box>
@@ -577,11 +600,12 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                     </Typography>
                     <MultiSelect
                       value={returnInterestsData}
-                      onChange={(e) => handleInterestsSearchData(e.target.value)}
-                      options= {interestsSearchData.map((obj, id) => ({
+                      onChange={(e) =>
+                        handleInterestsSearchData(e.target.value)
+                      }
+                      options={interestsSearchData.map((obj, id) => ({
                         label: `${obj.name}`,
                         value: obj.id,
-                        
                       }))}
                       className="w-full"
                       // scrollHeight="{interestsSearchData.length}+200"
@@ -595,7 +619,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                         alignItems: "center",
                         boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
                         borderRadius: "4px",
-                        borderColor: "rgba(0, 0, 0, 0.23)"
+                        borderColor: "rgba(0, 0, 0, 0.23)",
                       }}
                       virtualScrollerOptions={{ itemSize: 38 }}
 
@@ -622,7 +646,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
                       autoFocus
                       autoComplete="startTime"
                       value={startTime}
-                      sx={{width: "210px"}}
+                      sx={{ width: "210px" }}
                       onChange={(e) => setStartTime(e.target.value)}
                     />
                   </Box>

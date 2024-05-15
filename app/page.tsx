@@ -9,7 +9,7 @@ import GetStarted from './_components/LandingPageComponent/GetStarted';
 import Companies from './_components/LandingPageComponent/Companies';
 import Cards from './_components/LandingPageComponent/Cards';
 import useStore from './_store/authStore';
-import Navbar from './_components/Navbar';
+import Navbar from './_components/Navbar/Navbar';
 import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 const inter = Inter({ subsets: ['latin'] });

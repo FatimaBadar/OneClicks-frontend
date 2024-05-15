@@ -12,7 +12,7 @@ import {
   Button,
   Chip,
 } from "@mui/material";
-import Navbar from "@/app/_components/Navbar";
+import Navbar from "@/app/_components/Navbar/Navbar";
 import { AdCreative } from "@/app/_models/adAccount.model";
 import AdCreativeForm from "@/app/_components/Ads/AdCreativeForm";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -76,7 +76,7 @@ const AdCreatives = () => {
           height: "55px",
         }}
       >
-        <Typography variant="h6" fontWeight={550} sx={{ ml: "15px" }}>
+        <Typography variant="h6" fontWeight={550} sx={{ ml: "15px", color: "darkblue" }}>
           Ad Creatives
         </Typography>
       </Box>

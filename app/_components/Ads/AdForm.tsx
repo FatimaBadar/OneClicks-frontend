@@ -174,8 +174,16 @@ const AdForm = () => {
     <>
       <ThemeProvider theme={defaultTheme}>
         <Typography
-          component="h2"
-          sx={{ fontWeight: 700, color: "#272144", textAlign: "left" }}
+          variant="h5"
+          fontWeight={550}
+          marginBottom={2}
+          sx={{
+            fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+            fontSize: "1.75rem",
+            color: "darkblue",
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
           Create an ad
         </Typography>

@@ -11,7 +11,7 @@ import RecentActivity from '@/app/_components/HomeComponent/RecentActivity';
 import MonthlyEarnings from '@/app/_components/HomeComponent/MonthlyEarnings';
 import AdAccountsSummary from '@/app/_components/HomeComponent/AdAccountsSummary';
 import ContactsCreated from '@/app/_components/HomeComponent/ContactsCreated';
-import Navbar from '@/app/_components/Navbar';
+import Navbar from '@/app/_components/Navbar/Navbar';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SelectManagerAccModal from '@/app/_components/GoogleAds/SelectManagerAccModal';
 import { GetRefreshToken } from '@/app/_services/googleService';
@@ -109,9 +109,9 @@ export default function Home() {
                     <Grid item xs={12}>
                       <AmountSpent />
                     </Grid>
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                       <AmountSpent />
-                    </Grid>
+                    </Grid> */}
                     <Grid item xs={12}>
                       <MonthlyEarnings />
                     </Grid>

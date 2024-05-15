@@ -1,6 +1,6 @@
 import useFetch from "../_helpers/useFetch";
 import { ResponseVM } from "../_models/response.model";
-import { AdAccount, Campaign, Adset, AdImagePayload, CampaignPayload, AdsetPayload, Interest, LocationData, AdTargetingCategory, AdCreative, AdCreativePayload, ImageHash, Ads, AdPayloadData } from "../_models/adAccount.model";
+import { AdAccount, Campaign, Adset, AdImagePayload, CampaignPayload, AdsetPayload, Interest, LocationData, AdTargetingCategory, AdCreative, AdCreativePayload, ImageHash, Ads, AdPayloadData, AdData } from "../_models/adAccount.model";
 import useFetchMultipart from "../_helpers/useFetchMultipart";
 
 // const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
@@ -117,11 +117,11 @@ export async function ScheduleAdService(payload: Ads): Promise<ResponseVM<string
     return handleResponse<ResponseVM<string>>(response).then((data) => data);
 }
 
-export async function getAllAdsService(adAccountId: string, accessToken: string):  Promise<ResponseVM<Ads[]>>{
+export async function getAllAdsService(adAccountId: string, accessToken: string):  Promise<ResponseVM<AdData[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetAllAds?accessToken=${accessToken}&adAccountId=${adAccountId}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetAllAdsData?accessToken=${accessToken}&adAccountId=${adAccountId}`);
     
-    return handleResponse<ResponseVM<Ads[]>>(response).then((data) => data);
+    return handleResponse<ResponseVM<AdData[]>>(response).then((data) => data);
 }
 
 export async function getAllAdsPayloadService(adAccountId: string, accessToken: string):  Promise<ResponseVM<AdPayloadData>>{

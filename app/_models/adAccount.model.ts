@@ -158,3 +158,13 @@ export interface CreativeData{
     id: string,
     name: string
 }
+export interface AdData{
+    id: string
+    name: string
+    adsetName: string,
+    creativeName: string,
+    campaignName: string
+    status: string,
+    adAccountId: string,
+    type: string
+}

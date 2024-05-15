@@ -168,16 +168,16 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        {/* <Box > */}
         <Typography
-            component="h2"
+            variant="h5"
+            fontWeight={550}
+            marginBottom={2}
             sx={{
-              fontWeight: 700,
-              color: "green",
-              textAlign: "left",
-              ml: 15,
-              mr: 15,
-              mb: 5
+              fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+              fontSize: "1.75rem",
+              color: "darkblue",
+              display: "flex",
+              justifyContent: "center",
             }}
           >
             Create a new Adcreative

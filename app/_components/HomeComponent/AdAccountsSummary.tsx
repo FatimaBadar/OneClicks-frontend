@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Typography,
   Box,
@@ -10,7 +10,6 @@ import {
   TableHead,
   TableRow,
   Chip,
-  Button,
 } from "@mui/material";
 import DashboardCard from "./DashboardCard";
 import AccountLogin from "../Ads/AdAccountLogin";
@@ -70,6 +69,47 @@ const accounts = [
 ];
 
 const AdAccountsSummary = () => {
+  useEffect(() => {
+    getFacebookCampaigns();
+  }, []);
+
+  const getFacebookCampaigns = async () => {
+    
+    // const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
+    // const adaccountId = localStorage?.getItem("adAccountId") ?? "";
+    // try {
+  
+    //   const response = await getAllCampaignsService(
+    //     adaccountId.toString(),
+    //     accessTokenfb
+    //   );
+    //   if (response.statusCode === "200") {
+    //     setFacebookCampaigns(response.responseData);
+  
+    //     try {
+    //       const accessTokengoogle =
+    //         localStorage?.getItem("accesstoken_Google") ?? "";
+    //       const customerId = localStorage?.getItem("g_managerId") ?? "";
+    
+    //       const response2 = await GetAllGoogleCampaignsService(
+    //         accessTokengoogle,
+    //         parseFloat(customerId)
+    //       );
+    //       if (response2) {
+    //         setGoogleCampaigns(response2);
+    //         setCombinedCampaigns([...response.responseData,...response2]);
+    //         console.log(googleCampaigns);
+    //       }
+    //     } catch (error) {
+    //       console.error(error);
+    //     }
+  
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  }
+  
   return (
     <DashboardCard>
       <Box

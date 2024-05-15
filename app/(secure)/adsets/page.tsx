@@ -12,7 +12,7 @@ import {
   Chip,
   Button,
 } from "@mui/material";
-import Navbar from "@/app/_components/Navbar";
+import Navbar from "@/app/_components/Navbar/Navbar";
 import { getAllAdsetsService } from "@/app/_services/adAccountService";
 import AdsetForm from "@/app/_components/Ads/AdSetForm";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -96,7 +96,7 @@ const Adsets = () => {
             height: "55px",
           }}
         >
-          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px" }}>
+          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px", color: "darkblue" }}>
             Ad adsets
           </Typography>
         </Box>
