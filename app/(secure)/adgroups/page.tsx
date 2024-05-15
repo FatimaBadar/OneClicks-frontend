@@ -14,19 +14,19 @@ import {
 } from "@mui/material";
 import Navbar from "@/app/_components/Navbar";
 import { getAllAdsetsService } from "@/app/_services/adAccountService";
-import AdsetForm from "@/app/_components/Ads/AdSetForm";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Adset } from "@/app/_models/adAccount.model";
-import AdGroupForm from "@/app/_components/GoogleAds/AdGroupForm";
+import AdSearchForm from "@/app/_components/GoogleAds/AdSearchForm";
+import { GetAllAdsService } from "@/app/_services/googleService";
+import { AdGroup } from "@/app/_models/Google.model";
 
 const Facebook= "rgb(19, 222, 185)";
 const Instagram= "rgb(250, 137, 107)";
 const Google="rgb(73, 190, 255)";
 
 const Adsets = () => {
-  const [adsets, setAdsets] = useState<Adset[]>([]);
-  const router = useRouter();
   const searchParams = useSearchParams();
+  const [googleAds, setGoogleAds] = useState<AdGroup[]>([]);
 
   var f_CampaignId: string | null =
     searchParams.get("f_CampaignId");
@@ -34,38 +34,20 @@ const Adsets = () => {
   var f_Objective: string | null = searchParams.get("f_Objective");
   if (f_Objective == null) f_Objective = "";
 
-  const CreateAdcreative = (name1: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(name1, value);
-    return params.toString();
-  };
-
-  const ScheduleAd = useCallback(
-    (name1: string, value: string, name2: string, value2: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name1, value);
-      params.set(name2, value2);
-
-      return params.toString();
-    },
-    [searchParams]
-  );
-
   useEffect(() => {
-    getAdsets();
+    getAds();
   }, []);
 
-  const getAdsets = async () => {
+  const getAds = async () => {
     try {
-      const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
-      const adaccountId = localStorage?.getItem("adAccountId") ?? "";
 
-      const response = await getAllAdsetsService(
-        adaccountId.toString(),
-        accessTokenfb
-      );
+      const accessTokengoogle = localStorage?.getItem("accesstoken_Google") ?? "";
+      const customerId = localStorage?.getItem("g_managerId") ?? "";
+
+      const response = await GetAllAdsService(accessTokengoogle,parseFloat(customerId));
       if (response.statusCode == "200") {
-        setAdsets(response.responseData);
+        setGoogleAds(response.responseData);
+        console.log(response.responseData)
       }
     } catch (error) {
       console.error(error);
@@ -76,7 +58,7 @@ const Adsets = () => {
     <>
       <Navbar />
       <Box sx={{ mt: 10, ml: 10, mr: 10 }}>
-        <AdGroupForm/>
+        <AdSearchForm/>
         {/* {f_CampaignId ? (
           <AdsetForm
             campaign={f_CampaignId}
@@ -109,12 +91,17 @@ const Adsets = () => {
               <TableRow>
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
-                    Adset Name
+                    Ad Name
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
-                    Optimization Goal
+                    Headlines
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Descriptions
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -122,23 +109,17 @@ const Adsets = () => {
                     Type
                   </Typography>
                 </TableCell>
-                <TableCell>
+                <TableCell >
                   <Typography variant="subtitle2" fontWeight={600}>
                     Status
                   </Typography>
                 </TableCell>
-                <TableCell align="center">
-                  <Typography variant="subtitle2" fontWeight={600}>
-                    Start time
-                  </Typography>
-                </TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
+  
               </TableRow>
             </TableHead>
             <TableBody>
-              {adsets?.map((data, key) => (
-                <TableRow key={data.adsetId}>
+              {googleAds?.map((data, key) => (
+                <TableRow key={data.adId}>
                   <TableCell>
                     <Typography
                       sx={{
@@ -146,7 +127,7 @@ const Adsets = () => {
                         fontWeight: "500",
                       }}
                     >
-                      {data.adsetName}
+                      {data.adName}
                     </Typography>
                   </TableCell>
 
@@ -157,8 +138,25 @@ const Adsets = () => {
                         fontWeight: "500",
                       }}
                     >
-                      {data.optimizationGoal}
+                      {data.headlines}
                     </Typography>
+                  </TableCell>
+
+                  <TableCell align="center">
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Typography
+                        color="textSecondary"
+                        variant="subtitle2"
+                        fontWeight={600}
+                      >
+                        {data.descriptions}
+                      </Typography>
+                    </Box>
                   </TableCell>
 
                   <TableCell>
@@ -172,6 +170,7 @@ const Adsets = () => {
                       label={data.type}
                     ></Chip>
                   </TableCell>
+
                   <TableCell>
                     <Box
                       sx={{
@@ -184,23 +183,8 @@ const Adsets = () => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell align="center">
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Typography
-                        color="textSecondary"
-                        variant="subtitle2"
-                        fontWeight={600}
-                      >
-                        {data.startTime}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell align="center">
+                 
+                  {/* <TableCell align="center">
                     <Button
                       onClick={() => {
                         router.push(
@@ -220,33 +204,8 @@ const Adsets = () => {
                     >
                       Create ad
                     </Button>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      onClick={() => {
-                        router.push(
-                          "/ads" +
-                            "?" +
-                            ScheduleAd(
-                              "f_AdsetId",
-                              data.adsetId,
-                              "f_CampaignId",
-                              f_CampaignId ?? ""
-                            )
-                        );
-                      }}
-                      variant="contained"
-                      sx={{
-                        backgroundColor: "#597FB5 !important",
-                        color: "#fff !important",
-                        "&:hover": {
-                          backgroundColor: "#405D80 !important",
-                        },
-                      }}
-                    >
-                      Schedule ad
-                    </Button>
-                  </TableCell>
+                  </TableCell> */}
+
                 </TableRow>
               ))}
             </TableBody>

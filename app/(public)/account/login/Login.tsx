@@ -1,9 +1,9 @@
 // components/LoginComponent.tsx
 
-'use client';
-import React, { useState, ChangeEvent, FormEvent, useRef } from 'react';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Image from 'next/image';
+"use client";
+import React, { useState, ChangeEvent, FormEvent, useRef } from "react";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Image from "next/image";
 
 import {
   Avatar,
@@ -19,21 +19,28 @@ import {
   ThemeProvider,
   Divider,
   stepperClasses,
-} from '@mui/material';
+} from "@mui/material";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 // import { Toast } from 'primereact/toast';
-import { LoginService, ForgetPasswordService } from '@/app/_services/authService';
-import useStore from '@/app/_store/authStore';
-import { Toast } from 'primereact/toast';
-import 'primereact/resources/themes/lara-light-cyan/theme.css';
-import { Dialog } from 'primereact/dialog';
+import {
+  LoginService,
+  ForgetPasswordService,
+} from "@/app/_services/authService";
+import useStore from "@/app/_store/authStore";
+import { Toast } from "primereact/toast";
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+import { Dialog } from "primereact/dialog";
+import SnackbarComponent from "@/app/_components/SnackbarComponent";
 
 export default function LoginComponent() {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [ForgotPassUsername, setForgotPassUsername] = useState<string>('');
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [ForgotPassUsername, setForgotPassUsername] = useState<string>("");
+
   const [visible, setVisible] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   const store = useStore();
   const router = useRouter();
@@ -44,16 +51,22 @@ export default function LoginComponent() {
     try {
       const response = await ForgetPasswordService(ForgotPassUsername);
       if (response.statusCode == "200") {
-        showSuccessToast(response.message);
-          router.push('/home');
-       } 
-      else{
-        showErrorToast(response.message);
+        setVisible(true)
+        setSuccess(true)
+        setMessage(response.message);
+        // showSuccessToast(response.message);
+        router.push("/home");
+      } else {
+        setSuccess(false);
+        setMessage(response.message);
+        // showErrorToast(response.message);
       }
-      setForgotPassUsername('');
-
+      setForgotPassUsername("");
     } catch (error) {
-      showErrorToast('Please enter correct registered username.');
+      setVisible(true)
+      setSuccess(false);
+      setMessage("Please enter correct registered username.");
+      // showErrorToast("Please enter correct registered username.");
     }
   };
 
@@ -67,30 +80,35 @@ export default function LoginComponent() {
           store.setLoggedIn();
           store.setAuthUser(response.responseData);
 
-          console.log('user store2: ', store.authUser);
+          console.log("user store2: ", store.authUser);
         } catch (error: any) {
-          console.log('errorrr');
+          console.log("errorrr");
         }
-        localStorage.setItem('token', response.responseData.token);
-        if(response.responseData.role){
-          localStorage?.setItem('role', response.responseData.role);
+        localStorage.setItem("token", response.responseData.token);
+        if (response.responseData.role) {
+          localStorage?.setItem("role", response.responseData.role);
         }
-        showSuccessToast('Logged in successfully!');
+        setVisible(true)
+        setSuccess(true);
+        setMessage("Logged in successfully")
+        //showSuccessToast("Logged in successfully!");
+        router.push("/home");
 
-        setTimeout(() => {
-          router.push('/home');
-        }, 3000);
+        // setTimeout(() => {
+        //   router.push('/home');
+        // }, 3000);
+      } else {
+        //showErrorToast("Wrong password!");
       }
-      else{
-        showErrorToast('Wrong password!');
-      }
-     // <ToastComponent func="SuccessToast" message="Logged in successfully!"/>
-      setUsername('');
-      setPassword('');
-    } 
-    catch (error) {
+      setUsername("");
+      setPassword("");
+    } catch (error) {
+      setVisible(true)
+      setSuccess(true);
+      setMessage("Login failed. Please check your credentials.");
       console.error(error);
-      showErrorToast('Login failed. Please check your credentials.');
+
+     // showErrorToast("Login failed. Please check your credentials.");
     }
   };
 
@@ -98,13 +116,13 @@ export default function LoginComponent() {
     const { name, value } = e.target;
 
     switch (name) {
-      case 'username':
+      case "username":
         setUsername(value);
         break;
-      case 'password':
+      case "password":
         setPassword(value);
         break;
-      case 'ForgotPassUsername':
+      case "ForgotPassUsername":
         setForgotPassUsername(value);
         break;
       default:
@@ -112,23 +130,23 @@ export default function LoginComponent() {
     }
   };
 
-  const showSuccessToast = (message: string) => {
-    toast.current?.show({
-      severity: 'success',
-      summary: 'Success',
-      detail: message,
-      life: 3000,
-    });
-  };
+  // const showSuccessToast = (message: string) => {
+  //   toast.current?.show({
+  //     severity: "success",
+  //     summary: "Success",
+  //     detail: message,
+  //     life: 3000,
+  //   });
+  // };
 
-  const showErrorToast = (message: string) => {
-    toast.current?.show({
-      severity: 'error',
-      summary: 'Error Message',
-      detail: message,
-      life: 3000,
-    });
-  };
+  // const showErrorToast = (message: string) => {
+  //   toast.current?.show({
+  //     severity: "error",
+  //     summary: "Error Message",
+  //     detail: message,
+  //     life: 3000,
+  //   });
+  // };
 
   const defaultTheme = createTheme({
     typography: {
@@ -141,15 +159,15 @@ export default function LoginComponent() {
           root: {
             width: "100%",
             // width: '360px',
-            boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16)',
-            borderRadius: '8px',
-            '& .MuiInputLabel-root': {
-              transform: 'translateY(50%)',
+            boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
+            borderRadius: "8px",
+            "& .MuiInputLabel-root": {
+              transform: "translateY(50%)",
             },
           },
           input: {
-            borderRadius: '50%',
-            height: '15px',
+            borderRadius: "50%",
+            height: "15px",
           },
         },
       },
@@ -159,39 +177,38 @@ export default function LoginComponent() {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        <Box sx={{ m: 7}}>
+        <Box sx={{ m: 7 }}>
           <Grid
             container
             component={Paper}
             elevation={24}
             square={false}
             sx={{
-              borderRadius: '20px',
-              boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+              borderRadius: "20px",
+              boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
             }}
           >
             <CssBaseline />
             <Grid
               item
               sx={{
-                m: 'auto',
-                display: { xs: 'none', 
-                sm: 'none', md: 'block', 
-                lg: 'block', xl: 'block' }, // hide on extra-small screens, show on medium screens
+                m: "auto",
+                display: {
+                  xs: "none",
+                  sm: "none",
+                  md: "block",
+                  lg: "block",
+                  xl: "block",
+                }, // hide on extra-small screens, show on medium screens
               }}
             >
-              <Image src="/Images/signupImage.svg" 
-              width={456} height={304} priority={true} alt="loginpageimage" />
-              {/* <Image
-              src="/Images/signupImage.svg"
-              width={200}
-              height={200}
-              // width={640}
-              // height={412.66}
-              // priority={true}
-              alt="loginpageimage"
-              // style={{ width: '100%', height: 'auto', aspectRatio: '640 / 442.66' }}
-            /> */}
+              <Image
+                src="/Images/signupImage.svg"
+                width={456}
+                height={304}
+                priority={true}
+                alt="loginpageimage"
+              />
             </Grid>
 
             <Grid item xs={12} md={6}>
@@ -199,15 +216,19 @@ export default function LoginComponent() {
                 sx={{
                   my: 8,
                   mx: 4,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
                 }}
               >
-                <Avatar sx={{ m: 1, bgcolor: '#597FB5' }}>
+                <Avatar sx={{ m: 1, bgcolor: "#597FB5" }}>
                   <LockOutlinedIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5" sx={{ fontWeight: 700 }}>
+                <Typography
+                  component="h1"
+                  variant="h5"
+                  sx={{ fontWeight: 700 }}
+                >
                   Login
                 </Typography>
                 <Box
@@ -217,7 +238,7 @@ export default function LoginComponent() {
                     width: "93%",
                     // width: '360px',
                     mt: 3,
-                    textAlign: 'center',
+                    textAlign: "center",
                   }}
                 >
                   <TextField
@@ -231,7 +252,7 @@ export default function LoginComponent() {
                     autoComplete="username"
                     value={username}
                     onChange={onChange}
-                    sx={{display:"flex"}}
+                    sx={{ display: "flex" }}
                   />
                   <TextField
                     margin="normal"
@@ -243,7 +264,7 @@ export default function LoginComponent() {
                     autoComplete="current-password"
                     value={password}
                     onChange={onChange}
-                    sx={{display:"flex"}}
+                    sx={{ display: "flex" }}
                   />
                   <Button
                     type="submit"
@@ -253,13 +274,11 @@ export default function LoginComponent() {
                       mt: 3,
                       mb: 2,
                       width: "100%",
-                      display:"flex",
-                      // width: '360px',
-                      // width: "66%",
-                      backgroundColor: '#597FB5 !important',
-                      color: '#fff !important',
-                      '&:hover': {
-                        backgroundColor: '#405D80 !important',
+                      display: "flex",
+                      backgroundColor: "#597FB5 !important",
+                      color: "#fff !important",
+                      "&:hover": {
+                        backgroundColor: "#405D80 !important",
                       },
                     }}
                   >
@@ -267,13 +286,12 @@ export default function LoginComponent() {
                   </Button>
                   <Divider variant="middle" sx={{ mb: 2 }} />
                   <Link
-                    // href="#forgotpassword"
                     variant="body2"
                     textAlign="center"
                     sx={{
                       fontWeight: 600,
-                      color: '#597FB5',
-                      '&:hover': {
+                      color: "#597FB5",
+                      "&:hover": {
                         fontWeight: 500,
                       },
                     }}
@@ -287,8 +305,8 @@ export default function LoginComponent() {
                     textAlign="center"
                     sx={{
                       fontWeight: 600,
-                      color: '#597FB5',
-                      '&:hover': {
+                      color: "#597FB5",
+                      "&:hover": {
                         fontWeight: 500,
                       },
                     }}
@@ -306,26 +324,15 @@ export default function LoginComponent() {
         <Dialog
           header="Forgot Your Password?"
           className="shadow-8 m-3 surface-card "
-          // align="center"
-          // headerClassName="flex align-items-center"
           visible={visible}
           onHide={() => setVisible(false)}
-          style={{ width: '50vw', color: 'bg-teal-500' }}
-          breakpoints={{ '960px': '75vw', '641px': '100vw' }}
-          // component={Paper}
-          //   elevation={24}
-          //   square={false}
-          //   sx={{
-          //     borderRadius: "20px",
-          //     boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
-          //   }}
+          style={{ width: "50vw", color: "bg-teal-500" }}
+          breakpoints={{ "960px": "75vw", "641px": "100vw" }}
         >
           <Typography>
-            Please enter your username used to register. We will send you a link to reset your
-            password to that address
+            Please enter your username used to register. We will send you a link
+            to reset your password to that address
           </Typography>
-          {/* <Typography>
-      </Typography> */}
 
           <Box
             sx={{
@@ -333,19 +340,19 @@ export default function LoginComponent() {
               mr: -3,
               mb: -4,
               mt: 2,
-              bgcolor: '#f5f5f5',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              bgcolor: "#f5f5f5",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
             <Box
               component="form"
               onSubmit={submitForgotPassword}
               sx={{
-                display: 'inline-flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                display: "inline-flex",
+                flexDirection: "column",
+                alignItems: "center",
               }}
             >
               <TextField
@@ -360,38 +367,35 @@ export default function LoginComponent() {
                 value={ForgotPassUsername}
                 onChange={onChange}
                 sx={{
-                  width: '250px',
-                  boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16)',
-                  borderRadius: '8px',
-                  // mb:-2
+                  width: "250px",
+                  boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
+                  borderRadius: "8px",
                 }}
               />
               <Button
                 type="submit"
-                // fullWidth
                 variant="contained"
                 sx={{
                   mb: 2,
-                  width: '200px',
-                  backgroundColor: '#597FB5 !important',
-                  color: '#fff !important',
-                  '&:hover': {
-                    backgroundColor: '#405D80 !important',
+                  width: "200px",
+                  backgroundColor: "#597FB5 !important",
+                  color: "#fff !important",
+                  "&:hover": {
+                    backgroundColor: "#405D80 !important",
                   },
                 }}
               >
-                {' '}
                 Retrieve Password
               </Button>
             </Box>
           </Box>
         </Dialog>
       </div>
-
+      {visible ? <SnackbarComponent openBar={success} message={message} /> : ""}
       {/* <PrimeReactProvider> */}
-      <div className="card flex justify-content-center">
+      {/* <div className="card flex justify-content-center">
         <Toast ref={toast} />
-      </div>
+      </div> */}
       {/* </PrimeReactProvider>   */}
     </>
   );

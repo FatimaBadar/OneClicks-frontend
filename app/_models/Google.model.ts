@@ -18,6 +18,7 @@ export interface CampaignPayload{
   startDate: string
   endDate: string,
   customerId: number,
+  managerId: number,
   refreshToken: string,
   type: string
 }
@@ -30,24 +31,17 @@ export interface GoogleCampaign{
   status: string
   startDate: string
   endDate: string,
-  
-  // advertisingChannelType: string
-  // targetGoogleSearch: boolean
-  // targetSearchNetwork: boolean
-  // budgetName: string;
-  // budgetAmount: string;
-  // budgetDeliveryMethod: string;
-  // customerId: number,
-  // refreshToken: string,
   type: string
 }
 
 export interface AdGroupPayload{
   adGroupName: string
-  campaignId: string
+  campaignId: number
+  campaignName: string
   adGroupBidAmount: string
   adGroupStatus: string
   customerId: number,
+  managerId: number,
   refreshToken: string,
   type: string
   searchAds: SearchAd
@@ -56,9 +50,11 @@ export interface AdGroupPayload{
 }
 
 export interface SearchAd{
-  customizerAttributeName: string
-  customizerAttributePrice: string
   targetUrl: string
+  headlines: string[]
+  descriptions: string[] 
+  path1?: string
+  path2?: string
 }
 
 export interface Keywords{
@@ -71,19 +67,22 @@ export interface GeoTargeting{
   cityName: string[]
 }
 
+export interface GeoTargetingData {
+  CriteriaId: string,
+  Name: string
+  CanonicalName: string
+  ParentId: string
+  CountryCode: string
+  TargetType: string
+  Status: string
+}
+
 export interface AdGroup{
-  adGroupId: string
-  adGroupName: string
-  campaignId: string
-  campaignName: string
-  adGroupBidAmount: string
-  adGroupStatus: string
-  customerId: number,
-  refreshToken: string,
-  managerId: number
+  adId: string
+  adName: string
+  headlines: string[]
+  descriptions: string[]
+  status: string
   type: string
-  searchAds: SearchAd
-  keywords: Keywords
-  geoTargeting: GeoTargeting
 }
   

@@ -61,7 +61,7 @@ const Adcampaigns = () => {
       if (response.statusCode == "200") {
         setFacebookCampaigns(response.responseData);
 
-        const response2 = await GetAllGoogleCampaignsService(accessTokengoogle, parseFloat(customerId));
+        const response2 = await GetAllGoogleCampaignsService( accessTokengoogle,parseFloat(customerId))
         if(response2){
           setGoogleCampaigns(response2);
 

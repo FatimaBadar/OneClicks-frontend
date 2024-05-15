@@ -35,7 +35,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
     boolean | null
   >();
   const [budgetName, setBudgetName] = useState("");
-  const [budgetAmount, setBudgetAmount] = useState(10000);
+  const [budgetAmount, setBudgetAmount] = useState(10);
   const [budgetDeliveryMethod, setBudgetDeliveryMethod] = useState("");
 
   const [status, setStatus] = useState("");
@@ -61,8 +61,8 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
   const DeliveryMethodOptions = ["Standard", "Accelerated"];
 
   function convertDateFormat(currentDate: Date){
-    var convertedDate = currentDate.getFullYear().toString() + "/" +
-              (currentDate.getMonth() + 1).toString().padStart(2, '0') + "/" +
+    var convertedDate = currentDate.getFullYear().toString() + "-" +
+              (currentDate.getMonth() + 1).toString().padStart(2, '0') + "-" +
               currentDate.getDate().toString().padStart(2, '0');
     return convertedDate
   }
@@ -71,8 +71,9 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
     e.preventDefault();
 
     const accessTokengoogle = localStorage?.getItem("accesstoken_Google") ?? "";
-    const customerId = localStorage?.getItem("g_ManagerId") ?? "";
-    
+    const managerId = localStorage?.getItem("g_ManagerId") ?? "";
+    const customerId = localStorage?.getItem("g_clientId") ?? "";
+
     const tempCampaignData: CampaignPayload = {
       campaignName,
       advertisingChannelType,
@@ -86,6 +87,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
       endDate: convertDateFormat(new Date(endDate)),
       refreshToken: accessTokengoogle,
       customerId: parseFloat(customerId),
+      managerId: parseFloat(managerId),
       type: "Google",
     };
     console.log(tempCampaignData);
@@ -172,14 +174,15 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
               onChange={(e) => setAvertisingChannelType(e.target.value)}
               label="Advertising Channel Type"
             >
-               <ScrollPanel>
+               {/* <ScrollPanel> */}
               {advertisingChannelTypeDropdown.map((obj, id) => (
                 <MenuItem key={id} value={obj}
                 sx={{ width: "200px", height: "15px", fontSize: "small" }}
                 >
                   {obj}
                 </MenuItem>
-              ))}</ScrollPanel>
+              ))}
+              {/* </ScrollPanel> */}
             </Select>
           </FormControl>
 
@@ -229,7 +232,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
                 variant="outlined"
                 autoFocus
                 autoComplete="budgetAmount"
-                InputProps={{ inputProps: { min: 10000} }}
+                InputProps={{ inputProps: { min: 10} }}
                 value={budgetAmount}
                 onChange={(e) => setBudgetAmount(parseFloat(e.target.value))}
                 sx={{ display: "flex" }}
