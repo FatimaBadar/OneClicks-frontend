@@ -75,7 +75,7 @@ const RecentActivity = () => {
               <Typography fontWeight="600">New clicks</Typography>{' '}
               {/* <Link href="/" underline="none">
                 #ML-3467
-              </Link> */}
+              </Link> */} 
             </TimelineContent>
           </TimelineItem>
           

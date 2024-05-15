@@ -31,14 +31,14 @@ export async function ConnectAdAccount(accessToken: string): Promise<ResponseVM<
 
 export async function CreateCampaignService(payload: CampaignPayload): Promise<ResponseVM<Campaign>> {
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateCampaign`,payload);
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Facebook/CreateCampaign`,payload);
 
     return handleResponse<ResponseVM<Campaign>>(response).then((data) => data);
 }
 
 export async function CreateAdcampaignService(){
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdset`);
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Facebook/CreateAdset`);
 
     return handleResponse(response).then((data) => data);
 }
@@ -46,49 +46,49 @@ export async function CreateAdcampaignService(){
 
 export async function getAllCampaignsService(adAccountId: string, accessToken: string):  Promise<ResponseVM<Campaign[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllCampaigns?accessToken=${accessToken}&adAccountId=${adAccountId}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetAllCampaigns?accessToken=${accessToken}&adAccountId=${adAccountId}`);
     
     return handleResponse<ResponseVM<Campaign[]>>(response).then((data) => data);
 }
 
 export async function CreateAdsetService(payload: AdsetPayload): Promise<ResponseVM<Adset>> {
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdset`, payload);
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Facebook/CreateAdset`, payload);
 
     return handleResponse<ResponseVM<Adset>>(response).then((data) => data);
 }
 
 export async function getAllAdsetsService(adAccountId: string, accessToken: string):  Promise<ResponseVM<Adset[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAdsets?accessToken=${accessToken}&adAccountId=${adAccountId}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetAllAdsets?accessToken=${accessToken}&adAccountId=${adAccountId}`);
     
     return handleResponse<ResponseVM<Adset[]>>(response).then((data) => data);
 }
 
 export async function GetInterestsSearchData(interests: string, accessToken: string):  Promise<ResponseVM<Interest[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetInterests?accessToken=${accessToken}&interests=${interests}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetInterests?accessToken=${accessToken}&interests=${interests}`);
     
     return handleResponse<ResponseVM<Interest[]>>(response).then((data) => data);
 }
 
 export async function GetIndustrySearchData(accessToken: string): Promise<ResponseVM<AdTargetingCategory[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetTargetingCategory?accessToken=${accessToken}&targetType=industries`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetTargetingCategory?accessToken=${accessToken}&targetType=industries`);
     
     return handleResponse<ResponseVM<AdTargetingCategory[]>>(response).then((data) => data);
 }
 
 export async function GetCitySearchData(city: string, accessToken: string):  Promise<ResponseVM<LocationData[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetCities?accessToken=${accessToken}&city=${city}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetCities?accessToken=${accessToken}&city=${city}`);
     
     return handleResponse<ResponseVM<LocationData[]>>(response).then((data) => data);
 }
 
 export async function CreateAdImageHashService(adAccountId: string, payload: FormData, accessToken: string): Promise<ResponseVM<string>> {
 
-    const response = await fetch(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdImageHash/${adAccountId}?accessToken=${accessToken}`,{
+    const response = await fetch(`${SERVER_ENDPOINT}/api/Facebook/CreateAdImageHash/${adAccountId}?accessToken=${accessToken}`,{
         method : 'PUT', 
         body : payload
     });  
@@ -98,35 +98,35 @@ export async function CreateAdImageHashService(adAccountId: string, payload: For
 
 export async function CreateAdcreativeService(payload: AdCreativePayload): Promise<ResponseVM<AdCreative>> {
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/CreateAdCreative`, payload);
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Facebook/CreateAdCreative`, payload);
 
     return handleResponse<ResponseVM<AdCreative>>(response).then((data) => data);
 }
 
 export async function getAllAdcreativesService():  Promise<ResponseVM<AdCreative[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAdcreatives`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetAllAdcreatives`);
     
     return handleResponse<ResponseVM<AdCreative[]>>(response).then((data) => data);
 }
 
 export async function ScheduleAdService(payload: Ads): Promise<ResponseVM<string>> {
     const fetch = useFetch();
-    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Campaigns/ScheduleAd`, payload);
+    const response = await fetch.post(`${SERVER_ENDPOINT}/api/Facebook/ScheduleAd`, payload);
 
     return handleResponse<ResponseVM<string>>(response).then((data) => data);
 }
 
 export async function getAllAdsService(adAccountId: string, accessToken: string):  Promise<ResponseVM<Ads[]>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAds?accessToken=${accessToken}&adAccountId=${adAccountId}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetAllAds?accessToken=${accessToken}&adAccountId=${adAccountId}`);
     
     return handleResponse<ResponseVM<Ads[]>>(response).then((data) => data);
 }
 
 export async function getAllAdsPayloadService(adAccountId: string, accessToken: string):  Promise<ResponseVM<AdPayloadData>>{
     const fetch = useFetch();
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Campaigns/GetAllAdsPayload?accessToken=${accessToken}&adAccountId=${adAccountId}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetAllAdsPayload?accessToken=${accessToken}&adAccountId=${adAccountId}`);
     
     return handleResponse<ResponseVM<AdPayloadData>>(response).then((data) => data);
 }

@@ -110,6 +110,9 @@ const Home: React.FC<HomeProps> = ({ clickToGetManagerId }) => {
                       <AmountSpent />
                     </Grid>
                     <Grid item xs={12}>
+                      <AmountSpent />
+                    </Grid>
+                    <Grid item xs={12}>
                       <MonthlyEarnings />
                     </Grid>
                   </Grid>

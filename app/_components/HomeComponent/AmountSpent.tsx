@@ -1,14 +1,33 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Grid, Stack, Typography, Avatar } from '@mui/material';
 import NorthWestOutlinedIcon from '@mui/icons-material/NorthWestOutlined';
 import DashboardCard from './DashboardCard';
 import dynamic from 'next/dynamic';
+import { GetBudgetAmountFacebook } from '@/app/_services/insightsService';
 const Chart = dynamic(() => import('react-apexcharts'),   { ssr: false })
 
 const AmountSpent = () => {
-  const [amount, setAmount] = useState("$36,358")
+  const [amount, setAmount] = useState<string>("")
+  useEffect(() => {
+   
+  
+    fetchData();
+  }, []);
+  const adAccountId = localStorage?.getItem('adAccountId') ?? "";
+
+  const fetchData = async () => {
+    try {
+      const accesstoken_Google = localStorage?.getItem('accesstoken_fb') ?? "";
+      const response = await GetBudgetAmountFacebook(adAccountId, accesstoken_Google);
+      if (response.statusCode === "200") {
+        setAmount(response.responseData.toString());
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // chart color
   const theme = useTheme();
   const primary = "rgb(93, 135, 255)";
@@ -77,7 +96,7 @@ const AmountSpent = () => {
             <Typography variant="subtitle2" fontWeight="500">
               +9%
             </Typography>
-            <Typography variant="subtitle2" color="rgb(230, 255, 250)">
+            <Typography variant="subtitle2" color="#39B69A">
               last year
             </Typography>
           </Stack>
