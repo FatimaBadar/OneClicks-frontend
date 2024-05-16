@@ -89,8 +89,8 @@ const AdSearchForm = () => {
       setLoader(true)
       const accessTokengoogle =
         localStorage?.getItem("accesstoken_Google") ?? "";
-        const customerId = localStorage?.getItem("g_clientId") ?? "";
-      const managerId = localStorage?.getItem("g_managerId") ?? "";
+      const customerId = localStorage?.getItem("g_ClientId") ?? "";
+      const managerId = localStorage?.getItem("g_ManagerId") ?? "";
 
       const response = await GetAllGoogleCampaigns(
         accessTokengoogle,
@@ -110,8 +110,8 @@ const AdSearchForm = () => {
     e.preventDefault();
 
     const accessTokengoogle = localStorage?.getItem("accesstoken_Google") ?? "";
-    const managerId = localStorage?.getItem("g_managerId") ?? "";
-    const customerId = localStorage?.getItem("g_clientId") ?? "";
+    const managerId = localStorage?.getItem("g_ManagerId") ?? "";
+    const customerId = localStorage?.getItem("g_ClientId") ?? "";
 
     headlines.push(headline0 ?? "")
     headlines.push(headline1 ?? "")

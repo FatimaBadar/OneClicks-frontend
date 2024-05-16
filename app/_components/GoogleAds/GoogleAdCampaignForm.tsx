@@ -83,7 +83,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
 
     const accessTokengoogle = localStorage?.getItem("accesstoken_Google") ?? "";
     const managerId = localStorage?.getItem("g_ManagerId") ?? "";
-    const customerId = localStorage?.getItem("g_clientId") ?? "";
+    const customerId = localStorage?.getItem("g_ClientId") ?? "";
 
     const tempCampaignData: CampaignPayload = {
       campaignName,

@@ -58,8 +58,8 @@ export default function Home() {
         setLoader(false);
         const accesstoken_Google =
           localStorage?.getItem("accesstoken_Google") ?? "";
-        const managerId = localStorage?.getItem("g_managerId");
-        const clientId = localStorage?.getItem("g_clientId");
+        const managerId = localStorage?.getItem("g_ManagerId");
+        const clientId = localStorage?.getItem("g_ClientId");
 
         if (!accesstoken_Google || !managerId || !clientId) {
           setOpenManagerAccModal(true);

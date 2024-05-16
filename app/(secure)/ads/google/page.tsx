@@ -45,8 +45,8 @@ const AdGroupPage = () => {
     try {
       const accessTokengoogle =
         localStorage?.getItem("accesstoken_Google") ?? "";
-      const customerId = localStorage?.getItem("g_managerId") ?? "";
-      const clientId = localStorage?.getItem("g_clientId") ?? "";
+      const customerId = localStorage?.getItem("g_ManagerId") ?? "";
+      const clientId = localStorage?.getItem("g_ClientId") ?? "";
 
       const response = await GetAllAdsService(
         accessTokengoogle,

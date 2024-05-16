@@ -83,8 +83,8 @@ const Adcampaigns = () => {
         try {
           const accessTokengoogle =
             localStorage?.getItem("accesstoken_Google") ?? "";
-            const customerId = localStorage?.getItem("g_clientId") ?? "";
-          const managerId = localStorage?.getItem("g_managerId") ?? "";
+            const customerId = localStorage?.getItem("g_ClientId") ?? "";
+          const managerId = localStorage?.getItem("g_ManagerId") ?? "";
     
           const response2 = await GetAllCampaignsGoogle(
             accessTokengoogle,

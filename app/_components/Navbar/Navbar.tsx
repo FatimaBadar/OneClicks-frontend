@@ -199,6 +199,7 @@ export const Navbar: React.FC = () => {
                   // ml:"-30px"
                 }}
               >
+                  {store.loggedIn ? (
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Link href={"/home"} style={{ textDecoration: "none" }}>
                     <Typography
@@ -213,6 +214,8 @@ export const Navbar: React.FC = () => {
                     </Typography>
                   </Link>
                 </MenuItem>
+                ): ""}
+
                 <Divider />
                 {!store.loggedIn ? (
                   <MenuItem onClick={handleCloseNavMenu}>
