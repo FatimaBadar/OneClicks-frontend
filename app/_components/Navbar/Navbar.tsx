@@ -199,24 +199,25 @@ export const Navbar: React.FC = () => {
                   // ml:"-30px"
                 }}
               >
-                  {store.loggedIn ? (
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link href={"/home"} style={{ textDecoration: "none" }}>
-                    <Typography
-                      className={pathname === "/" ? "active" : ""}
-                      textAlign="center"
-                      color="#597FB5"
-                      margin="-4px"
-                      width="140px"
-                      sx={{ "&:hover": { color: "#405D80" } }}
-                    >
-                      Home
-                    </Typography>
-                  </Link>
-                </MenuItem>
-                ): ""}
-
-                <Divider />
+                {store.loggedIn ? (
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Link href={"/home"} style={{ textDecoration: "none" }}>
+                      <Typography
+                        className={pathname === "/" ? "active" : ""}
+                        textAlign="center"
+                        color="#597FB5"
+                        margin="-4px"
+                        width="140px"
+                        sx={{ "&:hover": { color: "#405D80" } }}
+                      >
+                        Home
+                      </Typography>
+                    </Link>
+                  </MenuItem>
+                ) : (
+                  ""
+                )}
+                {store.loggedIn ? <Divider /> : ""}
                 {!store.loggedIn ? (
                   <MenuItem onClick={handleCloseNavMenu}>
                     <Link
@@ -408,19 +409,26 @@ export const Navbar: React.FC = () => {
             </Paper>
           </Box>
 
+          {store.loggedIn ? (
           <NavbarLinksBox>
             <Link href="/home" style={{ textDecoration: "none" }}>
               <NavLink variant="body2">Home</NavLink>
             </Link>
-            <Link href="/campaigns" style={{ textDecoration: "none", 
+            <Link
+              href="/campaigns"
+              style={{
+                textDecoration: "none",
                 // width: "140px",
                 // textAlign: "center",
-             }}>
+              }}
+            >
               <NavLink variant="body2">Ad Campaigns</NavLink>
             </Link>
             <FacebookDropdown />
             <GoogleDropdown />
           </NavbarLinksBox>
+                ) : ""}
+
         </Box>
 
         <Box //logo for small screen
@@ -476,7 +484,7 @@ export const Navbar: React.FC = () => {
               </Link>
             </Box>
           )}
-          <ProfileDropdown />
+            {store.loggedIn ? <ProfileDropdown />: ""}
         </Box>
       </NavbarContainer>
     </AppBar>

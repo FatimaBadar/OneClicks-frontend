@@ -185,7 +185,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
             type="text"
             variant="outlined"
             autoFocus
-            autoComplete="username"
+            autoComplete="campaignName"
             value={campaignName}
             onChange={(e) => setCampaignName(e.target.value)}
             sx={{ display: "flex" }}
@@ -227,7 +227,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
                 type="text"
                 variant="outlined"
                 autoFocus
-                autoComplete="name"
+                autoComplete="budgetName"
                 value={budgetName}
                 onChange={(e) => setBudgetName(e.target.value)}
                 sx={{ display: "flex" }}
@@ -269,7 +269,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
           <TextField
             margin="normal"
             required
-            label="Start Date"
+            // label="Start Date"
             type="date"
             variant="outlined"
             autoFocus
@@ -282,7 +282,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
           <TextField
             margin="normal"
             required
-            label="End Date"
+            // label="End Date"
             type="date"
             variant="outlined"
             autoFocus

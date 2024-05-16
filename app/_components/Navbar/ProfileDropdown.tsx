@@ -133,9 +133,7 @@ const GoogleDropdown: React.FC = () => {
             <Typography>Payment</Typography>
           </Box>
         </MenuItem>
-
         <Divider />
-
         <MenuItem onClick={handleClose}>
           <Link
             onClick={logoutFunc}
