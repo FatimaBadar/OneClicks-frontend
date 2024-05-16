@@ -50,42 +50,26 @@ export async function CreateClientAccountService(refreshToken: string, customerI
 
 export async function CreateAdcampaignService(payload: CampaignPayload): Promise<ResponseVM<string>>{
     const fetch = useFetch();
-    payload.customerId = 2989534382
-    payload.managerId = 4520819258
-    // payload.campaignId = 21233446722
-    payload.refreshToken = "1//03v7pNMJs1LOPCgYIARAAGAMSNwF-L9IrDpDmkd1-ga1Y6jAaYrYtfqi6Re3xy31rPhoVQvl7OgAuTDgmkdxnsqHV7kCERZ-WuNc"
-
     const response = await fetch.post(`${SERVER_ENDPOINT}/api/Google/CreateCampaign`, payload);
 
     return handleResponse<ResponseVM<string>>(response).then((data) => data);
 }
-export async function GetAllGoogleCampaigns(refreshToken: string, customerId: number): Promise<ResponseVM<GoogleCampaign[]>>{
+export async function GetAllGoogleCampaigns(refreshToken: string, customerId: number, managerId: number): Promise<ResponseVM<GoogleCampaign[]>>{
     const fetch = useFetch();
-    customerId = 2989534382;
-    refreshToken = "1//03v7pNMJs1LOPCgYIARAAGAMSNwF-L9IrDpDmkd1-ga1Y6jAaYrYtfqi6Re3xy31rPhoVQvl7OgAuTDgmkdxnsqHV7kCERZ-WuNc"
-
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetAllCampaigns?refreshToken=${refreshToken}&customerId=${customerId}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetAllCampaigns?refreshToken=${refreshToken}&customerId=${customerId}&managerId=${managerId}`);
     
     return handleResponse<ResponseVM<GoogleCampaign[]>>(response).then((data) => data);
 }
 
-export async function GetAllCampaignsGoogle(refreshToken: string, customerId: number): Promise<ResponseVM<any[]>>{
+export async function GetAllCampaignsGoogle(refreshToken: string, customerId: number, managerId: number): Promise<ResponseVM<any[]>>{
     const fetch = useFetch();
-    customerId = 2989534382;
-    refreshToken = "1//03v7pNMJs1LOPCgYIARAAGAMSNwF-L9IrDpDmkd1-ga1Y6jAaYrYtfqi6Re3xy31rPhoVQvl7OgAuTDgmkdxnsqHV7kCERZ-WuNc"
-
-    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetAllCampaigns?refreshToken=${refreshToken}&customerId=${customerId}`);
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetAllCampaigns?refreshToken=${refreshToken}&customerId=${customerId}&managerId=${managerId}`);
     
     return handleResponse<ResponseVM<any[]>>(response).then((data) => data);
 }
 
 export async function CreateAdGroupService(payload: AdGroupPayload): Promise<ResponseVM<string>>{
     const fetch = useFetch();
-    payload.customerId = 2989534382
-    payload.managerId = 4520819258
-    payload.campaignId = 21233446722
-    payload.refreshToken = "1//03v7pNMJs1LOPCgYIARAAGAMSNwF-L9IrDpDmkd1-ga1Y6jAaYrYtfqi6Re3xy31rPhoVQvl7OgAuTDgmkdxnsqHV7kCERZ-WuNc"
-
     const response = await fetch.post(`${SERVER_ENDPOINT}/api/Google/CreateAdGroup`, payload);
 
     return handleResponse<ResponseVM<string>>(response).then((data) => data);
@@ -93,10 +77,6 @@ export async function CreateAdGroupService(payload: AdGroupPayload): Promise<Res
 
 export async function GetAllAdsService(refreshToken: string, clientId: number, customerId: number): Promise<ResponseVM<AdGroup[]>>{
     const fetch = useFetch();
-    clientId = 2989534382
-    customerId = 4520819258;
-    refreshToken = "1//03v7pNMJs1LOPCgYIARAAGAMSNwF-L9IrDpDmkd1-ga1Y6jAaYrYtfqi6Re3xy31rPhoVQvl7OgAuTDgmkdxnsqHV7kCERZ-WuNc"
-
     const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetAllAds?refreshToken=${refreshToken}&customerId=${clientId}&managerId=${customerId}`);
     
     return handleResponse<ResponseVM<AdGroup[]>>(response).then((data) => data);

@@ -83,11 +83,13 @@ const Adcampaigns = () => {
         try {
           const accessTokengoogle =
             localStorage?.getItem("accesstoken_Google") ?? "";
-          const customerId = localStorage?.getItem("g_managerId") ?? "";
+            const customerId = localStorage?.getItem("g_clientId") ?? "";
+          const managerId = localStorage?.getItem("g_managerId") ?? "";
     
           const response2 = await GetAllCampaignsGoogle(
             accessTokengoogle,
-            parseFloat(customerId)
+            parseFloat(customerId),
+            parseFloat(managerId)
           );
           if (response2.statusCode == "200") {
             setGoogleCampaigns(response2.responseData);

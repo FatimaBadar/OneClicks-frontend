@@ -107,7 +107,8 @@ var Fb_Budget: number = 0;
       if (accessTokenGoogle && selectedClientId && selectedManagerId) {
         const response2 = await GetAllCampaignsGoogle(
           accessTokenGoogle,
-          parseFloat(selectedClientId)
+          parseFloat(selectedClientId),
+          parseFloat(selectedManagerId)
         );
         if (response2.statusCode === "200") {
           setGoogleCampaigns(response2.responseData);

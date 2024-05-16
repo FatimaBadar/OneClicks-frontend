@@ -89,11 +89,13 @@ const AdSearchForm = () => {
       setLoader(true)
       const accessTokengoogle =
         localStorage?.getItem("accesstoken_Google") ?? "";
-      const customerId = localStorage?.getItem("g_managerId") ?? "";
+        const customerId = localStorage?.getItem("g_clientId") ?? "";
+      const managerId = localStorage?.getItem("g_managerId") ?? "";
 
       const response = await GetAllGoogleCampaigns(
         accessTokengoogle,
-        parseFloat(customerId)
+        parseFloat(customerId),
+        parseFloat(managerId)
       );
       if (response) {
         setCampaignData(response.responseData);
