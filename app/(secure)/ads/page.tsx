@@ -114,7 +114,7 @@ const AdPage = () => {
       ) : 
         <>
           <Box sx={{ mt: 10, ml: 20, mr: 20, mb: 5 }}>
-           <AdForm /> 
+            <AdForm />
           </Box>
           <Box sx={{ mt: 15 }}>
             <Box
@@ -136,122 +136,126 @@ const AdPage = () => {
               </Typography>
             </Box>
 
-        <Box sx={{ overflow: "auto", width: { xs: "100%", sm: "auto" } }}>
-          <Table aria-label="simple table">
-            <TableHead sx={{ backgroundColor: "#EEF8FD" }}>
-              <TableRow>
-                <TableCell>
-                  <Typography variant="subtitle2" fontWeight={600}>
-                    Ad Name
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="subtitle2" fontWeight={600}>
-                    Campaign Name
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="subtitle2" fontWeight={600}>
-                 Adset Name
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="subtitle2" fontWeight={600}>
-                Creative Name
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="subtitle2" fontWeight={600}>
-                Type
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="subtitle2" fontWeight={600}>
-                    Status
-                  </Typography>
-                </TableCell>
-               
-                <TableCell align="right"></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {ads?.map((data, key) => (
-                <TableRow key={data.id}>
-                  <TableCell>
-                    <Typography
-                      sx={{
-                        fontSize: "15px",
-                        fontWeight: "500",
-                      }}
-                    >
-                      {data.name}
-                    </Typography>
-                  </TableCell>
-
-                  <TableCell>
-                    <Typography
-                      sx={{
-                        fontSize: "15px",
-                        fontWeight: "500",
-                      }}
-                    >
-                      {data.campaignName}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      sx={{
-                        fontSize: "15px",
-                        fontWeight: "500",
-                      }}
-                    >
-                      {data.adsetName}
-                    </Typography>
-                    
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      sx={{
-                        fontSize: "15px",
-                        fontWeight: "500",
-                      }}
-                    >
-                      {data.creativeName}
-                    </Typography>
-                    
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      sx={{
-                        px: "4px",
-                        backgroundColor: data.type === "Facebook" ? Facebook : data.type === "Instagram" ? Instagram : Google,
-                        color: "#fff",
-                      }}
-                      size="small"
-                      label={data.type}
-                    ></Chip>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
+            <Box sx={{ overflow: "auto", width: { xs: "100%", sm: "auto" } }}>
+              <Table aria-label="simple table">
+                <TableHead sx={{ backgroundColor: "#EEF8FD" }}>
+                  <TableRow>
+                    <TableCell>
                       <Typography variant="subtitle2" fontWeight={600}>
-                        {data.status}
+                        Ad Name
                       </Typography>
-                    </Box>
-                  </TableCell>
-                 
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle2" fontWeight={600}>
+                        Campaign Name
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle2" fontWeight={600}>
+                        Adset Name
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle2" fontWeight={600}>
+                        Creative Name
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle2" fontWeight={600}>
+                        Type
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="subtitle2" fontWeight={600}>
+                        Status
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell align="right"></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {ads?.map((data, key) => (
+                    <TableRow key={data.id}>
+                      <TableCell>
+                        <Typography
+                          sx={{
+                            fontSize: "15px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {data.name}
+                        </Typography>
+                      </TableCell>
+
+                      <TableCell>
+                        <Typography
+                          sx={{
+                            fontSize: "15px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {data.campaignName}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography
+                          sx={{
+                            fontSize: "15px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {data.adsetName}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography
+                          sx={{
+                            fontSize: "15px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {data.creativeName}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          sx={{
+                            px: "4px",
+                            backgroundColor:
+                              data.type === "Facebook"
+                                ? Facebook
+                                : data.type === "Instagram"
+                                ? Instagram
+                                : Google,
+                            color: "#fff",
+                          }}
+                          size="small"
+                          label={data.type}
+                        ></Chip>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography variant="subtitle2" fontWeight={600}>
+                            {data.status}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Box>
+        </>
+      }
       {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
-      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}          
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };
