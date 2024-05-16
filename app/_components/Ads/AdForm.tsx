@@ -14,6 +14,8 @@ import {
   ThemeProvider,
   Typography,
   Grid,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 
 import { Toast } from "primereact/toast";
@@ -27,8 +29,18 @@ import {
   ScheduleAdService,
   getAllAdsPayloadService,
 } from "@/app/_services/adAccountService";
+import { useSearchParams } from "next/navigation";
+import SuccessSnackbar from "../SuccessSnackbarComponent";
+import FailureSnackbar from "../FailureSnackbarComponent";
 
 const AdForm = () => {
+  const searchParams = useSearchParams();
+  const [loader, setLoader] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+
+
   const [adName, setAdName] = useState("");
   const [campaignData, setCampaignData] = useState<CampaignData[]>([]);
   const [adsetData, setAdsetData] = useState<AdsetData[]>([]);
@@ -47,6 +59,22 @@ const AdForm = () => {
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
+
+    var f_AdsetId: string | null = searchParams.get("f_AdsetId");
+    if (f_AdsetId == null) f_AdsetId = "";
+    else
+    setAdsetId(f_AdsetId)
+  
+    var f_CreativeId: string | null = searchParams.get("f_CreativeId");
+    if (f_CreativeId == null) f_CreativeId = "";
+    else 
+    setCreativeId(f_CreativeId)
+
+    var f_CampaignId: string | null = searchParams.get("f_CampaignId");
+    if (f_CampaignId == null) f_CampaignId = "";
+    else
+    setCampaignId(f_CampaignId)
+
     getAdsDropdownData();
   }, []);
 
@@ -70,6 +98,7 @@ const AdForm = () => {
 
   const getAdsDropdownData = async () => {
     try {
+      setLoader(true)
       const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const adaccountId = localStorage?.getItem("adAccountId") ?? "";
 
@@ -83,8 +112,14 @@ const AdForm = () => {
         setCreativeData(response.responseData.adCreativeData);
         console.log(response.responseData.adSetData);
         setAdsetData(response.responseData.adSetData);
+        setLoader(false)
+        setSuccess(true);
+        setMessage("Successfully created adset!");
       }
     } catch (error) {
+      setLoader(false)
+      setSuccess(false);
+      setMessage("Failed to create adset.");
       console.error(error);
     }
   };
@@ -162,16 +197,18 @@ const AdForm = () => {
       },
     },
   });
-  const [selectedCity, setSelectedCity] = useState(null);
-  const city = [
-    { name: "New York", code: "NY" },
-    { name: "Rome", code: "RM" },
-    { name: "London", code: "LDN" },
-    { name: "Istanbul", code: "IST" },
-    { name: "Paris", code: "PRS" },
-  ];
+
   return (
     <>
+         {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress  />
+        </Container>
+      ) : (
+        <>
       <ThemeProvider theme={defaultTheme}>
         <Typography
           variant="h5"
@@ -351,6 +388,10 @@ const AdForm = () => {
           </Grid>
         </Box>
       </ThemeProvider>
+      </>
+      )}
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };

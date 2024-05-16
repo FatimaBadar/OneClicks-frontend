@@ -94,6 +94,10 @@ const FacebookDropdown: React.FC = () => {
           "&:hover": {
             color: "#405D80",
           },
+          // margin: "-4px",
+          // width: "100px",
+          // textAlign: "center",
+          // color: "#597FB5",
         }}
       >
         Facebook Ads
@@ -113,47 +117,62 @@ const FacebookDropdown: React.FC = () => {
             href="/adsets"
             sx={{
               fontSize: "14px",
-              color: "#4F5361",
+              // color: "#4F5361",
               fontWeight: "bold",
               cursor: "pointer",
               textDecoration: "none",
               "&:hover": {
                 color: "#405D80",
               },
+              margin: "-4px",
+              width: "140px",
+              textAlign: "center",
+              color: "#597FB5",
             }}
           >
             <Typography>Adsets</Typography>
           </Link>
         </MenuItem>
+        <Divider/>
         <MenuItem onClick={handleClose}>
           <Link
             href="/adcreatives"
             sx={{
               fontSize: "14px",
-              color: "#4F5361",
+              // color: "#4F5361",
               fontWeight: "bold",
               cursor: "pointer",
               textDecoration: "none",
               "&:hover": {
                 color: "#405D80",
               },
+              margin: "-4px",
+              width: "140px",
+              textAlign: "center",
+              color: "#597FB5",
             }}
           >
             <Typography>Ad Creatives</Typography>
           </Link>
         </MenuItem>
+        <Divider/>
+
         <MenuItem onClick={handleClose}>
           <Link
             href="/ads"
             sx={{
               fontSize: "14px",
-              color: "#4F5361",
+              // color: "#4F5361",
               fontWeight: "bold",
               cursor: "pointer",
               textDecoration: "none",
               "&:hover": {
                 color: "#405D80",
               },
+              margin: "-4px",
+              width: "140px",
+              textAlign: "center",
+              color: "#597FB5",
             }}
           >
             <Typography>Ads</Typography>

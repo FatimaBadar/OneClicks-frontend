@@ -11,24 +11,37 @@ import {
   TableRow,
   Chip,
   Button,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 import Navbar from "@/app/_components/Navbar/Navbar";
 import AdSearchForm from "@/app/_components/GoogleAds/AdSearchForm";
 import { GetAllAdsService } from "@/app/_services/googleService";
 import { AdGroup } from "@/app/_models/Google.model";
+import { useSearchParams } from "next/navigation";
+import SuccessSnackbar from "@/app/_components/SuccessSnackbarComponent";
+import FailureSnackbar from "@/app/_components/FailureSnackbarComponent";
 
 const Facebook = "rgb(19, 222, 185)";
 const Instagram = "rgb(250, 137, 107)";
 const Google = "rgb(73, 190, 255)";
 
-const Adsets = () => {
+const AdGroupPage = () => {
+  const searchParams = useSearchParams();
   const [googleAds, setGoogleAds] = useState<AdGroup[]>([]);
+  const [loader, setLoader] = useState<boolean>(true);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     getAds();
   }, []);
+  var g_CampaignId: string | null = searchParams.get("g_CampaignId");
+  if (g_CampaignId == null) g_CampaignId = "";
 
   const getAds = async () => {
+    setLoader(true)
     try {
       const accessTokengoogle =
         localStorage?.getItem("accesstoken_Google") ?? "";
@@ -42,8 +55,10 @@ const Adsets = () => {
       );
       if (response.statusCode == "200") {
         setGoogleAds(response.responseData);
+        setLoader(false)
       }
     } catch (error) {
+      setLoader(false)
       console.error(error);
     }
   };
@@ -51,18 +66,18 @@ const Adsets = () => {
   return (
     <>
       <Navbar />
+      {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress size={"70px"} />
+        </Container>
+      ) : 
+        <>
       <Box sx={{ mt: 10, ml: 10, mr: 10 }}>
-        <AdSearchForm />
-        {/* {f_CampaignId ? (
-          <AdsetForm
-            campaign={f_CampaignId}
-            objective={f_Objective}
-          />
-        ) : (
-          ""
-        )} */}
+      {g_CampaignId ? <AdSearchForm /> : ""}
       </Box>
-
       <Box sx={{ mt: 5 }}>
         <Box
           sx={{
@@ -224,8 +239,12 @@ const Adsets = () => {
           </Table>
         </Box>
       </Box>
+      </>
+      }
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };
 
-export default Adsets;
+export default AdGroupPage;

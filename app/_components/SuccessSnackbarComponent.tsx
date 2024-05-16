@@ -8,7 +8,7 @@ interface SnackbarProps {
   openBar: boolean;
   message: string
 }
-const CustomizedSnackbars: React.FC<SnackbarProps> = ({ openBar, message }) => {
+const SuccessSnackbar: React.FC<SnackbarProps> = ({ openBar, message }) => {
   const [open, setOpen] = React.useState(false);
 
   useEffect(()=> {
@@ -45,4 +45,4 @@ const CustomizedSnackbars: React.FC<SnackbarProps> = ({ openBar, message }) => {
     </div>
   );
 }
-export default CustomizedSnackbars;
+export default SuccessSnackbar;

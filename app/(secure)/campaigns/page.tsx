@@ -11,6 +11,8 @@ import {
   TableRow,
   Chip,
   Button,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 
 import Navbar from "@/app/_components/Navbar/Navbar";
@@ -21,6 +23,8 @@ import CreateCampaignDropdown from "@/app/_components/CreateCampaignDropdown";
 import { GoogleCampaign } from "@/app/_models/Google.model";
 import { GetAllCampaignsGoogle } from "@/app/_services/googleService";
 import { CombinedCampaign } from "@/app/_models/ad.model";
+import SuccessSnackbar from "@/app/_components/SuccessSnackbarComponent";
+import FailureSnackbar from "@/app/_components/FailureSnackbarComponent";
 
 const Facebook = "rgb(19, 222, 185)";
 const Instagram = "rgb(250, 137, 107)";
@@ -29,6 +33,11 @@ const Google = "rgb(73, 190, 255)";
 const Adcampaigns = () => {
   const impressions = 0;
   const clicks = 0;
+
+  const [loader, setLoader] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   const [facebookCampaigns, setFacebookCampaigns] = useState<Campaign[]>([]);
   const [googleCampaigns, setGoogleCampaigns] = useState<GoogleCampaign[]>([]);
@@ -135,6 +144,15 @@ const Adcampaigns = () => {
   );
   return (
     <>
+     {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress size={"70px"} />
+        </Container>
+      ) : 
+        <>
       <Navbar />
       <Box sx={{ mt: 15 }}>
         <Box
@@ -329,6 +347,10 @@ const Adcampaigns = () => {
           </Table>
         </Box>
       </Box>
+      </>
+    }
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };

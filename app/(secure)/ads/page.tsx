@@ -11,23 +11,24 @@ import {
   TableRow,
   Chip,
   Button,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 
-import DashboardCard from "@/app/_components/HomeComponent/DashboardCard";
 import Navbar from "@/app/_components/Navbar/Navbar";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AdData, Ads } from "@/app/_models/adAccount.model";
 import {
   ScheduleAdService,
-  getAllAdsPayloadService,
   getAllAdsService,
 } from "@/app/_services/adAccountService";
 import AdForm from "@/app/_components/Ads/AdForm";
-import PaymentComponent from "../../_components/Ads/PaymentComponent";
+import SuccessSnackbar from "@/app/_components/SuccessSnackbarComponent";
+import FailureSnackbar from "@/app/_components/FailureSnackbarComponent";
 
-const Facebook= "rgb(19, 222, 185)";
-const Instagram= "rgb(250, 137, 107)";
-const Google="rgb(73, 190, 255)";
+const Facebook = "rgb(19, 222, 185)";
+const Instagram = "rgb(250, 137, 107)";
+const Google = "rgb(73, 190, 255)";
 
 const AdPage = () => {
   const [ads, setAds] = useState<AdData[]>([]);
@@ -38,6 +39,10 @@ const AdPage = () => {
   const [creativeId, setCreativeId] = useState("");
   const [status, setStatus] = useState("");
   const [type, setType] = useState("");
+  const [loader, setLoader] = useState<boolean>(true);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -45,8 +50,7 @@ const AdPage = () => {
   var f_AdsetId: string | null = searchParams.get("f_AdsetId");
   if (f_AdsetId == null) f_AdsetId = "";
 
-  var f_CreativeId: string | null =
-    searchParams.get("f_CreativeId");
+  var f_CreativeId: string | null = searchParams.get("f_CreativeId");
   if (f_CreativeId == null) f_CreativeId = "";
 
   useEffect(() => {
@@ -54,16 +58,21 @@ const AdPage = () => {
   }, []);
 
   const getAdsData = async () => {
+    setLoader(true);
     try {
-      
-    const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
-    const adaccountId = localStorage?.getItem("adAccountId") ?? "";
+      const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
+      const adaccountId = localStorage?.getItem("adAccountId") ?? "";
 
-      const response = await getAllAdsService(adaccountId.toString(), accessTokenfb);
+      const response = await getAllAdsService(
+        adaccountId.toString(),
+        accessTokenfb
+      );
       if (response.statusCode == "200") {
         setAds(response.responseData);
+        setLoader(false);
       }
     } catch (error) {
+      setLoader(false);
       console.error(error);
     }
   };
@@ -80,7 +89,7 @@ const AdPage = () => {
       status,
       accessToken: accessTokenfb,
       adAccountId: adaccountId,
-      type: "Facebook"
+      type: "Facebook",
     };
     try {
       const response = await ScheduleAdService(tempAdsData);
@@ -95,25 +104,37 @@ const AdPage = () => {
   return (
     <>
       <Navbar />
-      <Box sx={{ mt: 10, ml: 20, mr: 20, mb: 5 }}>
-       
-        <AdForm />
-      </Box>
-      <Box sx={{ mt: 15 }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexDirection: "row",
-            backgroundColor: "#D6E0FE",
-            height: "55px",
-          }}
+      {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
         >
-          <Typography variant="h6" fontWeight={550} sx={{ ml: "15px", color: "darkblue" }}>
-            Ads
-          </Typography>
-        </Box>
+          <CircularProgress size={"70px"} />
+        </Container>
+      ) : 
+        <>
+          <Box sx={{ mt: 10, ml: 20, mr: 20, mb: 5 }}>
+           <AdForm /> 
+          </Box>
+          <Box sx={{ mt: 15 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexDirection: "row",
+                backgroundColor: "#D6E0FE",
+                height: "55px",
+              }}
+            >
+              <Typography
+                variant="h6"
+                fontWeight={550}
+                sx={{ ml: "15px", color: "darkblue" }}
+              >
+                Ads
+              </Typography>
+            </Box>
 
         <Box sx={{ overflow: "auto", width: { xs: "100%", sm: "auto" } }}>
           <Table aria-label="simple table">
@@ -229,6 +250,8 @@ const AdPage = () => {
           </Table>
         </Box>
       </Box>
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}          
     </>
   );
 };

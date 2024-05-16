@@ -2,8 +2,6 @@
 "use client";
 import React, {
   useState,
-  useEffect,
-  useRef,
   ChangeEvent,
   FormEvent,
 } from "react";
@@ -21,16 +19,17 @@ import {
   createTheme,
   ThemeProvider,
   Divider,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { RegisterService } from "@/app/_services/authService";
 import useStore from "@/app/_store/authStore";
 import { UserPayload } from "@/app/_models/user.model";
-// import  {showSuccessToast, showErrorToast, ToastComponent} from '@/app/_components/toaster';
-import { Toast } from "primereact/toast";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
-import { PrimeReactProvider } from "primereact/api";
+import SuccessSnackbar from "@/app/_components/SuccessSnackbarComponent";
+import FailureSnackbar from "@/app/_components/FailureSnackbarComponent";
 
 const Signup = () => {
   const [firstname, setFirstname] = useState("");
@@ -39,8 +38,11 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const toast = useRef<Toast>(null);
+  const [loader, setLoader] = useState<boolean>(false);
 
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
   // const userService = useUserService();
   // useEffect(() => {
   //   // if (!store.authUser) {
@@ -63,13 +65,17 @@ const Signup = () => {
     };
 
     try {
+      setLoader(true);
       const response = await RegisterService(tempUser);
       if (response.statusCode == "200") {
-        showSuccessToast(
-          "Registered. \nPlease verify your account using the verification Link sent to your email address."
-        );
+        setLoader(false)
+        setSuccess(true);
+        setMessage("Registered. \nPlease verify your account using the verification Link sent to your email address.");
+        
       } else {
-        showErrorToast("Registration failed. Please check your credentials.");
+        setLoader(false)
+        setFailure(true);
+        setMessage("Registration failed. Please check your credentials..");
       }
 
       setFirstname("");
@@ -78,30 +84,12 @@ const Signup = () => {
       setEmail("");
       setPassword("");
 
-      ///setTimeout(() => {
       router.push("/");
-      // }, 3000);
     } catch (error) {
-      console.error(error);
-      showErrorToast("Please enter correct registered username.");
+      setLoader(false)
+      setFailure(true);
+      setMessage("Registration failed. Please check your credentials..");     
     }
-  };
-  const showSuccessToast = (message: string) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: message,
-      life: 3000,
-    });
-  };
-
-  const showErrorToast = (message: string) => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error Message",
-      detail: message,
-      life: 3000,
-    });
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -155,6 +143,15 @@ const Signup = () => {
 
   return (
     <>
+        {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress size={"70px"} />
+        </Container>
+      ) : 
+        <>
       <ThemeProvider theme={defaultTheme}>
         <Box sx={{ m: 7 }}>
           <Grid
@@ -335,12 +332,10 @@ const Signup = () => {
           </Grid>
         </Box>
       </ThemeProvider>
-
-      <PrimeReactProvider>
-        <div className="card flex justify-content-center">
-          <Toast ref={toast} />
-        </div>
-      </PrimeReactProvider>
+      </>
+      }
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };

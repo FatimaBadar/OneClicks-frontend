@@ -11,12 +11,16 @@ import {
   TableRow,
   Button,
   Chip,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 import Navbar from "@/app/_components/Navbar/Navbar";
 import { AdCreative } from "@/app/_models/adAccount.model";
 import AdCreativeForm from "@/app/_components/Ads/AdCreativeForm";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getAllAdcreativesService } from "@/app/_services/adAccountService";
+import SuccessSnackbar from "@/app/_components/SuccessSnackbarComponent";
+import FailureSnackbar from "@/app/_components/FailureSnackbarComponent";
 
 const Facebook= "rgb(19, 222, 185)";
 const Instagram= "rgb(250, 137, 107)";
@@ -24,7 +28,11 @@ const Google="rgb(73, 190, 255)";
 
 const AdCreatives = () => {
   const [creatives, setCreatives] = useState<AdCreative[]>([]);
-
+  const [loader, setLoader] = useState<boolean>(true);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+  
   const router = useRouter();
   const searchParams = useSearchParams();
   var f_AdsetId: string | null = searchParams.get("f_AdsetId");
@@ -35,13 +43,15 @@ const AdCreatives = () => {
   }, []);
 
   const getAdCreatives = async () => {
+    setLoader(true);
     try {
       const response = await getAllAdcreativesService();
       if (response.statusCode == "200") {
         setCreatives(response.responseData);
-        console.log("creatives: ", creatives);
+        setLoader(false)
       }
     } catch (error) {
+      setLoader(false)
       console.error(error);
     }
   };
@@ -60,7 +70,17 @@ const AdCreatives = () => {
   return (
     <>
       <Navbar />
+      {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress size={"70px"} />
+        </Container>
+      ) : 
+        <>
       <Box sx={{ mt: 15 }}>
+        
         <AdCreativeForm adset={f_AdsetId} />
       </Box>
 
@@ -186,6 +206,10 @@ const AdCreatives = () => {
         </Table>
       </Box>
       </Box>
+      </>
+      }
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };

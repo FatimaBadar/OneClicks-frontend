@@ -409,7 +409,10 @@ export const Navbar: React.FC = () => {
             <Link href="/home" style={{ textDecoration: "none" }}>
               <NavLink variant="body2">Home</NavLink>
             </Link>
-            <Link href="/campaigns" style={{ textDecoration: "none" }}>
+            <Link href="/campaigns" style={{ textDecoration: "none", 
+                // width: "140px",
+                // textAlign: "center",
+             }}>
               <NavLink variant="body2">Ad Campaigns</NavLink>
             </Link>
             <FacebookDropdown />

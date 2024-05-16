@@ -1,62 +1,50 @@
 'use client'
-import React, { useState, useRef} from 'react';
+import React, { useState} from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
-    Avatar, Button, CssBaseline, Link,
-    Paper, Box, Typography, createTheme, ThemeProvider, Divider
+    Avatar, Button,
+    Paper, Box, Typography, createTheme, ThemeProvider, Divider,
+    CircularProgress,
+    Container
 } from '@mui/material';
 import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { VerifyService } from '@/app/_services/authService';
 
-import { Toast} from 'primereact/toast';
 import 'primereact/resources/themes/lara-light-cyan/theme.css';
-import { PrimeReactProvider } from 'primereact/api';
+import SuccessSnackbar from '@/app/_components/SuccessSnackbarComponent';
+import FailureSnackbar from '@/app/_components/FailureSnackbarComponent';
 
 export default function EmailVerification() {
     const router = useRouter();
-    const toast = useRef<Toast>(null);
     const searchParams = useSearchParams()
-        //get token from params
-    const showSuccessToast = (message: string) => {
-        toast.current?.show({
-            severity: 'success',
-            summary: 'Success',
-            detail: message,
-            life: 3000,
-        });
-    };
-    
-    const showErrorToast = (message: string) => {
-        toast.current?.show({
-            severity: 'error',
-            summary: 'Error Message',
-            detail: message,
-            life: 3000,
-        });
-    };
+    const [loader, setLoader] = useState<boolean>(false);
+
+    const [success, setSuccess] = useState<boolean>(false);
+    const [failure, setFailure] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>("");
         
     const submitVerification = async (e: any) => {
     e.preventDefault();
     const token = searchParams.get("token");
     try {
+        setLoader(true)
         if(token!==""){
             const response = await VerifyService(token);
             
             if(response.statusCode=="200"){
-                showSuccessToast("Account Verified Successfully!");
-                
-             //   setTimeout(() => {
-                    router.push('/account/login');
-             //     }, 3000);   
-                // showSuccessToast("Please login again");
+                setLoader(false)
+                setSuccess(true);
+                setMessage("Account Verified Successfully!");
+                                
+                router.push('/account/login');
             }
-            //check status code, if 200 then route to login page.        
         }
     } catch (error) {
-        showErrorToast("Verification failed.");
-        // console.error(error);
+        setLoader(false)
+        setFailure(true);
+        setMessage("Verification failed.");
     }
     }
 
@@ -67,6 +55,15 @@ export default function EmailVerification() {
     });
 
     return (
+        <>
+           {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress size={"70px"} />
+        </Container>
+      ) : 
         <>
         <ThemeProvider theme={defaultTheme}>
             <Box component={Paper} elevation={24} square={false}
@@ -130,12 +127,10 @@ export default function EmailVerification() {
                 </Box>
                      </Box>
         </ThemeProvider>
-
-        <PrimeReactProvider>
-    <div className="card flex justify-content-center">  
-    <Toast ref={toast} />
-      </div>    
-    </PrimeReactProvider>  
+        </>
+      }
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
       </>
     );
 }

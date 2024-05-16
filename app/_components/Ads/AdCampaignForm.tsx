@@ -16,6 +16,8 @@ import {
   ThemeProvider,
   FormLabel,
   Divider,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 
 import objectives from "@/public/jsonData/objectives.json";
@@ -25,12 +27,19 @@ import { CreateCampaignService } from "../../_services/adAccountService";
 import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
 import { ScrollPanel } from "primereact/scrollpanel";
+import SuccessSnackbar from "../SuccessSnackbarComponent";
+import FailureSnackbar from "../FailureSnackbarComponent";
 
 const AdCampaignForm = ({ onReturn }: any) => {
   const [campaignName, setCampaignName] = useState("");
   const [objective, setObjective] = useState("");
   const [status, setStatus] = useState("");
   const [specialAdCategory, setSpecialAdCategory] = useState<string[]>([]);
+
+  const [loader, setLoader] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
@@ -50,9 +59,13 @@ const AdCampaignForm = ({ onReturn }: any) => {
     console.log(tempCampaignData);
 
     try {
+      setLoader(true);
       const response = await CreateCampaignService(tempCampaignData);
       if (response.statusCode == "200") {
         localStorage.setItem("campaignId", response.responseData.campaignId);
+        setLoader(false)
+        setSuccess(true);
+        setMessage("Successfully created campaign!");
         onReturn(true);
       }
 
@@ -61,8 +74,11 @@ const AdCampaignForm = ({ onReturn }: any) => {
       setStatus("");
       setSpecialAdCategory([]);
     } catch (error) {
+      setLoader(false)
+      setSuccess(false);
+      setMessage("Failed to create campaign.");
+
       onReturn(false);
-      console.error(error);
     }
   };
 
@@ -101,6 +117,15 @@ const AdCampaignForm = ({ onReturn }: any) => {
   });
   return (
     <>
+        {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress  />
+        </Container>
+      ) : (
+        <>
       <ThemeProvider theme={defaultTheme}>
         <Box
           component="form"
@@ -154,24 +179,24 @@ const AdCampaignForm = ({ onReturn }: any) => {
             />
           </Box> */}
             <InputLabel>Objective</InputLabel>
-            
-              <Select
-                value={objective}
-                onChange={(e) => setObjective(e.target.value)}
-                label="Objective"
-              >
-                {/* <ScrollPanel> */}
-                {objectives.map((obj, id) => (
-                  <MenuItem
-                    key={id}
-                    value={obj.codeWord}
-                    sx={{ width: "200px", height: "35px", fontSize: "small" }}
-                  >
-                    {obj.name} - "{obj.description}"
-                  </MenuItem>
-                ))}
-                {/* </ScrollPanel> */}
-              </Select>
+
+            <Select
+              value={objective}
+              onChange={(e) => setObjective(e.target.value)}
+              label="Objective"
+            >
+              {/* <ScrollPanel> */}
+              {objectives.map((obj, id) => (
+                <MenuItem
+                  key={id}
+                  value={obj.codeWord}
+                  sx={{ width: "200px", height: "35px", fontSize: "small" }}
+                >
+                  {obj.name} - "{obj.description}"
+                </MenuItem>
+              ))}
+              {/* </ScrollPanel> */}
+            </Select>
           </FormControl>
 
           <FormControl
@@ -210,34 +235,7 @@ const AdCampaignForm = ({ onReturn }: any) => {
             </RadioGroup>
           </FormControl>
 
-          {/* <Box sx={{display: "flex",  flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-evenly",}}>
-            <MultiSelect
-              value={specialAdCategory}
-              onChange={(e) => handleSpecialAdCategoryChange(e.target.value)}
-              options={specialAdCategories.map((obj, id) => ({
-                label: `${obj.name} - ${obj.description}`,
-                value: obj.codeWord,
-              }))}
-              placeholder="Special Ad Category"
-              className="w-full"
-              style={{
-                height: "45px",
-                width: "100%",
-                fontFamily:
-                  'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
-                fontSize: "1rem",
-                fontWeight: "200",
-                alignItems: "center",
-                boxShadow: "0 3px 6px rgba(0, 0, 0, 0.16)",
-                borderRadius: "4px",
-                borderColor: "rgba(0, 0, 0, 0.23)",
-              }}
-              virtualScrollerOptions={{ itemSize: 38 }}
-            />
-          </Box> */}
-            <FormControl fullWidth variant="outlined" margin="normal">
+          <FormControl fullWidth variant="outlined" margin="normal">
             <InputLabel>Special Ad Category</InputLabel>
             <Select
               value={specialAdCategory}
@@ -245,40 +243,19 @@ const AdCampaignForm = ({ onReturn }: any) => {
               multiple
               label="Special Ad Category"
             >
-               {/* <ScrollPanel> */}
-               {specialAdCategories.map((ads, id) => (
-                <MenuItem 
-                key={id}
-                value={ads.codeWord}
-                sx={{ width: "200px", height: "15px", fontSize: "small" }}
+              {/* <ScrollPanel> */}
+              {specialAdCategories.map((ads, id) => (
+                <MenuItem
+                  key={id}
+                  value={ads.codeWord}
+                  sx={{ width: "200px", height: "15px", fontSize: "small" }}
                 >
-                  {ads.name}  - "{ads.description}"
+                  {ads.name} - "{ads.description}"
                 </MenuItem>
               ))}
               {/* </ScrollPanel> */}
             </Select>
           </FormControl>
-          {/* <FormControl fullWidth variant="outlined" margin="normal">
-            <InputLabel>Special Ad Category</InputLabel>
-            <Select
-              value={specialAdCategory}
-              multiple
-              onChange={handleSpecialAdCategoryChange}
-              label="Special Ad Category"
-            >
-              <ScrollPanel>
-              {specialAdCategories.map((ads, id) => (
-                <MenuItem
-                  key={id}
-                  value={ads.codeWord}
-                  sx={{ width: "200px", height: "35px", fontSize: "small" }}
-                >
-                  {ads.name}  - "{ads.description}"
-                </MenuItem>
-              ))}
-              </ScrollPanel>
-            </Select>
-          </FormControl> */}
 
           <Button
             type="submit"
@@ -296,10 +273,14 @@ const AdCampaignForm = ({ onReturn }: any) => {
               },
             }}
           >
-            Next
+            Create
           </Button>
         </Box>
       </ThemeProvider>
+      </>
+      )}
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };

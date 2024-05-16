@@ -88,13 +88,17 @@ const GoogleDropdown: React.FC = () => {
         onClick={handleClick}
         sx={{
           fontSize: "14px",
-          color: "#4F5361",
           fontWeight: "bold",
+          color: "#4F5361",
           cursor: "pointer",
           textDecoration: "none",
           "&:hover": {
             color: "#405D80",
           },
+          // margin: "-4px",
+          // width: "140px",
+          // textAlign: "center",
+          // color: "#597FB5",
         }}
       >
         Google Ads
@@ -114,13 +118,17 @@ const GoogleDropdown: React.FC = () => {
             href="/ads/google"
             sx={{
               fontSize: "14px",
-              color: "#4F5361",
+              // color: "#4F5361",
               fontWeight: "bold",
               cursor: "pointer",
               textDecoration: "none",
               "&:hover": {
                 color: "#405D80",
               },
+              margin: "-4px",
+              width: "140px",
+              textAlign: "center",
+              color: "#597FB5",
             }}
           >
             <Typography>Ads</Typography>
