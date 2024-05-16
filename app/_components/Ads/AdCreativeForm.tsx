@@ -8,6 +8,8 @@ import {
   ThemeProvider,
   Grid,
   Typography,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -17,8 +19,8 @@ import { AdCreativePayload, AdImagePayload, ImageHash } from "@/app/_models/adAc
 import { Toast } from "primereact/toast";
 import { ResponseVM } from "@/app/_models/response.model";
 import ClearIcon from '@mui/icons-material/Clear';
-
-const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
+import SuccessSnackbar from "../SuccessSnackbarComponent";
+import FailureSnackbar from "../FailureSnackbarComponent";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -37,35 +39,21 @@ interface AdCreativeProps {
 }
 
 const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
+  const [loader, setLoader] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [messageToaster, setMessageToaster] = useState<string>("");
 
   const [creativeName, setcreativeName] = useState("");
   const emptyFile = new File([], '', { type: '' });
   // const emptyFile2 = new File([])
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<File>(emptyFile);
   const [imagePath, setImagePath] = useState("");
   const [message, setMessage] = useState("");
   const [displaySelectButton, setDisplaySelectButton] = useState(true);
 
   const [imageHash, setImageHash] = useState("");
   const toast = useRef<Toast>(null);
-
-  const showSuccessToast = (message: string) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: message,
-      life: 3000,
-    });
-  };
-
-  const showErrorToast = (message: string) => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error Message",
-      detail: message,
-      life: 3000,
-    });
-  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -85,14 +73,19 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
       type: "Facebook"
     };
     try {
+      setLoader(true);
       const response = await CreateAdcreativeService(tempAdCreativeData);
       if (response.statusCode == "200") {
         setMessage(response.responseData.message);
         setcreativeName(response.responseData.creativeName);
-        console.log("creative res", response.responseData);
-        showSuccessToast(response.message);
+        setLoader(false)
+        setSuccess(true);
+        setMessageToaster("Successfully created ad creative!");
       }
     } catch (error) {
+      setLoader(false)
+      setSuccess(false);
+      setMessageToaster("Failed to create ad creative.");
       console.error(error);
     }
   }
@@ -130,12 +123,19 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
     const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
     const adaccountId = localStorage?.getItem('adAccountId') ??  "";
     try {
+      setLoader(true)
       const response = await CreateAdImageHashService(adaccountId.toString(), formData, accessTokenfb);
       if (response.statusCode === "200") {
         const hash = response.responseData;
         setImageHash(hash);
+        setLoader(false)
+        setSuccess(true);
+        setMessageToaster("Successfully uploaded image!");
       }
     } catch (error) {
+      setLoader(false)
+      setSuccess(false);
+      setMessageToaster("Failed to upload image.");
       console.error(error);
     }
   };
@@ -167,6 +167,15 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
 
   return (
     <>
+      {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress  />
+        </Container>
+      ) : 
+        <>
       <ThemeProvider theme={defaultTheme}>
         <Typography
             variant="h5"
@@ -316,6 +325,10 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
           </Grid>
         </Grid>
       </ThemeProvider>
+      </>
+      }
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };

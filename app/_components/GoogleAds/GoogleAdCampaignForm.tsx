@@ -19,13 +19,22 @@ import {
   AccordionSummary,
   Typography,
   AccordionDetails,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { CreateAdcampaignService } from "@/app/_services/googleService";
 import { CampaignPayload } from "@/app/_models/Google.model";
 import { ScrollPanel } from "primereact/scrollpanel";
+import SuccessSnackbar from "../SuccessSnackbarComponent";
+import FailureSnackbar from "../FailureSnackbarComponent";
 
 const GoogleAdCampaignForm = ({ onReturn }: any) => {
+  const [loader, setLoader] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+
   const [campaignName, setCampaignName] = useState("");
   const [advertisingChannelType, setAvertisingChannelType] = useState("");
   const [targetGoogleSearch, setTargetGoogleSearch] = useState<
@@ -93,10 +102,13 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
     console.log(tempCampaignData);
 
     try {
+      setLoader(true)
       const response = await CreateAdcampaignService(tempCampaignData);
       if (response.statusCode == "200") {
-        console.log(response.responseData);
-        //setCampaigns(response.responseData);
+        setLoader(false)
+        setSuccess(true);
+        setMessage("Successfully created campaign!");
+                //setCampaigns(response.responseData);
         onReturn(true);
       }
       setCampaignName("");
@@ -111,8 +123,9 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
       setStatus("");
     } 
     catch (error) {
-   //   onReturn(false);
-      console.error(error);
+      setLoader(false)
+      setSuccess(false);
+      setMessage("Failed to create campaign");    
     }
   };
 
@@ -143,6 +156,15 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
 
   return (
     <>
+      {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress  />
+        </Container>
+      ) : 
+        <>
       <ThemeProvider theme={defaultTheme}>
         <Box
           component="form"
@@ -397,6 +419,10 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
           </Button>
         </Box>
       </ThemeProvider>
+      </>
+      }
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };

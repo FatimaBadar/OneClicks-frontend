@@ -78,24 +78,6 @@ const AdForm = () => {
     getAdsDropdownData();
   }, []);
 
-  const showSuccessToast = (message: string) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: message,
-      life: 3000,
-    });
-  };
-
-  const showErrorToast = (message: string) => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error Message",
-      detail: message,
-      life: 3000,
-    });
-  };
-
   const getAdsDropdownData = async () => {
     try {
       setLoader(true)
@@ -113,13 +95,9 @@ const AdForm = () => {
         console.log(response.responseData.adSetData);
         setAdsetData(response.responseData.adSetData);
         setLoader(false)
-        setSuccess(true);
-        setMessage("Successfully created adset!");
       }
     } catch (error) {
       setLoader(false)
-      setSuccess(false);
-      setMessage("Failed to create adset.");
       console.error(error);
     }
   };
@@ -143,9 +121,12 @@ const AdForm = () => {
     };
 
     try {
+      setLoader(true)
       const response = await ScheduleAdService(tempPayload);
       if (response.statusCode == "200") {
-        showSuccessToast(response.message);
+        setLoader(false)
+        setSuccess(true);
+        setMessage("Successfully scheduled ad!");
       }
       setAdName("");
       setAdsetName("");
@@ -156,8 +137,9 @@ const AdForm = () => {
       setCampaignId("");
       setStatus("");
     } catch (error) {
-      showErrorToast("Could not schedule ad");
-      console.error(error);
+      setLoader(false)
+      setSuccess(false);
+      setMessage("Failed to schedule ad.");
     }
   };
 
@@ -207,7 +189,7 @@ const AdForm = () => {
         >
           <CircularProgress  />
         </Container>
-      ) : (
+      ) : 
         <>
       <ThemeProvider theme={defaultTheme}>
         <Typography
@@ -389,7 +371,7 @@ const AdForm = () => {
         </Box>
       </ThemeProvider>
       </>
-      )}
+      }
       {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
       {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>

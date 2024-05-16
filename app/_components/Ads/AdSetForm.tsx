@@ -14,6 +14,8 @@ import {
   Typography,
   Grid,
   IconButton,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import optimization from "@/public/jsonData/optimization_goals.json";
@@ -32,9 +34,10 @@ import {
   GetIndustrySearchData,
   GetInterestsSearchData,
 } from "../../_services/adAccountService";
-import { Toast } from "primereact/toast";
 import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
+import SuccessSnackbar from "../SuccessSnackbarComponent";
+import FailureSnackbar from "../FailureSnackbarComponent";
 
 interface AdSetProps {
   campaign: string;
@@ -66,25 +69,10 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const [returnCityData, setReturnCityData] = useState<string[]>([]);
   const [returnIndustryData, setReturnIndustryData] = useState<string[]>([]);
 
-  const toast = useRef<Toast>(null);
-
-  const showSuccessToast = (message: string) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: message,
-      life: 3000,
-    });
-  };
-
-  const showErrorToast = (message: string) => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error Message",
-      detail: message,
-      life: 3000,
-    });
-  };
+  const [loader, setLoader] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
@@ -141,9 +129,13 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
     console.log(tempAdSetData);
 
     try {
+      setLoader(true)
       const response = await CreateAdsetService(tempAdSetData);
       if (response.statusCode == "200") {
-        showSuccessToast(response.message);
+        localStorage.setItem("campaignId", response.responseData.campaignId);
+        setLoader(false)
+        setSuccess(true);
+        setMessage("Successfully created adset!");
       }
       setAdsetName("");
       setOptimizationGoal("");
@@ -157,51 +149,66 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
       setReturnInterestsData([]);
       setReturnCityData([]);
     } catch (error) {
-      showErrorToast("Could not create adset");
-      console.error(error);
+      setLoader(false)
+      setSuccess(false);
+      setMessage("Failed to create adset.");
     }
   };
 
   const getAvailableInterestsData = async (e: FormEvent) => {
     e.preventDefault();
     try {
+      setLoader(true)
       const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const response = await GetInterestsSearchData(interests, accessTokenfb);
       if (response.statusCode == "200") {
         setInterestsSearchData(response.responseData);
-        showSuccessToast(response.message);
+        setLoader(false)
+        setSuccess(true);
+        setMessage("Successfully fetched interests!");      
       }
     } catch (error) {
-      showErrorToast("Error searching interests");
-    }
+      setLoader(false)
+      setSuccess(false);
+      setMessage("Failed to fetch interests");     }
   };
 
   const getAvailableCityData = async (e: FormEvent) => {
     e.preventDefault();
     try {
+      setLoader(true)
+
       const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const response = await GetCitySearchData(cities, accessTokenfb);
       if (response.statusCode === "200") {
         setCitySearchData(response.responseData);
-        showSuccessToast(response.message);
+        setLoader(false)
+        setSuccess(true);
+        setMessage("Successfully fetched cities!"); 
       }
     } catch (error) {
-      showErrorToast("Error searching cities");
+      setLoader(false)
+      setSuccess(false);
+      setMessage("Failed to fetch cities");    
     }
   };
 
   const getAvailableIndustryData = async (e: FormEvent) => {
     e.preventDefault();
     try {
+      setLoader(true)
       const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const response = await GetIndustrySearchData(accessTokenfb);
       if (response.statusCode == "200") {
-        showSuccessToast(response.message);
         setIndustrySearchData(response.responseData);
-        showSuccessToast(response.message);
+        setLoader(false)
+        setSuccess(true);
+        setMessage("Successfully fetched industries!");
       }
     } catch (error) {
-      showErrorToast("Error searching industries");
+      setLoader(false)
+      setSuccess(false);
+      setMessage("Failed to fetch industries");
     }
   };
 
@@ -261,7 +268,16 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   });
 
   return (
-    <>
+    <>  
+    {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress  />
+        </Container>
+      ) : 
+        <>
       <ThemeProvider theme={defaultTheme}>
         {/* <Typography component="h1" sx={{ fontWeight: 700, color: "#272144", textAlign: "left", mb: 2 }}
         >Create a new Adset</Typography> */}
@@ -710,6 +726,10 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
           </Grid>
         </Grid>
       </ThemeProvider>
+      </>
+      }
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };

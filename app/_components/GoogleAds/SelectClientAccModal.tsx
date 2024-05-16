@@ -1,15 +1,17 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
-import { Toast } from "primereact/toast";
 import {
   CreateClientAccountService,
   GetClientAccounts,
 } from "@/app/_services/googleService";
 import { AccountHierarchyDto } from "@/app/_models/Google.model";
+import { CircularProgress, Container } from "@mui/material";
+import SuccessSnackbar from "../SuccessSnackbarComponent";
+import FailureSnackbar from "../FailureSnackbarComponent";
 
 interface SelectClientAccountModalProps {
   open: boolean;
@@ -29,7 +31,10 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
   );
   const [clientId, setClientId] = useState<string>("");
 
-  const toast = useRef<Toast>(null);
+  const [loader, setLoader] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     fetchClientAccounts();
@@ -46,26 +51,26 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
 
   const handleSelectClient = () => {
     if (selectedClient) {
+      setSuccess(true);
+      setMessage("Successfully selected a client account");
       onClose();
     } else {
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "Please select a client account",
-        life: 30000,
-      });
+      setFailure(true);
+      setMessage("Please select a client account");
     }
   };
 
   const fetchClientAccounts = async () => {
     try {
+      setLoader(true)
       const accessToken = localStorage?.getItem("accesstoken_Google") ?? "";
-      // Pass managerIds to GetCLientAccounts function
       const response = await GetClientAccounts(accessToken, managerIds);
       if (response.statusCode == "200") {
         setClientAccounts(response.responseData[0].childAccounts);
+        setLoader(false)
       }
     } catch (error) {
+      setLoader(false)
       console.log(error);
     }
   };
@@ -108,6 +113,16 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
   // };
   
   return (
+    <>
+    {loader ? (
+      <Container
+        maxWidth={false}
+        sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+      >
+        <CircularProgress />
+      </Container>
+    ) : (
+      <>
     <Dialog open={open} onClose={() => onClose()}>
       <DialogTitle>Select Client Account</DialogTitle>
       <DialogContent>
@@ -147,8 +162,12 @@ const SelectClientAccountModal: React.FC<SelectClientAccountModalProps> = ({
           Select
         </Button>
       </DialogActions>
-      <Toast ref={toast} />
     </Dialog>
+    </>
+      )}
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
+    </>
   );
 };
 

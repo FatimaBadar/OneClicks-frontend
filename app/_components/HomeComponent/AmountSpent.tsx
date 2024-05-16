@@ -11,14 +11,12 @@ const Chart = dynamic(() => import('react-apexcharts'),   { ssr: false })
 const AmountSpent = () => {
   const [amount, setAmount] = useState<string>("")
   useEffect(() => {
-   
-  
     fetchData();
   }, []);
-  const adAccountId = localStorage?.getItem('adAccountId') ?? "";
 
   const fetchData = async () => {
     try {
+      const adAccountId = localStorage?.getItem('adAccountId') ?? "";
       const accesstoken_Google = localStorage?.getItem('accesstoken_fb') ?? "";
       if(accesstoken_Google != "" && adAccountId != ""){
       const response = await GetBudgetAmountFacebook(adAccountId.toString(), accesstoken_Google);

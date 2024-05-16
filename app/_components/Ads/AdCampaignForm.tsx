@@ -124,7 +124,7 @@ const AdCampaignForm = ({ onReturn }: any) => {
         >
           <CircularProgress  />
         </Container>
-      ) : (
+      ) : 
         <>
       <ThemeProvider theme={defaultTheme}>
         <Box
@@ -278,7 +278,7 @@ const AdCampaignForm = ({ onReturn }: any) => {
         </Box>
       </ThemeProvider>
       </>
-      )}
+      }
       {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
       {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>

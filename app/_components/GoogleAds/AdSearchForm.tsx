@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useState, useRef, useEffect } from "react";
+import React, { FormEvent, useState, useEffect } from "react";
 import {
   Button,
   TextField,
@@ -12,9 +12,10 @@ import {
   ThemeProvider,
   Typography,
   Grid,
+  Container,
+  CircularProgress,
 } from "@mui/material";
 
-import { Toast } from "primereact/toast";
 import {
   AdGroupPayload,
   GeoTargeting,
@@ -25,10 +26,12 @@ import {
 } from "@/app/_models/Google.model";
 import {
   CreateAdGroupService,
-  GetAllCampaignsGoogle,
+  GetAllGoogleCampaigns,
 } from "@/app/_services/googleService";
 import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
+import SuccessSnackbar from "../SuccessSnackbarComponent";
+import FailureSnackbar from "../FailureSnackbarComponent";
 // import geotargetingData as GeoTargetingData from '@/public/jsonData/GeoTargetGoogle.json';
 
 const AdSearchForm = () => {
@@ -57,25 +60,11 @@ const AdSearchForm = () => {
   const [campaignData, setCampaignData] = useState<GoogleCampaign[]>([]);
   const [geotargetingData, setGeoTargetingdata] = useState<GeoTargetingData[]>([])
   const [filteredOptions, setFilteredOptions] = useState<GeoTargetingData[]>([]);
-  const toast = useRef<Toast>(null);
 
-  const showSuccessToast = (message: string) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Success",
-      detail: message,
-      life: 3000,
-    });
-  };
-
-  const showErrorToast = (message: string) => {
-    toast.current?.show({
-      severity: "error",
-      summary: "Error Message",
-      detail: message,
-      life: 3000,
-    });
-  };
+  const [loader, setLoader] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [failure, setFailure] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     getAllCampaigns();
@@ -95,19 +84,21 @@ const AdSearchForm = () => {
     setFilteredOptions(geotargeting.sort())
 
     try {
+      setLoader(true)
       const accessTokengoogle =
         localStorage?.getItem("accesstoken_Google") ?? "";
       const customerId = localStorage?.getItem("g_managerId") ?? "";
 
-      const response = await GetAllCampaignsGoogle(
+      const response = await GetAllGoogleCampaigns(
         accessTokengoogle,
         parseFloat(customerId)
       );
       if (response) {
-        setCampaignData(response);
+        setCampaignData(response.responseData);
+        setLoader(false)
       }
     } catch (error) {
-      showErrorToast("Error searching interests");
+      setLoader(false)
     }
   };
 
@@ -165,16 +156,22 @@ const AdSearchForm = () => {
     };
 
     try {
+      setLoader(true)
       const response = await CreateAdGroupService(tempPayload);
       if (response.statusCode == "200") {
-        showSuccessToast(response.message);
-      }
+
+        setLoader(false)
+        setSuccess(true);
+        setMessage("Successfully created Ad!"); 
+            }
       setAdGroupName("");
       setCampaignId("");
       setAdGroupBidAmount(0);
       setAdGroupStatus("");
     } catch (error) {
-      showErrorToast("Could not create ad group");
+      setLoader(false)
+      setSuccess(false);
+      setMessage("Failed to create ad");   
       console.error(error);
     }
   };
@@ -216,6 +213,15 @@ const AdSearchForm = () => {
 
   return (
     <>
+     {loader ? (
+        <Container
+          maxWidth={false}
+          sx={{ display: "flex", width: "fit-content", mt: "20%" }}
+        >
+          <CircularProgress  />
+        </Container>
+      ) : 
+        <>
       <ThemeProvider theme={defaultTheme}>
         <Typography
           component="h2"
@@ -596,6 +602,10 @@ const AdSearchForm = () => {
           </Grid>
         </Box>
       </ThemeProvider>
+      </>
+      }
+      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
     </>
   );
 };

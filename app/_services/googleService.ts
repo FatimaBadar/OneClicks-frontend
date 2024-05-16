@@ -59,6 +59,15 @@ export async function CreateAdcampaignService(payload: CampaignPayload): Promise
 
     return handleResponse<ResponseVM<string>>(response).then((data) => data);
 }
+export async function GetAllGoogleCampaigns(refreshToken: string, customerId: number): Promise<ResponseVM<GoogleCampaign[]>>{
+    const fetch = useFetch();
+    customerId = 2989534382;
+    refreshToken = "1//03v7pNMJs1LOPCgYIARAAGAMSNwF-L9IrDpDmkd1-ga1Y6jAaYrYtfqi6Re3xy31rPhoVQvl7OgAuTDgmkdxnsqHV7kCERZ-WuNc"
+
+    const response = await fetch.get(`${SERVER_ENDPOINT}/api/Google/GetAllCampaigns?refreshToken=${refreshToken}&customerId=${customerId}`);
+    
+    return handleResponse<ResponseVM<GoogleCampaign[]>>(response).then((data) => data);
+}
 
 export async function GetAllCampaignsGoogle(refreshToken: string, customerId: number): Promise<ResponseVM<any[]>>{
     const fetch = useFetch();
