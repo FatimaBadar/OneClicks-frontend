@@ -29,7 +29,7 @@ import {
   ScheduleAdService,
   getAllAdsPayloadService,
 } from "@/app/_services/adAccountService";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import SuccessSnackbar from "../SuccessSnackbarComponent";
 import FailureSnackbar from "../FailureSnackbarComponent";
 
@@ -108,7 +108,8 @@ const AdForm = () => {
     const selectedAdsetName = adsetData.find((x) => x.id == adsetId)?.name;
     const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
     const adaccountId = localStorage?.getItem("adAccountId") ?? "";
-
+    const router = useRouter()
+    
     const tempPayload: Ads = {
       adName,
       adsetId,
@@ -127,6 +128,7 @@ const AdForm = () => {
         setLoader(false)
         setSuccess(true);
         setMessage("Successfully scheduled ad!");
+        router.refresh()
       }
       setAdName("");
       setAdsetName("");

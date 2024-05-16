@@ -38,6 +38,7 @@ import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
 import SuccessSnackbar from "../SuccessSnackbarComponent";
 import FailureSnackbar from "../FailureSnackbarComponent";
+import { useRouter } from "next/navigation";
 
 interface AdSetProps {
   campaign: string;
@@ -73,6 +74,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const [success, setSuccess] = useState<boolean>(false);
   const [failure, setFailure] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const router = useRouter();
 
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
@@ -136,6 +138,7 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
         setLoader(false)
         setSuccess(true);
         setMessage("Successfully created adset!");
+        router.refresh()
       }
       setAdsetName("");
       setOptimizationGoal("");
@@ -158,17 +161,14 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableInterestsData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      setLoader(true)
       const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const response = await GetInterestsSearchData(interests, accessTokenfb);
       if (response.statusCode == "200") {
         setInterestsSearchData(response.responseData);
-        setLoader(false)
         setSuccess(true);
         setMessage("Successfully fetched interests!");      
       }
     } catch (error) {
-      setLoader(false)
       setSuccess(false);
       setMessage("Failed to fetch interests");     }
   };
@@ -176,18 +176,14 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableCityData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      setLoader(true)
-
       const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const response = await GetCitySearchData(cities, accessTokenfb);
       if (response.statusCode === "200") {
         setCitySearchData(response.responseData);
-        setLoader(false)
         setSuccess(true);
         setMessage("Successfully fetched cities!"); 
       }
     } catch (error) {
-      setLoader(false)
       setSuccess(false);
       setMessage("Failed to fetch cities");    
     }
@@ -196,46 +192,37 @@ const AdsetForm: React.FC<AdSetProps> = ({ campaign, objective }) => {
   const getAvailableIndustryData = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      setLoader(true)
       const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
       const response = await GetIndustrySearchData(accessTokenfb);
       if (response.statusCode == "200") {
         setIndustrySearchData(response.responseData);
-        setLoader(false)
         setSuccess(true);
         setMessage("Successfully fetched industries!");
       }
     } catch (error) {
-      setLoader(false)
       setSuccess(false);
       setMessage("Failed to fetch industries");
     }
   };
 
-  const handleIndustrySearchData = (event: SelectChangeEvent<string[]>) => {
-    const {
-      target: { value },
-    } = event;
+  const handleIndustrySearchData = (value: SelectChangeEvent<string[]>) => {
+   
     if (Array.isArray(value)) {
       // console.log(value)
       setReturnIndustryData(value);
     }
   };
 
-  const handleCitySearchData = (event: SelectChangeEvent<string[]>) => {
-    const {
-      target: { value },
-    } = event;
+  const handleCitySearchData = (value: SelectChangeEvent<string[]>) => {
+    
     if (Array.isArray(value)) {
       // console.log(value)
       setReturnCityData(value);
     }
   };
 
-  const handleInterestsSearchData = (event: SelectChangeEvent<string[]>) => {
-    const {
-      target: { value },
-    } = event;
+  const handleInterestsSearchData = (value: SelectChangeEvent<string[]>) => {
+   
     if (Array.isArray(value)) {
       // console.log(value)
       setReturnInterestsData(value);

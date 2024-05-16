@@ -32,6 +32,7 @@ import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
 import SuccessSnackbar from "../SuccessSnackbarComponent";
 import FailureSnackbar from "../FailureSnackbarComponent";
+import { useRouter } from "next/navigation";
 // import geotargetingData as GeoTargetingData from '@/public/jsonData/GeoTargetGoogle.json';
 
 const AdSearchForm = () => {
@@ -65,6 +66,7 @@ const AdSearchForm = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [failure, setFailure] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const router = useRouter()
 
   useEffect(() => {
     getAllCampaigns();
@@ -163,6 +165,8 @@ const AdSearchForm = () => {
         setLoader(false)
         setSuccess(true);
         setMessage("Successfully created Ad!"); 
+        router.refresh()
+
             }
       setAdGroupName("");
       setCampaignId("");

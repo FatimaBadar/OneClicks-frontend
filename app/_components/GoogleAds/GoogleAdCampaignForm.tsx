@@ -28,12 +28,14 @@ import { CampaignPayload } from "@/app/_models/Google.model";
 import { ScrollPanel } from "primereact/scrollpanel";
 import SuccessSnackbar from "../SuccessSnackbarComponent";
 import FailureSnackbar from "../FailureSnackbarComponent";
+import { useRouter } from "next/navigation";
 
 const GoogleAdCampaignForm = ({ onReturn }: any) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [failure, setFailure] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const router = useRouter()
 
   const [campaignName, setCampaignName] = useState("");
   const [advertisingChannelType, setAvertisingChannelType] = useState("");
@@ -110,6 +112,7 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
         setMessage("Successfully created campaign!");
                 //setCampaigns(response.responseData);
         onReturn(true);
+        router.refresh()
       }
       setCampaignName("");
       setAvertisingChannelType("");

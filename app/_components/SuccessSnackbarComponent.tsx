@@ -31,7 +31,6 @@ const SuccessSnackbar: React.FC<SnackbarProps> = ({ openBar, message }) => {
 
   return (
     <div>
-      <Button onClick={handleClick}>Open Snackbar</Button>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}

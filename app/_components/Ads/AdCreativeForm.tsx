@@ -123,18 +123,15 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
     const accessTokenfb = localStorage?.getItem('accesstoken_fb') ??  "";
     const adaccountId = localStorage?.getItem('adAccountId') ??  "";
     try {
-      setLoader(true)
       const response = await CreateAdImageHashService(adaccountId.toString(), formData, accessTokenfb);
       if (response.statusCode === "200") {
         const hash = response.responseData;
         setImageHash(hash);
-        setLoader(false)
         setSuccess(true);
         setMessageToaster("Successfully uploaded image!");
       }
     } catch (error) {
-      setLoader(false)
-      setSuccess(false);
+      setFailure(false);
       setMessageToaster("Failed to upload image.");
       console.error(error);
     }
@@ -327,8 +324,8 @@ const AdCreativeForm: React.FC<AdCreativeProps> = ({ adset }) => {
       </ThemeProvider>
       </>
       }
-      {success ? <SuccessSnackbar openBar={success} message={message} /> : ""}
-      {failure ? <FailureSnackbar openBar={failure} message={message} /> : ""}
+      {success ? <SuccessSnackbar openBar={success} message={messageToaster} /> : ""}
+      {failure ? <FailureSnackbar openBar={failure} message={messageToaster} /> : ""}
     </>
   );
 };

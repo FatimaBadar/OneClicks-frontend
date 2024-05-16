@@ -29,6 +29,7 @@ import { MultiSelect } from "primereact/multiselect";
 import { ScrollPanel } from "primereact/scrollpanel";
 import SuccessSnackbar from "../SuccessSnackbarComponent";
 import FailureSnackbar from "../FailureSnackbarComponent";
+import { useRouter } from "next/navigation";
 
 const AdCampaignForm = ({ onReturn }: any) => {
   const [campaignName, setCampaignName] = useState("");
@@ -40,7 +41,7 @@ const AdCampaignForm = ({ onReturn }: any) => {
   const [success, setSuccess] = useState<boolean>(false);
   const [failure, setFailure] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-
+  const router = useRouter()
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -67,6 +68,7 @@ const AdCampaignForm = ({ onReturn }: any) => {
         setSuccess(true);
         setMessage("Successfully created campaign!");
         onReturn(true);
+        router.refresh()
       }
 
       setCampaignName("");
