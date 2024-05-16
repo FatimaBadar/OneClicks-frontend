@@ -109,12 +109,15 @@ export default function Home() {
                     <Grid item xs={12}>
                       <AmountSpent />
                     </Grid>
+                    <Grid item xs={12}>
+                      <AmountSpent />
+                    </Grid>
                     {/* <Grid item xs={12}>
                       <AmountSpent />
                     </Grid> */}
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                       <MonthlyEarnings />
-                    </Grid>
+                    </Grid> */}
                   </Grid>
                 </Grid>
 

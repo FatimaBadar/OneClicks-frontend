@@ -44,11 +44,11 @@ export async function CreateAdcampaignService(){
 }
 
 
-export async function getAllCampaignsService(adAccountId: string, accessToken: string):  Promise<ResponseVM<Campaign[]>>{
+export async function getAllCampaignsFacebook(adAccountId: string, accessToken: string):  Promise<ResponseVM<any[]>>{
     const fetch = useFetch();
     const response = await fetch.get(`${SERVER_ENDPOINT}/api/Facebook/GetAllCampaigns?accessToken=${accessToken}&adAccountId=${adAccountId}`);
     
-    return handleResponse<ResponseVM<Campaign[]>>(response).then((data) => data);
+    return handleResponse<ResponseVM<any[]>>(response).then((data) => data);
 }
 
 export async function CreateAdsetService(payload: AdsetPayload): Promise<ResponseVM<Adset>> {

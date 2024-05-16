@@ -25,7 +25,7 @@ import {
 } from "@/app/_models/Google.model";
 import {
   CreateAdGroupService,
-  GetAllGoogleCampaignsService,
+  GetAllCampaignsGoogle,
 } from "@/app/_services/googleService";
 import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
@@ -99,7 +99,7 @@ const AdSearchForm = () => {
         localStorage?.getItem("accesstoken_Google") ?? "";
       const customerId = localStorage?.getItem("g_managerId") ?? "";
 
-      const response = await GetAllGoogleCampaignsService(
+      const response = await GetAllCampaignsGoogle(
         accessTokengoogle,
         parseFloat(customerId)
       );

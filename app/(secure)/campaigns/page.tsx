@@ -14,12 +14,12 @@ import {
 } from "@mui/material";
 
 import Navbar from "@/app/_components/Navbar/Navbar";
-import { getAllCampaignsService } from "@/app/_services/adAccountService";
+import { getAllCampaignsFacebook } from "@/app/_services/adAccountService";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Campaign } from "@/app/_models/adAccount.model";
 import CreateCampaignDropdown from "@/app/_components/CreateCampaignDropdown";
 import { GoogleCampaign } from "@/app/_models/Google.model";
-import { GetAllGoogleCampaignsService } from "@/app/_services/googleService";
+import { GetAllCampaignsGoogle } from "@/app/_services/googleService";
 import { CombinedCampaign } from "@/app/_models/ad.model";
 
 const Facebook = "rgb(19, 222, 185)";
@@ -63,7 +63,7 @@ const Adcampaigns = () => {
     const adaccountId = localStorage?.getItem("adAccountId") ?? "";
     try {
 
-      const response = await getAllCampaignsService(
+      const response = await getAllCampaignsFacebook(
         adaccountId.toString(),
         accessTokenfb
       );
@@ -76,13 +76,13 @@ const Adcampaigns = () => {
             localStorage?.getItem("accesstoken_Google") ?? "";
           const customerId = localStorage?.getItem("g_managerId") ?? "";
     
-          const response2 = await GetAllGoogleCampaignsService(
+          const response2 = await GetAllCampaignsGoogle(
             accessTokengoogle,
             parseFloat(customerId)
           );
-          if (response2) {
-            setGoogleCampaigns(response2);
-            setCombinedCampaigns([...response.responseData,...response2]);
+          if (response2.statusCode == "200") {
+            setGoogleCampaigns(response2.responseData);
+            setCombinedCampaigns([...response.responseData,...response2.responseData]);
             console.log(googleCampaigns);
           }
         } catch (error) {

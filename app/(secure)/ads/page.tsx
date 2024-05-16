@@ -126,17 +126,22 @@ const AdPage = () => {
                 </TableCell>
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
-                    Adset Name
+                    Campaign Name
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
-                    Creative Id
+                 Adset Name
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
-                    Type
+                Creative Name
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2" fontWeight={600}>
+                Type
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -144,11 +149,7 @@ const AdPage = () => {
                     Status
                   </Typography>
                 </TableCell>
-                <TableCell>
-                  <Typography variant="subtitle2" fontWeight={600}>
-                    Ad Account Id
-                  </Typography>
-                </TableCell>
+               
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
@@ -162,7 +163,7 @@ const AdPage = () => {
                         fontWeight: "500",
                       }}
                     >
-                      {data.adsetName}
+                      {data.name}
                     </Typography>
                   </TableCell>
 
@@ -173,7 +174,7 @@ const AdPage = () => {
                         fontWeight: "500",
                       }}
                     >
-                      {data.adsetName}
+                      {data.campaignName}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -183,8 +184,20 @@ const AdPage = () => {
                         fontWeight: "500",
                       }}
                     >
-                      {data.campaignName}
+                      {data.adsetName}
                     </Typography>
+                    
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {data.creativeName}
+                    </Typography>
+                    
                   </TableCell>
                   <TableCell>
                     <Chip
@@ -209,31 +222,7 @@ const AdPage = () => {
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell align="right">
-                    <Typography
-                      color="textSecondary"
-                      variant="subtitle2"
-                      fontWeight={400}
-                    >
-                      {data.adAccountId}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Button
-                      variant="contained"
-                      sx={{
-                        marginRight: "10px",
-                        backgroundColor: "#597FB5 !important",
-                        color: "#fff !important",
-                        "&:hover": {
-                          backgroundColor: "#405D80 !important",
-                        },
-                      }}
-                      onClick={ScheduleAds}
-                    >
-                      Create ad
-                    </Button>
-                  </TableCell>
+                 
                 </TableRow>
               ))}
             </TableBody>

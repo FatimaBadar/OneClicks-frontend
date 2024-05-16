@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -14,102 +14,119 @@ import {
 import DashboardCard from "./DashboardCard";
 import AccountLogin from "../Ads/AdAccountLogin";
 import CreateAd from "../Ads/CreateAd";
+import { getAllCampaignsFacebook } from "@/app/_services/adAccountService";
+import { Campaign } from "@/app/_models/adAccount.model";
+import { GoogleCampaign } from "@/app/_models/Google.model";
+import { GetAllCampaignsGoogle } from "@/app/_services/googleService";
+import { CombinedCampaign } from "@/app/_models/ad.model";
 
-const typeColor = {
-  Facebook: "rgb(19, 222, 185)",
-  Instagram: "rgb(250, 137, 107)",
-  Google: "rgb(73, 190, 255)",
-};
-
-const accounts = [
-  {
-    id: "1",
-    name: "Promoting Biglytics post",
-    accountName: "Biglytics Ad Account",
-    status: "Completed",
-    type: "Facebook",
-    impressions: 0,
-    clicks: 0,
-    pbg: typeColor.Facebook,
-    budget: 3.9,
-  },
-  {
-    id: "2",
-    name: "Capture automate screen",
-    accountName: "Biglytics Ad Account",
-    status: "Completed",
-    type: "Facebook",
-    impressions: 1,
-    clicks: 1,
-    pbg: typeColor.Facebook,
-    budget: 24.5,
-  },
-  {
-    id: "3",
-    name: "Big Data Ebook",
-    accountName: "Biglytics Ad Account",
-    status: "Completed",
-    type: "Facebook",
-    impressions: 5,
-    clicks: 10,
-    pbg: typeColor.Facebook,
-    budget: 12.8,
-  },
-  {
-    id: "4",
-    name: "Default Campaign Group",
-    accountName: "Biglytics",
-    status: "Active",
-    type: "Facebook",
-    impressions: 6,
-    clicks: 8,
-    pbg: typeColor.Facebook,
-    budget: 2.4,
-  },
-];
+// const accounts = [
+//   {
+//     id: "1",
+//     name: "Promoting Biglytics post",
+//     accountName: "Biglytics Ad Account",
+//     status: "Completed",
+//     type: "Facebook",
+//     impressions: 0,
+//     clicks: 0,
+//     pbg: typeColor.Facebook,
+//     budget: 3.9,
+//   },
+//   {
+//     id: "2",
+//     name: "Capture automate screen",
+//     accountName: "Biglytics Ad Account",
+//     status: "Completed",
+//     type: "Facebook",
+//     impressions: 1,
+//     clicks: 1,
+//     pbg: typeColor.Facebook,
+//     budget: 24.5,
+//   },
+//   {
+//     id: "3",
+//     name: "Big Data Ebook",
+//     accountName: "Biglytics Ad Account",
+//     status: "Completed",
+//     type: "Facebook",
+//     impressions: 5,
+//     clicks: 10,
+//     pbg: typeColor.Facebook,
+//     budget: 12.8,
+//   },
+//   {
+//     id: "4",
+//     name: "Default Campaign Group",
+//     accountName: "Biglytics",
+//     status: "Active",
+//     type: "Facebook",
+//     impressions: 6,
+//     clicks: 8,
+//     pbg: typeColor.Facebook,
+//     budget: 2.4,
+//   },
+// ];
+const Facebook = "rgb(19, 222, 185)";
+const Instagram = "rgb(250, 137, 107)";
+const Google = "rgb(73, 190, 255)";
 
 const AdAccountsSummary = () => {
+var Fb_Budget: number = 0;
+  const [facebookCampaigns, setFacebookCampaigns] = useState<any[]>([]);
+  const [googleCampaigns, setGoogleCampaigns] = useState<any[]>([]);
+  const [combinedCampaigns, setCombinedCampaigns] = useState<any[]>([]);
+  const getCampaigns = async () => {
+    const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
+    const adaccountId = localStorage?.getItem("adAccountId") ?? "";
+    const accessTokenGoogle = localStorage?.getItem("accesstoken_Google") ?? "";
+    const selectedClientId = localStorage?.getItem("g_ClientId") ?? "";
+    const selectedManagerId = localStorage?.getItem("g_ManagerId") ?? "";
+
+    try {
+      if (accessTokenfb && adaccountId) {
+        const response = await getAllCampaignsFacebook(
+          adaccountId.toString(),
+          accessTokenfb
+        );
+        if (response.statusCode === "200") {
+          Fb_Budget =0
+          setFacebookCampaigns(response.responseData);
+          console.log(response.responseData)
+          response.responseData.forEach(item => {
+            Fb_Budget = Fb_Budget+ item.budget
+          });
+          console.log("Budget Fb", Fb_Budget)
+
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    try {
+      if (accessTokenGoogle && selectedClientId && selectedManagerId) {
+        const response2 = await GetAllCampaignsGoogle(
+          accessTokenGoogle,
+          parseFloat(selectedClientId)
+        );
+        if (response2.statusCode === "200") {
+          setGoogleCampaigns(response2.responseData);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    getFacebookCampaigns();
+    getCampaigns();
   }, []);
 
-  const getFacebookCampaigns = async () => {
-    
-    // const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
-    // const adaccountId = localStorage?.getItem("adAccountId") ?? "";
-    // try {
-  
-    //   const response = await getAllCampaignsService(
-    //     adaccountId.toString(),
-    //     accessTokenfb
-    //   );
-    //   if (response.statusCode === "200") {
-    //     setFacebookCampaigns(response.responseData);
-  
-    //     try {
-    //       const accessTokengoogle =
-    //         localStorage?.getItem("accesstoken_Google") ?? "";
-    //       const customerId = localStorage?.getItem("g_managerId") ?? "";
-    
-    //       const response2 = await GetAllGoogleCampaignsService(
-    //         accessTokengoogle,
-    //         parseFloat(customerId)
-    //       );
-    //       if (response2) {
-    //         setGoogleCampaigns(response2);
-    //         setCombinedCampaigns([...response.responseData,...response2]);
-    //         console.log(googleCampaigns);
-    //       }
-    //     } catch (error) {
-    //       console.error(error);
-    //     }
-  
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
-  }
-  
+  useEffect(() => {
+    // Combine campaigns whenever either Facebook or Google campaigns change
+    setCombinedCampaigns([...facebookCampaigns, ...googleCampaigns]);
+  }, [facebookCampaigns, googleCampaigns]);
+  console.log(combinedCampaigns);
   return (
     <DashboardCard>
       <Box
@@ -141,12 +158,12 @@ const AdAccountsSummary = () => {
             <TableRow>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Name
+                  Campaign Name
                 </Typography>
               </TableCell>
               <TableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Account Name
+                  Status
                 </Typography>
               </TableCell>
               <TableCell>
@@ -166,14 +183,14 @@ const AdAccountsSummary = () => {
               </TableCell>
               <TableCell align="right">
                 <Typography variant="subtitle2" fontWeight={600}>
-                  Budget Spent
+                  Budget
                 </Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {accounts.map((account) => (
-              <TableRow key={account.id}>
+            {combinedCampaigns.map((campaign) => (
+              <TableRow key={campaign.campaignId}>
                 <TableCell>
                   <Typography
                     sx={{
@@ -181,7 +198,7 @@ const AdAccountsSummary = () => {
                       fontWeight: "500",
                     }}
                   >
-                    {account.name}
+                    {campaign.campaignName}
                   </Typography>
                 </TableCell>
 
@@ -194,7 +211,7 @@ const AdAccountsSummary = () => {
                   >
                     <Box>
                       <Typography variant="subtitle2" fontWeight={600}>
-                        {account.accountName}
+                        {campaign.status}
                       </Typography>
                       <Typography
                         color="textSecondary"
@@ -202,7 +219,7 @@ const AdAccountsSummary = () => {
                           fontSize: "13px",
                         }}
                       >
-                        {account.status}
+                        {campaign.status}
                       </Typography>
                     </Box>
                   </Box>
@@ -212,11 +229,16 @@ const AdAccountsSummary = () => {
                   <Chip
                     sx={{
                       px: "4px",
-                      backgroundColor: account.pbg,
+                      backgroundColor:
+                        campaign.type === "Facebook"
+                          ? Facebook
+                          : campaign.type === "Instagram"
+                          ? Instagram
+                          : Google,
                       color: "#fff",
                     }}
                     size="small"
-                    label={account.type}
+                    label={campaign.type}
                   ></Chip>
                 </TableCell>
 
@@ -226,7 +248,7 @@ const AdAccountsSummary = () => {
                     variant="subtitle2"
                     fontWeight={400}
                   >
-                    {account.impressions}
+                    {/* {campaign.impressions} */} 0
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
@@ -235,13 +257,13 @@ const AdAccountsSummary = () => {
                     variant="subtitle2"
                     fontWeight={400}
                   >
-                    {account.clicks}
+                    {/* {account.clicks} */} 0
                   </Typography>
                 </TableCell>
 
                 <TableCell align="right">
                   <Typography color="textSecondary" variant="subtitle2">
-                    ${account.budget}k
+                    {campaign.budget ? `$${campaign.budget}k` : "N/A"}
                   </Typography>
                 </TableCell>
               </TableRow>
