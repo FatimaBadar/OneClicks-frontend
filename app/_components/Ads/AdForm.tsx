@@ -101,6 +101,7 @@ const AdForm = () => {
       console.error(error);
     }
   };
+  const router = useRouter()
 
   const handleNextClick = async (e: FormEvent) => {
     e.preventDefault();
@@ -108,7 +109,6 @@ const AdForm = () => {
     const selectedAdsetName = adsetData.find((x) => x.id == adsetId)?.name;
     const accessTokenfb = localStorage?.getItem("accesstoken_fb") ?? "";
     const adaccountId = localStorage?.getItem("adAccountId") ?? "";
-    const router = useRouter()
     
     const tempPayload: Ads = {
       adName,

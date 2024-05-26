@@ -389,9 +389,9 @@ const GoogleAdCampaignForm = ({ onReturn }: any) => {
               sx={{ justifyContent: "center" }}
             >
               <FormControlLabel
-                value="ACTIVE"
+                value="ENABLED"
                 control={<Radio />}
-                label="Active"
+                label="Enabled"
                 sx={{ marginRight: "20px" }}
               />
               <FormControlLabel
