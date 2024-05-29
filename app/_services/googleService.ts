@@ -2,8 +2,8 @@ import useFetch from "../_helpers/useFetch";
 import { AccountHierarchyDto, AdGroup, AdGroupPayload, CampaignPayload, GoogleCampaign } from "../_models/Google.model";
 import { ResponseVM } from "../_models/response.model";
 
-// const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
-const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
+const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
+// const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
 // 
 
 async function handleResponse<T>(response: Response): Promise<T> {

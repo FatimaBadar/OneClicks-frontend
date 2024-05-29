@@ -3,8 +3,8 @@ import { ResponseVM } from "../_models/response.model";
 import { AdAccount, Campaign, Adset, AdImagePayload, CampaignPayload, AdsetPayload, Interest, LocationData, AdTargetingCategory, AdCreative, AdCreativePayload, ImageHash, Ads, AdPayloadData, AdData } from "../_models/adAccount.model";
 import useFetchMultipart from "../_helpers/useFetchMultipart";
 
-// const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
-const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
+const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://oneclicksapi.azurewebsites.net";
+// const SERVER_ENDPOINT = process.env.SERVER_ENDPOINT || "https://localhost:7256";
 // 
 
 async function handleResponse<T>(response: Response): Promise<T> {
